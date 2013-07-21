@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+
+        <TextView  android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:text="How many players:"
+                   android:layout_marginBottom="30dip"
+                   android:textStyle="bold"
+                   android:textSize="20sp"
+                   android:gravity="center_vertical|center_horizontal" />
+
+        <LinearLayout  android:layout_width="fill_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="center_vertical|center_horizontal"  >
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnTwo"
+                    android:text="2"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#8a0597"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnThree"
+                    android:text="3"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#0109f3"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnFour"
+                    android:text="4"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#007c17"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnFive"
+                    android:text="5"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#af0202"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnSix"
+                    android:text="6"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#f75800"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+        </LinearLayout>
+
+        <LinearLayout  android:layout_width="fill_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="15dip"
+                       android:gravity="center_vertical|center_horizontal">
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnSeven"
+                    android:text="7"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnEight"
+                    android:text="8"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#8c8b8b"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnNine"
+                    android:text="9"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#00adcd"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnTen"
+                    android:text="10"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#694220"
+                    android:textColor="#ffffff"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+
+            <Button android:layout_width="50dip"
+                    android:layout_height="50dip"
+                    android:id="@+id/btnEleven"
+                    android:text="11"
+                    android:layout_marginRight="7dip"
+                    android:layout_marginLeft="7dip"
+                    android:background="#fff600"
+                    android:textColor="#5c5c5c"
+                    android:textSize="30dip"
+                    android:typeface="serif"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="center_vertical|center_horizontal"
+                      android:orientation="vertical" >
+
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rules of the game"
+                    android:textStyle="italic"
+                    android:gravity="center_horizontal"
+                    android:textSize="16sp"
+                    android:layout_marginTop="50dip" />
+
+            <TableLayout android:layout_width="250dip"
+                         android:layout_height="wrap_content"
+                         android:orientation="vertical">
+
+                <TableRow android:layout_width="250dip"
+                          android:layout_height="wrap_content">
+
+                    <TextView android:layout_width="250dip"
+                              android:layout_height="wrap_content"
+                              android:paddingLeft="15dip"
+                              android:paddingRight="15dip"
+                              android:paddingTop="15dip"
+                              android:text=" 1). Choose how many players there will be." />
+
+                </TableRow>
+
+                <TableRow android:layout_width="250dip"
+                          android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_width="250dip"
+                            android:layout_height="wrap_content"
+                            android:padding="15dip"
+                            android:text=" 2). Each player chooses a number." />
+
+                </TableRow>
+
+                <TableRow android:layout_width="250dip"
+                          android:layout_height="wrap_content">
+
+                    <TextView
+                            android:layout_width="250dip"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="15dip"
+                            android:paddingLeft="15dip"
+                            android:paddingBottom="15dip"
+                            android:text=" 3). After the last player has chosen their number the winner will be determined by who is closest to the randomly chosen number. If there is  a tie the player who is closest without going over will be the winner!!"  />
+
+
+
+
+
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>
