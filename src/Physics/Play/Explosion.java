@@ -5,30 +5,23 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 
-public class Explosion {
-
-    private static Bitmap explosion;
-    private float x, y;
+public class Explosion extends Drawable {
 
 
-    public Explosion(MainGamePanel g){
-
-        explosion =  BitmapFactory.decodeResource(g.getResources(), R.drawable.explosion);
-
+    public Explosion(MainGamePanel g) {
+        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.explosion));
     }
 
-    public static Bitmap getImg(){
-        return explosion;
+    public Bitmap getImg() {
+        return getImage();
     }
 
-    public void draw(Canvas c){
-        c.drawBitmap(explosion, x, y,null);
+    public void draw(Canvas c) {
+        c.drawBitmap(getImage(), getx(), gety(),null);
     }
 
-    public void setCoordinates(float x, float y){
-
-        this.x = x;
-        this.y = y;
-
+    public void setCoordinates(float x, float y) {
+        setx(x);
+        sety(y);
     }
 }

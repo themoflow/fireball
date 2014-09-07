@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FireballsList {
 
-    private List<Fireballs> fireballs = new ArrayList<Fireballs>();
+    private List<Fireball> fireballs = new ArrayList<Fireball>();
     private int amountOfFireballs = 0;
     private MainGamePanel gamePanel;
     private float xOrig, yOrig;
@@ -23,7 +23,7 @@ public class FireballsList {
 
     public void addFireball(float x, float y){
 
-        fireballs.add(new Fireballs(gamePanel,x,y));
+        fireballs.add(new Fireball(gamePanel,x,y));
         amountOfFireballs++;
     }
 
@@ -98,7 +98,7 @@ public class FireballsList {
 
         if(fireballs.size() <= 0)
         {
-            fireballs.add(new Fireballs(gamePanel, xOrig, yOrig));
+            fireballs.add(new Fireball(gamePanel, xOrig, yOrig));
             amountOfFireballs++;
         }
     }
@@ -107,7 +107,7 @@ public class FireballsList {
 
         for(int i = 0; i < fireballs.size(); i++)
         {
-            if(fireballs.get(i).getx() <= 0 - Fireballs.getWidth() || fireballs.get(i).getx() > gamePanel.getScrWidth() || fireballs.get(i).gety() < 0 - Fireballs.getHeight() || fireballs.get(i).gety() > gamePanel.getScrHeight())
+            if(fireballs.get(i).getx() <= 0 - Fireball.getWidth() || fireballs.get(i).getx() > gamePanel.getScrWidth() || fireballs.get(i).gety() < 0 - Fireball.getHeight() || fireballs.get(i).gety() > gamePanel.getScrHeight())
             {
                 fireballs.remove(i);
                 amountOfFireballs--;
@@ -122,17 +122,17 @@ public class FireballsList {
         {
             if(fireballs.get(amountOfFireballs-1).gety() + 48 < yOrig)
             {
-                fireballs.add(new Fireballs(gamePanel, xOrig, yOrig));
+                fireballs.add(new Fireball(gamePanel, xOrig, yOrig));
                 amountOfFireballs++;
             }
             else if(down == false && fireballs.get(amountOfFireballs-1).gety() <= yOrig && fireballs.get(amountOfFireballs-1).getx()+48 < xOrig)
             {
-                fireballs.add(new Fireballs(gamePanel, xOrig, yOrig));
+                fireballs.add(new Fireball(gamePanel, xOrig, yOrig));
                 amountOfFireballs++;
             }
             else if (down == false && fireballs.get(amountOfFireballs-1).gety() <= yOrig && fireballs.get(amountOfFireballs-1).getx() > xOrig+48)
             {
-                fireballs.add(new Fireballs(gamePanel,xOrig,yOrig));
+                fireballs.add(new Fireball(gamePanel,xOrig,yOrig));
                 amountOfFireballs++;
             }
 
@@ -142,8 +142,8 @@ public class FireballsList {
 
     public boolean checkForFireballTouch(float x, float y){
 
-        if((int)x >= getLastXCoord() - Fireballs.getWidth() && (int)x <= getLastXCoord() + (Fireballs.getWidth()*2) &&
-                (int)y >= getLastYCoord() - Fireballs.getHeight() && (int)y <= getLastYCoord() + (Fireballs.getHeight()*2))
+        if((int)x >= getLastXCoord() - Fireball.getWidth() && (int)x <= getLastXCoord() + (Fireball.getWidth()*2) &&
+                (int)y >= getLastYCoord() - Fireball.getHeight() && (int)y <= getLastYCoord() + (Fireball.getHeight()*2))
         {
             return true;
         }
@@ -158,7 +158,7 @@ public class FireballsList {
         amountOfFireballs--;
     }
 
-    public List<Fireballs> getArray(){
+    public List<Fireball> getArray(){
         return fireballs;
     }
 
@@ -169,14 +169,14 @@ public class FireballsList {
             setX(x);
             setY(y);
 
-            if(getY() > gamePanel.getScrHeight() - Fireballs.getHeight()*2)
-                setYBounds(gamePanel.getScrHeight() - Fireballs.getWidth()*2);
+            if(getY() > gamePanel.getScrHeight() - Fireball.getHeight()*2)
+                setYBounds(gamePanel.getScrHeight() - Fireball.getWidth()*2);
             if(getY() < yOrig)
                 setYBounds(yOrig);
             if(getX() < (gamePanel.getScrWidth()/4))
                 setXBounds(gamePanel.getScrWidth()/4);
-            if(getX() > ((gamePanel.getScrWidth()/4)*3)-Fireballs.getWidth())
-                setXBounds(((gamePanel.getScrWidth()/4)*3)-Fireballs.getWidth());
+            if(getX() > ((gamePanel.getScrWidth()/4)*3)-Fireball.getWidth())
+                setXBounds(((gamePanel.getScrWidth()/4)*3)-Fireball.getWidth());
         }
     }
 }

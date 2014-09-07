@@ -11,33 +11,29 @@ import android.graphics.Canvas;
  * Time: 3:09 PM
  * To change this template use File | Settings | File Templates.
  */
-public class City {
+public class City extends Drawable {
 
-
-    private float x, y;
     private MainGamePanel gamePanel;
-    private Bitmap city;
 
     public City(MainGamePanel g, float x, float y){
 
         gamePanel = g;
-        city = BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.city);
-        this.x = x;
-        this.y = y;
+        setImage(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.city));
+        setx(x);
+        sety(y);
 
     }
 
     public void draw(Canvas c){
 
-        c.drawBitmap(city, x, y, null);
+        c.drawBitmap(getImage(), getx(), gety(), null);
 
     }
-
-    public float getHeight(){
-        return city.getHeight();
+    public float getCityHeight(){
+        return getImage().getHeight();
     }
 
     public Bitmap getImg(){
-        return city;
+        return getImage();
     }
 }

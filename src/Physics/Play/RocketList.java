@@ -92,7 +92,7 @@ public class RocketList {
                 gamePanel.setLevel(2);
                 for(int i = 0; i < 10; i++)
                 {
-                    gamePanel.addNewSpaceship();
+                    //gamePanel.addNewSpaceship();
                 }
                 break;
         }

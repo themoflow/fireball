@@ -44,8 +44,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private int level = 1;
     private FireballsList fireballList;
     private RocketList rocketList;
-    private ShipRocketList shipRocketList;
-    private SpaceshipList spaceshipList;
     private City city;
     private Explosion explosion;
 
@@ -87,30 +85,24 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         screenWidth = getWidth();
         screenHeight = getHeight();
-        xOrig = (screenWidth/2) - (Fireballs.getWidth()/2);
+        xOrig = (screenWidth/2) - (Fireball.getWidth()/2);
         yOrig = (screenHeight - (screenHeight/4));
         fireballList = new FireballsList(this, xOrig, yOrig);
         rocketList = new RocketList(this);
-        shipRocketList = new ShipRocketList(this);
-        spaceshipList = new SpaceshipList(this);
         fireballList.addFireball(xOrig,yOrig);
         x = xOrig;
         y = yOrig;
         cityX = (screenWidth/2)-170;
         cityY =   screenHeight - 120;
-        float slingDistance = (screenHeight - Fireballs.getWidth()*2) - (yOrig);
+        float slingDistance = (screenHeight - Fireball.getWidth()*2) - (yOrig);
         length = slingDistance / 10;
         city = new City(this, cityX, cityY);
         explosion = new Explosion(this);
         rocketList.createRockets();
         level = 2;
-        thread = new MainThread(getHolder(), this, fireballList, rocketList, shipRocketList);
+        thread = new MainThread(getHolder(), this, fireballList, rocketList);
         thread.setRunning(true);
         thread.start();
-
-        for(int i = 0; i < 10; i++)
-            spaceshipList.add(shipRocketList);
-
     }
 
     @Override
@@ -219,14 +211,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              rocketList.move();
              rocketList.draw(canvas);
 
-             //Draw the Ship Rockets.
-             shipRocketList.move();
-             shipRocketList.draw(canvas);
-
-             //Draw the Spaceships.
-             spaceshipList.move();
-             spaceshipList.draw(canvas);
-
              if(level == 1)
              {
                  int amount = rocketList.checkRocketAmount();
@@ -270,8 +254,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      }
 
 
-
-
     }//end onDraw
 
     public void setLevel(int num){
@@ -298,7 +280,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public void addHitToCity(){
         cityHits++;
-        System.out.println("- -- -- - - - - - - - - CITY HITS = " + cityHits);
     }
 
     public boolean gameOver(){
@@ -315,12 +296,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public City getCity(){
         return city;
-    }
-
-    public void addNewSpaceship(){
-
-        spaceshipList.add(shipRocketList);
-
     }
 
 }

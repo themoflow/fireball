@@ -11,34 +11,32 @@ public class Collision {
 
     private RocketList rocketList;
     private FireballsList fireballList;
-    private ShipRocketList shipRocketList;
     private MainGamePanel gamePanel;
     private float cityX, cityY;
     private final float cityWidth = 340, cityHeight = 147;
 
 
 
-    public Collision(RocketList rocketList, FireballsList fireList,ShipRocketList srl, MainGamePanel g){
+    public Collision(RocketList rocketList, FireballsList fireList,/*ShipRocketList srl,*/ MainGamePanel g){
 
         this.rocketList = rocketList;
         fireballList = fireList;
-        shipRocketList = srl;
+        //shipRocketList = srl;
         gamePanel = g;
         this.cityX = gamePanel.getCityX();
         this.cityY = gamePanel.getCityY();
-
 
     }
 
     public float[] fireBallColided(){
 
         float[] coords = new float[2];
-        List<Fireballs> fireballs = fireballList.getArray();
+        List<Fireball> fireballs = fireballList.getArray();
         List<Rocket> rockets = rocketList.getArray();
 
         for(int i = 0; i < fireballs.size(); i++)
         {
-              Fireballs f = fireballs.get(i);
+              Fireball f = fireballs.get(i);
               Rect fireball = new Rect( (int)f.getx(), (int)f.gety(), (int)(f.getx()+f.getWidth()), (int)(f.gety() + f.getHeight()));
 
               for(int j = 0; j < rockets.size(); j++)
@@ -119,7 +117,7 @@ public class Collision {
         return null;
     }
 
-    public float[] shipRocketCollisionWithCity(){
+    /*public float[] shipRocketCollisionWithCity(){
 
         float[] coords = new float[2];
         Rect city = new Rect( (int)cityX,(int)cityY, (int)(cityX+cityWidth), (int)(cityY +cityHeight));
@@ -155,13 +153,13 @@ public class Collision {
         }
 
         return null;
-    }
+    }*/
 
     private int getBitmapPixel(Bitmap b, int i, int j){
         return b.getPixel(i - (int)cityX, j - (int)cityY);
     }
 
-    private static int getBitmapPixel(Fireballs f, int i, int j) {
+    private static int getBitmapPixel(Fireball f, int i, int j) {
             return f.getImage().getPixel(i - (int)f.getx(), j - (int)f.gety());
     }
 

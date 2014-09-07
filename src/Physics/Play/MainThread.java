@@ -7,12 +7,6 @@ import android.os.Looper;
 import android.view.SurfaceHolder;
 
 
-/**
- * @author impaler
- *
- * The Main thread which contains the game loop. The thread must have access to 
- * the surface view and holder to trigger events every game tick.
- */
 public class MainThread extends Thread {
 
 
@@ -23,15 +17,12 @@ public class MainThread extends Thread {
     private FireballsList fireballList;
 
 
-
-    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel, FireballsList fireList, RocketList rocketList, ShipRocketList srl) {
+    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel, FireballsList fireList, RocketList rocketList) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
         fireballList = fireList;
-        collision = new Collision(rocketList,fireList, srl, gamePanel);
-
-
+        collision = new Collision(rocketList, fireList, gamePanel);
     }
 
     public void setRunning(boolean running) {
@@ -67,9 +58,6 @@ public class MainThread extends Thread {
             }
             float[] coords = collision.fireBallColided();
             float[] coords2 = collision.rocketCollidedWithCity();
-            float[] coords3 = collision.shipRocketCollisionWithCity();
-
-
             canvas = null;
             canvas = this.surfaceHolder.lockCanvas();
             synchronized(surfaceHolder)
@@ -85,16 +73,9 @@ public class MainThread extends Thread {
                     this.gamePanel.explosion(true, coords2);
                 }
 
-                if(!(coords3 == null))
-                {
-                    this.gamePanel.addHitToCity();
-                    this.gamePanel.explosion(true, coords3);
-                }
-
             }
             if (canvas != null)
                 surfaceHolder.unlockCanvasAndPost(canvas);
-
         }
     }
 

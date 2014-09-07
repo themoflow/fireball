@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import java.util.Random;
 
 
-public class Rocket {
+public class Rocket extends Drawable {
 
     private float x,y;
     private Paint paint = new Paint();
