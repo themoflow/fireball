@@ -43,10 +43,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private int times, multiplyBy, theEnd;
     private int level = 1;
     private Fireball fireball;
-    private RocketList rocketList;
+    private Rocket rocket;
     private City city;
     private Explosion explosion;
     private Drawer drawer;
+    private List<Drawable> drawables = new ArrayList();
 
 
 
@@ -88,8 +89,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         xOrig = (screenWidth/2) - (Fireball.getWidth()/2);
         yOrig = (screenHeight - (screenHeight/4));
         Fireball.initialize(this, xOrig, yOrig);
+
         fireball = new Fireball(this, xOrig, yOrig);
-        rocketList = new RocketList(this);
+        rocket= new Rocket(this);
         fireball.addFireball(xOrig,yOrig);
         x = xOrig;
         y = yOrig;
@@ -99,9 +101,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         length = slingDistance / 10;
         city = new City(this, cityX, cityY);
         explosion = new Explosion(this);
-        rocketList.createRockets();
+        rocket.createRockets();
         level = 2;
-        thread = new MainThread(getHolder(), this, fireball, rocketList);
+        drawables.add(fireball);
+        drawables.add(rocket);
+        drawables.add(city);
+        drawables.add(explosion);
+        thread = new MainThread(getHolder(), this, fireball, rocket);
         thread.setRunning(true);
         thread.start();
     }
@@ -209,13 +215,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             fireball.drawAll(canvas);
 
              //Draw the Rockets.
-             rocketList.move();
-             rocketList.draw(canvas);
+             rocket.move();
+             rocket.draw(canvas);
 
              if(level == 1)
              {
-                 int amount = rocketList.checkRocketAmount();
-                 rocketList.checkForSpeed(amount);
+                 int amount = rocket.checkRocketAmount();
+                 rocket.checkForSpeed(amount);
              }
          }
 

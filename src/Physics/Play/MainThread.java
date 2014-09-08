@@ -17,12 +17,12 @@ public class MainThread extends Thread {
     private Fireball fireball;
 
 
-    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel, Fireball fireList, RocketList rocketList) {
+    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel, Fireball fireList, Rocket rocket) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
         fireball = fireList;
-        collision = new Collision(rocketList, fireList, gamePanel);
+        collision = new Collision(rocket, fireList, gamePanel);
     }
 
     public void setRunning(boolean running) {

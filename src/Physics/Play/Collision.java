@@ -9,7 +9,7 @@ import android.graphics.Color;
 
 public class Collision {
 
-    private RocketList rocketList;
+    private Rocket rocket;
     private Fireball fireball;
     private MainGamePanel gamePanel;
     private float cityX, cityY;
@@ -17,21 +17,19 @@ public class Collision {
 
 
 
-    public Collision(RocketList rocketList, Fireball fireball, MainGamePanel g){
-
-        this.rocketList = rocketList;
+    public Collision(Rocket rocket, Fireball fireball, MainGamePanel g){
+        this.rocket = rocket;
         this.fireball = fireball;
         gamePanel = g;
         this.cityX = gamePanel.getCityX();
         this.cityY = gamePanel.getCityY();
-
     }
 
     public float[] fireBallColided(){
 
         float[] coords = new float[2];
         List<Fireball> fireballs = fireball.getArray();
-        List<Rocket> rockets = rocketList.getArray();
+        List<Rocket> rockets = rocket.getArray();
 
         for(int i = 0; i < fireballs.size(); i++)
         {
@@ -79,7 +77,7 @@ public class Collision {
         float[] coords = new float[2];
         Rect city = new Rect( (int)cityX,(int)cityY, (int)(cityX+cityWidth), (int)(cityY +cityHeight));
         Bitmap cityImg = gamePanel.getCity().getImg();
-        List<Rocket> rockets = rocketList.getArray();
+        List<Rocket> rockets = rocket.getArray();
 
         for(int i = 0; i < rockets.size(); i++)
         {
