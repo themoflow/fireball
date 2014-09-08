@@ -42,10 +42,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private boolean gameOver;
     private int times, multiplyBy, theEnd;
     private int level = 1;
-    private FireballsList fireballList;
+    private Fireball fireball;
     private RocketList rocketList;
     private City city;
     private Explosion explosion;
+    private Drawer drawer;
 
 
 
@@ -82,14 +83,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
         screenWidth = getWidth();
         screenHeight = getHeight();
         xOrig = (screenWidth/2) - (Fireball.getWidth()/2);
         yOrig = (screenHeight - (screenHeight/4));
-        fireballList = new FireballsList(this, xOrig, yOrig);
+        Fireball.initialize(this, xOrig, yOrig);
+        fireball = new Fireball(this, xOrig, yOrig);
         rocketList = new RocketList(this);
-        fireballList.addFireball(xOrig,yOrig);
+        fireball.addFireball(xOrig,yOrig);
         x = xOrig;
         y = yOrig;
         cityX = (screenWidth/2)-170;
@@ -100,7 +101,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         explosion = new Explosion(this);
         rocketList.createRockets();
         level = 2;
-        thread = new MainThread(getHolder(), this, fireballList, rocketList);
+        thread = new MainThread(getHolder(), this, fireball, rocketList);
         thread.setRunning(true);
         thread.start();
     }
@@ -131,7 +132,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         if(event.getAction() == MotionEvent.ACTION_DOWN)
         {
-            down = fireballList.checkForFireballTouch(event.getX(), event.getY());
+            down = fireball.checkForFireballTouch(event.getX(), event.getY());
         }
 
         if(event.getAction() == MotionEvent.ACTION_UP)
@@ -140,7 +141,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             {
                 dragged = false;
                 down = false;
-                fireballList.getAndSetVelocity(event.getX(), event.getY(), length);
+                fireball.getAndSetVelocity(event.getX(), event.getY(), length);
             }
 
         }
@@ -150,7 +151,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             if(down)
             {
                dragged = true;
-               fireballList.move(event.getX(), event.getY());
+               fireball.move(event.getX(), event.getY());
             }
         }
         return true;
@@ -202,10 +203,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             city.draw(canvas);
 
              //Draw the Fireballs
-            fireballList.checkFor0Fireballs();
-            fireballList.checkForFireBallRemoval();
-            fireballList.checkForFireballCreation(down);
-            fireballList.drawAll(canvas);
+            fireball.checkFor0Fireballs();
+            fireball.checkForFireBallRemoval();
+            fireball.checkForFireballCreation(down);
+            fireball.drawAll(canvas);
 
              //Draw the Rockets.
              rocketList.move();
