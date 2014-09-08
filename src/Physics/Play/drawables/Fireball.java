@@ -1,5 +1,7 @@
-package Physics.Play;
+package Physics.Play.drawables;
 
+import Physics.Play.main.MainGamePanel;
+import Physics.Play.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,7 +21,7 @@ public class Fireball extends Drawable {
     private long replay = 50L;
     private int imageIndex;
     private List<Fireball> fireballs = new ArrayList<Fireball>();
-    public int amountOfFireballs = 0;
+    public static int amountOfFireballs = 0;
     private MainGamePanel gamePanel;
     private static float xOrigin, yOrigin;
 
@@ -38,7 +40,6 @@ public class Fireball extends Drawable {
         imgFireball[9] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4);
         imgFireball[10] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4a);
         imgFireball[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4b);
-
         setx(x);
         sety(y);
         super.setImage(imgFireball[0]);
@@ -50,6 +51,7 @@ public class Fireball extends Drawable {
     }
 
     public void draw(Canvas c){
+
         c.drawBitmap(getImage(), getx(), gety(), null);
     }
 
@@ -104,11 +106,10 @@ public class Fireball extends Drawable {
         amountOfFireballs++;
     }
 
-    public void drawAll(Canvas c){
+    public void addVeloc(){
         for (int i = 0; i < fireballs.size(); i++)
         {
             fireballs.get(i).addVelocity();
-            fireballs.get(i).draw(c);
         }
     }
 
@@ -182,7 +183,7 @@ public class Fireball extends Drawable {
 
         for(int i = 0; i < fireballs.size(); i++)
         {
-            if(fireballs.get(i).getx() <= 0 - Fireball.getWidth() || fireballs.get(i).getx() > gamePanel.getScrWidth() || fireballs.get(i).gety() < 0 - Fireball.getHeight() || fireballs.get(i).gety() > gamePanel.getScrHeight())
+            if(fireballs.get(i).getx() <= 0 - getWidth() || fireballs.get(i).getx() > gamePanel.getScrWidth() || fireballs.get(i).gety() < 0 - getHeight() || fireballs.get(i).gety() > gamePanel.getScrHeight())
             {
                 fireballs.remove(i);
                 amountOfFireballs--;
@@ -217,8 +218,8 @@ public class Fireball extends Drawable {
 
     public boolean checkForFireballTouch(float x, float y){
 
-        if((int)x >= getLastXCoord() - Fireball.getWidth() && (int)x <= getLastXCoord() + (Fireball.getWidth()*2) &&
-                (int)y >= getLastYCoord() - Fireball.getHeight() && (int)y <= getLastYCoord() + (Fireball.getHeight()*2))
+        if((int)x >= getLastXCoord() - getWidth() && (int)x <= getLastXCoord() + (getWidth()*2) &&
+                (int)y >= getLastYCoord() - getHeight() && (int)y <= getLastYCoord() + (getHeight()*2))
         {
             return true;
         }
@@ -229,7 +230,7 @@ public class Fireball extends Drawable {
 
     }
 
-    public void updateFireballAmount(){
+    public static void updateFireballAmount(){
         amountOfFireballs--;
     }
 
@@ -244,14 +245,14 @@ public class Fireball extends Drawable {
             setX(x);
             setY(y);
 
-            if(getY() > gamePanel.getScrHeight() - Fireball.getHeight()*2)
-                setYBounds(gamePanel.getScrHeight() - Fireball.getWidth()*2);
+            if(getY() > gamePanel.getScrHeight() - getHeight()*2)
+                setYBounds(gamePanel.getScrHeight() - getWidth()*2);
             if(getY() < yOrigin)
                 setYBounds(yOrigin);
             if(getX() < (gamePanel.getScrWidth()/4))
                 setXBounds(gamePanel.getScrWidth()/4);
-            if(getX() > ((gamePanel.getScrWidth()/4)*3)-Fireball.getWidth())
-                setXBounds(((gamePanel.getScrWidth()/4)*3)-Fireball.getWidth());
+            if(getX() > ((gamePanel.getScrWidth()/4)*3)- getWidth())
+                setXBounds(((gamePanel.getScrWidth()/4)*3)- getWidth());
         }
     }
 

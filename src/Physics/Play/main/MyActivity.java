@@ -1,6 +1,7 @@
-package Physics.Play;
+package Physics.Play.main;
 
 
+import Physics.Play.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

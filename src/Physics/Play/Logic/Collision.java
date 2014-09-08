@@ -1,7 +1,11 @@
-package Physics.Play;
+package Physics.Play.Logic;
 
 import java.util.List;
 
+import Physics.Play.drawables.Drawable;
+import Physics.Play.drawables.Fireball;
+import Physics.Play.drawables.Rocket;
+import Physics.Play.main.MainGamePanel;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.Color;
@@ -9,17 +13,14 @@ import android.graphics.Color;
 
 public class Collision {
 
-    private Rocket rocket;
-    private Fireball fireball;
     private MainGamePanel gamePanel;
     private float cityX, cityY;
     private final float cityWidth = 340, cityHeight = 147;
+    private List<Drawable> drawables;
 
 
-
-    public Collision(Rocket rocket, Fireball fireball, MainGamePanel g){
-        this.rocket = rocket;
-        this.fireball = fireball;
+    public Collision(List<Drawable> drawables, MainGamePanel g){
+        this.drawables = drawables;
         gamePanel = g;
         this.cityX = gamePanel.getCityX();
         this.cityY = gamePanel.getCityY();
@@ -28,8 +29,8 @@ public class Collision {
     public float[] fireBallColided(){
 
         float[] coords = new float[2];
-        List<Fireball> fireballs = fireball.getArray();
-        List<Rocket> rockets = rocket.getArray();
+        List<Fireball> fireballs = getFireballs();
+        List<Rocket> rockets = getRockets();
 
         for(int i = 0; i < fireballs.size(); i++)
         {
@@ -56,8 +57,8 @@ public class Collision {
                               {
                                   coords[0] = rockets.get(j).getX();
                                   coords[1] = rockets.get(j).getY();
-                                  this.fireball.remove(i);
-                                  this.fireball.updateFireballAmount();
+                                  fireballs.remove(i);
+                                  Fireball.updateFireballAmount();
                                   rockets.remove(j);
                                   return coords ;
                               }
@@ -71,13 +72,41 @@ public class Collision {
 
     }  //end fireBallColided
 
+    private List<Fireball> getFireballs(){
+        List<Fireball> fireballList = null;
+        Fireball fireball = null;
+        for(int i = 0; i < drawables.size(); i++)
+        {
+            if(drawables.get(i).getClass() == Fireball.class)
+            {
+                fireball = (Fireball) drawables.get(i);
+                fireballList = fireball.getArray();
+            }
+        }
+        return fireballList;
+    }
+
+    private List<Rocket> getRockets(){
+        List<Rocket> rocketList = null;
+        Rocket rocket = null;
+        for(int i = 0; i < drawables.size(); i++)
+        {
+            if(drawables.get(i).getClass() == Rocket.class)
+            {
+                rocket = (Rocket) drawables.get(i);
+                rocketList = rocket.getArray();
+            }
+        }
+        return rocketList;
+    }
+
 
     public float[] rocketCollidedWithCity(){
 
         float[] coords = new float[2];
         Rect city = new Rect( (int)cityX,(int)cityY, (int)(cityX+cityWidth), (int)(cityY +cityHeight));
         Bitmap cityImg = gamePanel.getCity().getImg();
-        List<Rocket> rockets = rocket.getArray();
+        List<Rocket> rockets = getRockets();
 
         for(int i = 0; i < rockets.size(); i++)
         {
@@ -107,7 +136,6 @@ public class Collision {
                 }
            }
         }
-
         return null;
     }
 
@@ -116,7 +144,7 @@ public class Collision {
     }
 
     private static int getBitmapPixel(Fireball f, int i, int j) {
-            return f.getImage().getPixel(i - (int)f.getx(), j - (int)f.gety());
+        return f.getImage().getPixel(i - (int)f.getx(), j - (int)f.gety());
     }
 
     private static int getBitmapPixel(Rocket s, int i, int j) {

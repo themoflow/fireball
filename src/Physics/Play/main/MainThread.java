@@ -1,10 +1,15 @@
 
-package Physics.Play;
+package Physics.Play.main;
 
 
+import Physics.Play.drawables.Drawable;
+import Physics.Play.drawables.Fireball;
+import Physics.Play.drawables.Rocket;
+import Physics.Play.Logic.Collision;
 import android.graphics.Canvas;
-import android.os.Looper;
 import android.view.SurfaceHolder;
+
+import java.util.List;
 
 
 public class MainThread extends Thread {
@@ -15,14 +20,15 @@ public class MainThread extends Thread {
     private boolean running;
     private Collision collision;
     private Fireball fireball;
+    private List<Drawable> drawables;
 
 
-    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel, Fireball fireList, Rocket rocket) {
+    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel, List<Drawable> drawables) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;
-        fireball = fireList;
-        collision = new Collision(rocket, fireList, gamePanel);
+        this.drawables = drawables;
+        collision = new Collision(drawables, gamePanel);
     }
 
     public void setRunning(boolean running) {

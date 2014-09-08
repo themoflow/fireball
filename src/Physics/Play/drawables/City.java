@@ -1,5 +1,7 @@
-package Physics.Play;
+package Physics.Play.drawables;
 
+import Physics.Play.main.MainGamePanel;
+import Physics.Play.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,18 +18,14 @@ public class City extends Drawable {
     private MainGamePanel gamePanel;
 
     public City(MainGamePanel g, float x, float y){
-
         gamePanel = g;
         setImage(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.city));
         setx(x);
         sety(y);
-
     }
 
     public void draw(Canvas c){
-
         c.drawBitmap(getImage(), getx(), gety(), null);
-
     }
     public float getCityHeight(){
         return getImage().getHeight();

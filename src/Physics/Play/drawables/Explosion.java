@@ -1,5 +1,7 @@
-package Physics.Play;
+package Physics.Play.drawables;
 
+import Physics.Play.main.MainGamePanel;
+import Physics.Play.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -7,6 +9,7 @@ import android.graphics.Canvas;
 
 public class Explosion extends Drawable {
 
+    private boolean isActive = false;
 
     public Explosion(MainGamePanel g) {
         setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.explosion));
@@ -23,5 +26,13 @@ public class Explosion extends Drawable {
     public void setCoordinates(float x, float y) {
         setx(x);
         sety(y);
+    }
+
+    public void setIsActive(boolean b) {
+        isActive = b;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 }
