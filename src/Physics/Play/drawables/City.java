@@ -16,10 +16,14 @@ import android.graphics.Canvas;
 public class City extends Drawable {
 
     private MainGamePanel gamePanel;
+    private static float height, width;
 
     public City(MainGamePanel g, float x, float y){
         gamePanel = g;
-        setImage(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.city));
+        Bitmap image = BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.city);
+        setImage(image);
+        width = image.getWidth();
+        height = image.getHeight();
         setx(x);
         sety(y);
     }
@@ -27,10 +31,12 @@ public class City extends Drawable {
     public void draw(Canvas c){
         c.drawBitmap(getImage(), getx(), gety(), null);
     }
-    public float getCityHeight(){
-        return getImage().getHeight();
+    public static float getHeight(){
+        return height;
     }
-
+    public static float getWidth(){
+        return width;
+    }
     public Bitmap getImg(){
         return getImage();
     }

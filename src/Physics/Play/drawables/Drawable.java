@@ -8,8 +8,11 @@ import android.graphics.Bitmap;
 public class Drawable {
 
     private float x,y;
-    private static float width, height;
     private Bitmap image;
+    private boolean isActive = true;
+
+    public Drawable() {
+    }
 
     public float getx(){
         return x;
@@ -27,21 +30,17 @@ public class Drawable {
         this.y = y;
     }
 
-    public static float getWidth(){
-        return width;
-    }
-
-    public static float getHeight(){
-        return height;
-    }
-
-    public static void setWidth(float w){ width = w; }
-
-    public static void setHeight(float h){
-        height = h;
-    }
-
     public Bitmap getImage() { return image; }
 
     public void setImage(Bitmap image) {  this.image = image; }
+
+    public void setIsActive(boolean b) {
+        isActive = b;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+
 }

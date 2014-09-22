@@ -6,20 +6,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Rocket extends Drawable {
 
-    private Paint paint = new Paint();
     private static float width, height, scrWidth, scrHeight;
-    private int add = 4;
-    private float cityX, cityY;
+    private int add = 50;
     private Bitmap rocketB;
     private Random rand = new Random();
     private List<Rocket> rockets = new ArrayList<Rocket>();
     private MainGamePanel gamePanel;
+    private Rocket rocket;
 
     public Rocket(MainGamePanel g) {
         this.gamePanel = g;
@@ -58,6 +59,10 @@ public class Rocket extends Drawable {
 
     public static float getHeight() {
         return height;
+    }
+
+    public float getDistanceIncrement() {
+        return add;
     }
 
     public void move2() {
@@ -160,10 +165,6 @@ public class Rocket extends Drawable {
                 break;
             case 0:
                 gamePanel.setLevel(2);
-                for(int i = 0; i < 10; i++)
-                {
-                    //gamePanel.addNewSpaceship();
-                }
                 break;
         }
     }

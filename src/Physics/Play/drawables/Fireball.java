@@ -5,6 +5,7 @@ import Physics.Play.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,12 @@ public class Fireball extends Drawable {
     public static int amountOfFireballs = 0;
     private MainGamePanel gamePanel;
     private static float xOrigin, yOrigin;
+    public boolean logEnabled = true;
+    private static float width, height;
 
 
     public Fireball(MainGamePanel g, float x, float y){
-
+        super();
         imgFireball[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1);
         imgFireball[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1a);
         imgFireball[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1b);
@@ -42,19 +45,39 @@ public class Fireball extends Drawable {
         imgFireball[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4b);
         setx(x);
         sety(y);
-        super.setImage(imgFireball[0]);
-        setWidth(getImage().getWidth());
-        setHeight(getImage().getHeight());
+        setImage(imgFireball[0]);
         setTimerTask();
         this.gamePanel = g;
 
     }
 
-    public void draw(Canvas c){
-
-        c.drawBitmap(getImage(), getx(), gety(), null);
+    //this is the initializer constructor. It must be called first untill i fix my bad code.
+    public Fireball(MainGamePanel g){
+        super();
+        imgFireball[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1);
+        imgFireball[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1a);
+        imgFireball[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1b);
+        imgFireball[3] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball2);
+        imgFireball[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball2a);
+        imgFireball[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball2b);
+        imgFireball[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball3);
+        imgFireball[7] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball3a);
+        imgFireball[8] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball3b);
+        imgFireball[9] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4);
+        imgFireball[10] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4a);
+        imgFireball[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4b);
+        setImage(imgFireball[0]);
+        width = imgFireball[0].getWidth();
+        height = imgFireball[0].getHeight();
+        this.gamePanel = g;
+        log("image width = " + getWidth());
+        log("image height = " + getHeight());
     }
 
+    public static void initialize(float xOrig, float yOrig) {
+        xOrigin = xOrig;
+        yOrigin = yOrig;
+    }
     public Bitmap getImage(){
         return super.getImage();
 
@@ -96,10 +119,11 @@ public class Fireball extends Drawable {
 
     }
 
-    public static void initialize(MainGamePanel g, float xOrig, float yOrig) {
-        xOrigin = xOrig;
-        yOrigin = yOrig;
+    public void setImage(Bitmap image) {
+        super.setImage(image);
     }
+
+
 
     public void addFireball(float x, float y){
         fireballs.add(new Fireball(gamePanel,x,y));
@@ -239,24 +263,39 @@ public class Fireball extends Drawable {
     }
 
     public void move(float x, float y){
-
+        log("move - getWidth() = " + getWidth());
         if(getSize() > 0)
         {
             setX(x);
             setY(y);
 
-            if(getY() > gamePanel.getScrHeight() - getHeight()*2)
-                setYBounds(gamePanel.getScrHeight() - getWidth()*2);
+            if(getY() > gamePanel.getScrHeight() - getHeight() * 2)
+                setYBounds(gamePanel.getScrHeight() - getHeight() * 2);
             if(getY() < yOrigin)
                 setYBounds(yOrigin);
-            if(getX() < (gamePanel.getScrWidth()/4))
-                setXBounds(gamePanel.getScrWidth()/4);
-            if(getX() > ((gamePanel.getScrWidth()/4)*3)- getWidth())
-                setXBounds(((gamePanel.getScrWidth()/4)*3)- getWidth());
+            if(getX() < (gamePanel.getScrWidth() / 4)) {
+                setXBounds(gamePanel.getScrWidth() / 4);
+            }
+            if(getX() > ((gamePanel.getScrWidth() / 4) * 3) - getWidth()) {
+                setXBounds(((gamePanel.getScrWidth() / 4) * 3) - getWidth());
+            }
         }
     }
 
     public void remove(int i){
         fireballs.remove(i);
+    }
+
+    public void log(String string) {
+        if(logEnabled)
+            Log.i("Fireball - ", string);
+    }
+
+    public  static float getHeight() {
+        return height;
+    }
+
+    public static float getWidth() {
+        return width;
     }
 }

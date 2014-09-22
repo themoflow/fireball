@@ -29,10 +29,12 @@ public class Explosion extends Drawable {
     }
 
     public void setIsActive(boolean b) {
-        isActive = b;
+
+        super.setIsActive(b);
     }
 
     public boolean isActive() {
-        return isActive;
+
+        return super.isActive();
     }
 }
