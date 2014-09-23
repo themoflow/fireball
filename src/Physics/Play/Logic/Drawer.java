@@ -20,24 +20,6 @@ public class Drawer {
             c.drawBitmap(drawables.get(i).getImage(), drawables.get(i).getx(), drawables.get(i).gety(), null);
     }
 
-    public void drawFireballs(List<Fireball> fireballs, Canvas c) {
-        List<Fireball> fireballList = null;
-        Fireball fireball = null;
-        for(int i = 0; i < fireballs.size(); i++)
-        {
-            if(fireballs.get(i).getClass() == Fireball.class)
-            {
-                fireball = (Fireball) fireballs.get(i);
-                fireballList = fireball.getArray();
-            }
-        }
-        if(fireballList != null) {
-            for (int i = 0; i < fireballList.size(); i++) {
-                c.drawBitmap(fireballList.get(i).getImage(), fireballList.get(i).getx(), fireballList.get(i).gety(), null);
-            }
-        }
-    }
-
     public void backgroundColor(int color, Canvas c) {
         c.drawColor(color);
     }

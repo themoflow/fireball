@@ -3,10 +3,7 @@ package Physics.Play.main;
 
 
 import Physics.Play.Logic.Collision;
-import Physics.Play.Managers.CityManager;
-import Physics.Play.Managers.ExplosionManager;
-import Physics.Play.Managers.RobotManager;
-import Physics.Play.Managers.RocketManager;
+import Physics.Play.Managers.*;
 import Physics.Play.drawables.*;
 import Physics.Play.Logic.Drawer;
 import android.content.Context;
@@ -26,16 +23,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public static float screenWidth;
     public static float screenHeight;
-    private Paint paint;
     private MainThread thread;
-    private float x;
-    private float y;
     private float xOrig;
     private float yOrig;
-    private float speed = 100;
-    private float angle = 0;
     private float length;
-    private float xVelocity = 0, yVelocity = 0, acceleration = 0.3f;
     private boolean dragged = false, down = false;
     private boolean exploded;
     private float[] explodeCoords;
@@ -43,14 +34,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private MyActivity activity;
     private float cityX, cityY;
     private int cityHits;
-    private Random rand = new Random();
     private boolean gameOver;
     private int times, multiplyBy, theEnd;
-    private int level = 1;
-    private Fireball fireball;
     private ScreenBackground screenBackground;
-    private Drawer drawer;
-    private List<Drawable> drawables = new ArrayList();
     private List<Robot> robots;
     private List<Rocket> rockets;
     private List<City> citys;
@@ -61,6 +47,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private RocketManager rocketManager = RocketManager.getInstance();
     private CityManager cityManager = CityManager.getInstance();
     private ExplosionManager explosionManager = ExplosionManager.getInstance();
+    private FireballManager fireballManager = FireballManager.getInstance();
     private Collision collision;
     private boolean logEnabled = false;
 
@@ -71,7 +58,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         getHolder().addCallback(this);
         // make the GamePanel focusable so it can handle events
         setFocusable(true);
-        paint = new Paint();
     }
 
     @Override
@@ -83,22 +69,17 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         screenHeight = getHeight();
         xOrig = (screenWidth/2) - (Fireball.getWidth()/2);
         yOrig = (screenHeight - (screenHeight/4));
-        Fireball.initialize(xOrig, yOrig);
-        fireball = new Fireball(this);
-        fireball.addFireball(xOrig,yOrig);
-        x = xOrig;
-        y = yOrig;
+        Fireball.initializeStaticMembers(xOrig, yOrig, this);
+        fireballs = fireballManager.createFireballs(1, this, xOrig, yOrig);
         cityX = (screenWidth/2) - 170;
         cityY = screenHeight - 120;
         float slingDistance = (screenHeight - Fireball.getWidth()*2) - (yOrig);
         length = slingDistance / 10;
         screenBackground = new ScreenBackground(this, 0f, 0f);
-        level = 2;
         robots = robotManager.createRobots(20);
         rockets = rocketManager.createRockets(70, this);
         citys = cityManager.createCitys(1, this, cityX, cityY);
         explosions = explosionManager.createExplosions(0, this);
-        fireballs.add(fireball);
         collision = new Collision(this);
         thread = new MainThread(getHolder(), this);
         thread.setRunning(true);
@@ -130,7 +111,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         if(event.getAction() == MotionEvent.ACTION_DOWN)
         {
             log("onTouchEvent - event.");
-            down = fireball.checkForFireballTouch(event.getX(), event.getY());
+            down = fireballManager.checkForFireballTouch(event.getX(), event.getY(), fireballs);
         }
 
         if(event.getAction() == MotionEvent.ACTION_UP)
@@ -139,7 +120,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             {
                 dragged = false;
                 down = false;
-                fireball.getAndSetVelocity(event.getX(), event.getY(), length);
+                fireballManager.getAndSetVelocity(event.getX(), event.getY(), length, fireballs);
             }
 
         }
@@ -150,7 +131,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
             {
                log("ACTION_MOVE");
                dragged = true;
-               fireball.move(event.getX(), event.getY());
+               fireballManager.onDrag(event.getX(), event.getY(), fireballs, this);
             }
         }
         return true;
@@ -191,10 +172,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
          }
          else
          {
-             fireball.checkFor0Fireballs();
-             fireball.checkForFireBallRemoval();
-             fireball.checkForFireballCreation(down);
-             fireball.addVeloc();
+             fireballManager.isAtleastOneFireball(fireballs, this);
+             fireballManager.checkForFireBallRemoval(fireballs, this);
+             fireballManager.checkForFireballCreation(down, fireballs, this);
+             fireballManager.addVelocity(fireballs);
              rocketManager.move(rockets);
 
 
@@ -236,7 +217,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              //Redraw the whole canvas.
              draw.backgroundColor(Color.BLACK, canvas);
              draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
-             draw.drawFireballs(fireballs, canvas);
+             draw.drawToCanvas(fireballManager.setAsDrawable(fireballs), canvas);
              draw.drawToCanvas(rocketManager.setAsDrawable(rockets), canvas);
              draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
          }
@@ -244,10 +225,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      }//end null canvas check.
 
     }//end onDraw
-
-    public void setLevel(int num){
-        level = num;
-    }
 
     public void explosion(boolean b, float[] c){
         exploded = b;

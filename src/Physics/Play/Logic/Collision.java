@@ -26,11 +26,9 @@ public class Collision {
         this.cityY = gamePanel.getCityY();
     }
 
-    public float[] fireBallColided(List<Fireball> FBL, List<Rocket> rockets){
+    public float[] fireBallColided(List<Fireball> fireballs, List<Rocket> rockets){
 
         float[] coords = new float[2];
-        List<Fireball> fireballs = FBL.get(0).getArray();
-
         for(int i = 0; i < fireballs.size(); i++)
         {
               Fireball f = fireballs.get(i);
@@ -56,7 +54,6 @@ public class Collision {
                                   coords[0] = rockets.get(j).getX();
                                   coords[1] = rockets.get(j).getY();
                                   fireballs.remove(i);
-                                  Fireball.updateFireballAmount();
                                   rockets.remove(j);
                                   return coords ;
                               }
