@@ -11,22 +11,21 @@ public class Drawable {
     private Bitmap image;
     private boolean isActive = true;
 
-    public Drawable() {
-    }
+    public Drawable() {}
 
-    public float getx(){
+    public float getX(){
         return x;
     }
 
-    public float gety(){
+    public float getY(){
         return y;
     }
 
-    public void setx(float x){
+    public void setX(float x){
         this.x = x;
     }
 
-    public void sety(float y){
+    public void setY(float y){
         this.y = y;
     }
 

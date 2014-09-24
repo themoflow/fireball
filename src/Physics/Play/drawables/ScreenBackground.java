@@ -10,19 +10,25 @@ import android.graphics.BitmapFactory;
  */
 public class ScreenBackground extends Drawable {
 
-    private MainGamePanel gamePanel;
+    private static float width, height;
 
     public ScreenBackground(MainGamePanel g, float x, float y){
-        gamePanel = g;
-        setImage(BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.screen_background));
-        setx(x);
-        sety(y);
+        super();
+        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.screen_background));
+        setX(x);
+        setY(y);
     }
 
-    public float getImgHeight(){
-        return getImage().getHeight();
+    public static void initializeStaticMembers(MainGamePanel g) {
+        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.screen_background).getWidth();
+        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.screen_background).getHeight();
     }
-    public Bitmap getImg(){
-        return getImage();
+
+    public static float getHeight(){
+        return height;
+    }
+
+    public static float getWidth(){
+        return width;
     }
 }

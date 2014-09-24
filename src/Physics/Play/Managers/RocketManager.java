@@ -31,9 +31,9 @@ public class RocketManager {
 
     public void move(List<Rocket> rockets) {
         for(int i = 0 ; i < rockets.size(); i++) {
-            float y = rockets.get(i).gety();
+            float y = rockets.get(i).getY();
             y += rockets.get(i).getDistanceIncrement();
-            rockets.get(i).sety(y+4);
+            rockets.get(i).setY(y+4);
         }
     }
 

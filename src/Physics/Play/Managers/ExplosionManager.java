@@ -35,4 +35,13 @@ public class ExplosionManager {
             converted.add(explosions.get(i));
         return converted;
     }
+
+    public void setCoordinates(float x, float y, List<Explosion> explosions) {
+        explosions.get(0).setX(x);
+        explosions.get(0).setY(y);
+    }
+
+    public void setIsActive(boolean b, List<Explosion> explosions) {
+        explosions.get(0).setIsActive(b);
+    }
 }

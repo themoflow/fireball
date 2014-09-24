@@ -1,16 +1,10 @@
 package Physics.Play.Managers;
 
-import Physics.Play.drawables.City;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Fireball;
 import Physics.Play.main.MainGamePanel;
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by morantornesella-brooks on 9/22/14.
@@ -43,12 +37,12 @@ public class FireballManager {
     public void addVelocity(List<Fireball> fireballs){
         for(int i = 0; i < fireballs.size(); i++)
         {
-            float x = fireballs.get(i).getx();
-            float y = fireballs.get(i).gety();
+            float x = fireballs.get(i).getX();
+            float y = fireballs.get(i).getY();
             x -= fireballs.get(i).getVelocityX();
             y -= fireballs.get(i).getVelocityY();
-            fireballs.get(i).setx(x);
-            fireballs.get(i).sety(y);
+            fireballs.get(i).setX(x);
+            fireballs.get(i).setY(y);
         }
     }
 
@@ -57,11 +51,11 @@ public class FireballManager {
     }
 
     public float getLastXCoord(List<Fireball> fireballs){
-        return fireballs.get(fireballs.size()-1).getx();
+        return fireballs.get(fireballs.size()-1).getX();
     }
 
     public float getLastYCoord(List<Fireball> fireballs){
-        return fireballs.get(fireballs.size()-1).gety();
+        return fireballs.get(fireballs.size()-1).getY();
     }
 
     public void setVelocity(float x, float y, List<Fireball> fireballs){
@@ -99,7 +93,7 @@ public class FireballManager {
 
         for(int i = 0; i < fireballs.size(); i++)
         {
-            if(fireballs.get(i).getx() <= 0 - Fireball.getWidth() || fireballs.get(i).getx() > g.getScrWidth() || fireballs.get(i).gety() < 0 - Fireball.getHeight() || fireballs.get(i).gety() > g.getScrHeight())
+            if(fireballs.get(i).getX() <= 0 - Fireball.getWidth() || fireballs.get(i).getX() > g.getScrWidth() || fireballs.get(i).getY() < 0 - Fireball.getHeight() || fireballs.get(i).getY() > g.getScrHeight())
             {
                 fireballs.remove(i);
             }
@@ -111,15 +105,15 @@ public class FireballManager {
 
         if(fireballs.size() > 0)
         {
-            if(fireballs.get(fireballs.size()-1).gety() + 48 < Fireball.getOriginY())
+            if(fireballs.get(fireballs.size()-1).getY() + 48 < Fireball.getOriginY())
             {
                 fireballs.add(new Fireball(g, Fireball.getOriginX(), Fireball.getOriginY()));
             }
-            else if(down == false && fireballs.get(fireballs.size()-1).gety() <= Fireball.getOriginY() && fireballs.get(fireballs.size()-1).getx()+48 < Fireball.getOriginX())
+            else if(down == false && fireballs.get(fireballs.size()-1).getY() <= Fireball.getOriginY() && fireballs.get(fireballs.size()-1).getX()+48 < Fireball.getOriginX())
             {
                 fireballs.add(new Fireball(g, Fireball.getOriginX(), Fireball.getOriginY()));
             }
-            else if (down == false && fireballs.get(fireballs.size()-1).gety() <= Fireball.getOriginY() && fireballs.get(fireballs.size()-1).getx() > Fireball.getOriginX()+48)
+            else if (down == false && fireballs.get(fireballs.size()-1).getY() <= Fireball.getOriginY() && fireballs.get(fireballs.size()-1).getX() > Fireball.getOriginX()+48)
             {
                 fireballs.add(new Fireball(g,Fireball.getOriginX(),Fireball.getOriginY()));
             }
@@ -145,18 +139,18 @@ public class FireballManager {
     public void onDrag(float x, float y, List<Fireball> fireballs, MainGamePanel g){
         if(fireballs.size() > 0)
         {
-            fireballs.get(fireballs.size()-1).setx(x);
-            fireballs.get(fireballs.size()-1).sety(y);
+            fireballs.get(fireballs.size()-1).setX(x);
+            fireballs.get(fireballs.size()-1).setY(y);
 
-            if(fireballs.get(fireballs.size()-1).gety() > g.getScrHeight() - Fireball.getHeight() * 2)
-                fireballs.get(fireballs.size()-1).sety(g.getScrHeight() - Fireball.getHeight() * 2);
-            if(fireballs.get(fireballs.size()-1).gety() < Fireball.getOriginY())
-                fireballs.get(fireballs.size()-1).sety(Fireball.getOriginY());
-            if(fireballs.get(fireballs.size()-1).getx() < (g.getScrWidth() / 4)) {
-                fireballs.get(fireballs.size()-1).setx(g.getScrWidth() / 4);
+            if(fireballs.get(fireballs.size()-1).getY() > g.getScrHeight() - Fireball.getHeight() * 2)
+                fireballs.get(fireballs.size()-1).setY(g.getScrHeight() - Fireball.getHeight() * 2);
+            if(fireballs.get(fireballs.size()-1).getY() < Fireball.getOriginY())
+                fireballs.get(fireballs.size()-1).setY(Fireball.getOriginY());
+            if(fireballs.get(fireballs.size()-1).getX() < (g.getScrWidth() / 4)) {
+                fireballs.get(fireballs.size()-1).setX(g.getScrWidth() / 4);
             }
-            if(fireballs.get(fireballs.size()-1).getx() > ((g.getScrWidth() / 4) * 3) - Fireball.getWidth()) {
-                fireballs.get(fireballs.size()-1).setx(((g.getScrWidth() / 4) * 3) - Fireball.getWidth());
+            if(fireballs.get(fireballs.size()-1).getX() > ((g.getScrWidth() / 4) * 3) - Fireball.getWidth()) {
+                fireballs.get(fireballs.size()-1).setX(((g.getScrWidth() / 4) * 3) - Fireball.getWidth());
             }
         }
     }

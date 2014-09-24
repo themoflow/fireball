@@ -15,29 +15,23 @@ import android.graphics.Canvas;
  */
 public class City extends Drawable {
 
-    private MainGamePanel gamePanel;
     private static float height, width;
 
     public City(MainGamePanel g, float x, float y){
-        gamePanel = g;
-        Bitmap image = BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.city);
-        setImage(image);
-        width = image.getWidth();
-        height = image.getHeight();
-        setx(x);
-        sety(y);
+        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.city));
+        setX(x);
+        setY(y);
     }
 
-    public void draw(Canvas c){
-        c.drawBitmap(getImage(), getx(), gety(), null);
+    public static void initializeStaticMembers(MainGamePanel g) {
+        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.city).getWidth();
+        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.city).getHeight();
     }
+
     public static float getHeight(){
         return height;
     }
     public static float getWidth(){
         return width;
-    }
-    public Bitmap getImg(){
-        return getImage();
     }
 }

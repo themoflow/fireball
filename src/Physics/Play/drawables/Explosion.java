@@ -9,32 +9,31 @@ import android.graphics.Canvas;
 
 public class Explosion extends Drawable {
 
-    private boolean isActive = false;
+    private static float width, height;
 
     public Explosion(MainGamePanel g) {
+        super();
         setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.explosion));
     }
 
-    public Bitmap getImg() {
-        return getImage();
-    }
-
-    public void draw(Canvas c) {
-        c.drawBitmap(getImage(), getx(), gety(),null);
-    }
-
-    public void setCoordinates(float x, float y) {
-        setx(x);
-        sety(y);
+    public static void initializeStaticMembers(MainGamePanel g) {
+        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.explosion).getWidth();
+        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.explosion).getHeight();
     }
 
     public void setIsActive(boolean b) {
-
         super.setIsActive(b);
     }
 
     public boolean isActive() {
-
         return super.isActive();
+    }
+
+    public static float getHeight(){
+        return height;
+    }
+
+    public static float getWidth(){
+        return width;
     }
 }

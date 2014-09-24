@@ -17,7 +17,7 @@ public class Drawer {
 
     public void drawToCanvas(List<Drawable> drawables, Canvas c) {
         for(int i = 0; i < drawables.size(); i++)
-            c.drawBitmap(drawables.get(i).getImage(), drawables.get(i).getx(), drawables.get(i).gety(), null);
+            c.drawBitmap(drawables.get(i).getImage(), drawables.get(i).getX(), drawables.get(i).getY(), null);
     }
 
     public void backgroundColor(int color, Canvas c) {

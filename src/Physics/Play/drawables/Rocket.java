@@ -16,37 +16,24 @@ public class Rocket extends Drawable {
 
     private static float width, height, scrWidth, scrHeight;
     private int add = 50;
-    private Bitmap rocketB;
     private Random rand = new Random();
-    private List<Rocket> rockets = new ArrayList<Rocket>();
-    private MainGamePanel gamePanel;
-    private Rocket rocket;
-
-    public Rocket(MainGamePanel g) {
-        this.gamePanel = g;
-    }
 
     public Rocket(MainGamePanel g, float y) {
-        rocketB = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket);
-        width = rocketB.getWidth();
-        height = rocketB.getHeight();
-        scrWidth = g.getScrWidth();
-        scrHeight = g.getScrHeight();
-        setx(generateRandomNumber());
-        sety(y);
+        super();
+        Bitmap image = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket);
+        width = image.getWidth();
+        height = image.getHeight();
+        setX(generateRandomNumber());
+        setY(y);
+        setImage(image);
         add = 1;
     }
 
-    public Rocket(MainGamePanel g, float x, float y) {
-        rocketB = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket);
-        width = rocketB.getWidth();
-        height = rocketB.getHeight();
-        scrWidth = g.getScrWidth();
-        scrHeight = g.getScrHeight();
-        setx(x);
-        sety(y);
-        add = 1;
-        rand = new Random();
+    public static void initializeStaticMembers(MainGamePanel g, float sw, float sh) {
+        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getWidth();
+        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getHeight();
+        scrWidth = sw;
+        scrHeight = sh;
     }
 
     private float generateRandomNumber() {
@@ -64,23 +51,5 @@ public class Rocket extends Drawable {
     public float getDistanceIncrement() {
         return add;
     }
-
-    public float getY() {
-        return gety();
-    }
-
-    public float getX() {
-        return getx();
-    }
-
-    public Bitmap getImage() {
-        return rocketB;
-    }
-
-
-
-
-
-
 
 }

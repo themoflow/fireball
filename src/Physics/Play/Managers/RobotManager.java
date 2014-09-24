@@ -1,12 +1,7 @@
 package Physics.Play.Managers;
 
-import Physics.Play.R;
-import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Robot;
 import Physics.Play.main.MainGamePanel;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import java.util.*;
 
 /**

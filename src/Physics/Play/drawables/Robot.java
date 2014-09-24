@@ -2,7 +2,6 @@ package Physics.Play.drawables;
 
 import Physics.Play.R;
 import Physics.Play.main.MainGamePanel;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
@@ -10,40 +9,25 @@ import android.graphics.BitmapFactory;
  */
 public class Robot extends Drawable {
 
-    private MainGamePanel gamePanel;
     private boolean isOnRocket = true;
     private static float width, height;
 
-    public Robot(MainGamePanel g, float x, float y){
-        super();
-        gamePanel = g;
-        Bitmap robot = BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.robot);
-        setImage(robot);
-        setx(x);
-        sety(y);
-        width = robot.getWidth();
-        height = robot.getHeight();
-    }
-
     public Robot(MainGamePanel g){
         super();
-        gamePanel = g;
-        Bitmap robot = BitmapFactory.decodeResource(gamePanel.getResources(), R.drawable.robot);
-        setImage(robot);
-        width = (robot.getWidth());
-        height = (robot.getHeight());
+        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot));
     }
 
-    public static float getHeight(){
+    public static void initializeStaticMembers(MainGamePanel g) {
+        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot).getWidth();
+        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot).getHeight();
+    }
+
+    public static float getHeight() {
         return height;
     }
 
     public static float getWidth(){
         return width;
-    }
-
-    public Bitmap getImg(){
-        return getImage();
     }
 
     public void setIsActive(boolean b) {

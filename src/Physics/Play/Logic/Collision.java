@@ -3,7 +3,6 @@ package Physics.Play.Logic;
 import java.util.List;
 
 import Physics.Play.drawables.City;
-import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Fireball;
 import Physics.Play.drawables.Rocket;
 import Physics.Play.main.MainGamePanel;
@@ -15,15 +14,13 @@ import android.util.Log;
 
 public class Collision {
 
-    private MainGamePanel gamePanel;
     private float cityX, cityY;
     private final float cityWidth = 340, cityHeight = 147;
     private boolean logEnabled = false;
 
     public Collision(MainGamePanel g){
-        gamePanel = g;
-        this.cityX = gamePanel.getCityX();
-        this.cityY = gamePanel.getCityY();
+        cityX = g.getCityX();
+        cityY = g.getCityY();
     }
 
     public float[] fireBallColided(List<Fireball> fireballs, List<Rocket> rockets){
@@ -32,7 +29,7 @@ public class Collision {
         for(int i = 0; i < fireballs.size(); i++)
         {
               Fireball f = fireballs.get(i);
-              Rect fireballArea = new Rect( (int)f.getx(), (int)f.gety(), (int)(f.getx()+f.getWidth()), (int)(f.gety() + f.getHeight()));
+              Rect fireballArea = new Rect( (int)f.getX(), (int)f.getY(), (int)(f.getX()+f.getWidth()), (int)(f.getY() + f.getHeight()));
 
               for(int j = 0; j < rockets.size(); j++)
               {
@@ -71,7 +68,7 @@ public class Collision {
 
         float[] coords = new float[2];
         Rect city = new Rect( (int)cityX,(int)cityY, (int)(cityX+cityWidth), (int)(cityY +cityHeight));
-        Bitmap cityImg = citys.get(0).getImg();
+        Bitmap cityImg = citys.get(0).getImage();
 
         for(int i = 0; i < rockets.size(); i++)
         {
@@ -110,8 +107,8 @@ public class Collision {
 
     private int getBitmapPixel(Fireball f, int i, int j) {
         if(logEnabled)
-            Log.i("Collision - getBitmapPixel","x = " + (i - (int)f.getx()) + ", width = " + f.getImage().getWidth());
-        return f.getImage().getPixel(i - (int)f.getx(), j - (int)f.gety());
+            Log.i("Collision - getBitmapPixel","x = " + (i - (int)f.getX()) + ", width = " + f.getImage().getWidth());
+        return f.getImage().getPixel(i - (int)f.getX(), j - (int)f.getY());
     }
 
     private static int getBitmapPixel(Rocket r, int i, int j) {
