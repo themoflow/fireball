@@ -29,6 +29,11 @@ public class BulletExplosionManager {
         return bulletExplosions;
     }
 
+    public List<BulletExplosion> createBulletExplosion(MainGamePanel g, List<BulletExplosion> bulletExplosions, float x, float y) {
+        bulletExplosions.add(new BulletExplosion(g, x, y));
+        return bulletExplosions;
+    }
+
     public List<Drawable> setAsDrawable(List<BulletExplosion> bulletExplosions) {
         List<Drawable> converted = new ArrayList();
         for(int i = 0; i < bulletExplosions.size(); i++)
@@ -39,6 +44,15 @@ public class BulletExplosionManager {
     public void setCoordinates(float x, float y, List<BulletExplosion> bulletExplosions) {
         bulletExplosions.get(0).setX(x);
         bulletExplosions.get(0).setY(y);
+    }
+
+    public void checkForRemoval(List<BulletExplosion> bulletExplosions) {
+        for(int i = 0; i < bulletExplosions.size(); i++)
+        {
+            double startTime = bulletExplosions.get(i).getStartTime();
+            if(System.currentTimeMillis() - startTime > 100)
+                bulletExplosions.remove(i);
+        }
     }
 
     public void setIsActive(boolean b, List<BulletExplosion> explosions) {

@@ -20,11 +20,15 @@ public class ExplosionManager {
         return e;
     }
 
-    public List<Explosion> createExplosions(int amount, MainGamePanel g) {
-        List<Explosion> explosions = new ArrayList();
+    public List<Explosion> createExplosions(int amount, MainGamePanel g, List<Explosion> explosions) {
         for(int i = 0; i < amount; i++) {
             explosions.add(new Explosion(g));
         }
+        return explosions;
+    }
+
+    public List<Explosion> createExplosion(MainGamePanel g, List<Explosion> explosions, float x, float y) {
+        explosions.add(new Explosion(g, x, y));
         return explosions;
     }
 
@@ -42,5 +46,14 @@ public class ExplosionManager {
 
     public void setIsActive(boolean b, List<Explosion> explosions) {
         explosions.get(0).setIsActive(b);
+    }
+
+    public void checkForRemoval(List<Explosion> explosions) {
+        for(int i = 0; i < explosions.size(); i++)
+        {
+            double startTime = explosions.get(i).getStartTime();
+            if(System.currentTimeMillis() - startTime > 100)
+                explosions.remove(i);
+        }
     }
 }

@@ -103,7 +103,7 @@ public class CollisionDetector {
         }
         return null;
 
-    }  //end fireBallColided
+    }  //end fireBallColidedWithRobots
 
     public float[] rocketCollidedWithCity(List<Rocket> rockets, List<City> citys, List<Robot> robots){
 
@@ -156,7 +156,7 @@ public class CollisionDetector {
         for(int i = 0; i < bullets.size(); i++)
         {
             Bullet bullet = bullets.get(i);
-            Rect square = new Rect( (int)bullet.getX(), (int)bullet.getY(), (int)(bullet.getX()+bullet.getWidth()), (int)(bullet.getY() + bullet.getHeight()) );
+            Rect square = new Rect( (int)bullet.getX(), (int)bullet.getY(), (int)(bullet.getX()+Bullet.getWidth()), (int)(bullet.getY() + Bullet.getHeight()));
 
             if( Rect.intersects(city, square) )
             {
@@ -171,8 +171,8 @@ public class CollisionDetector {
 
                         if(isFilled(cityPixel) && isFilled(squarePixel))
                         {
-                            coords[0] = bullets.get(i).getX() + (bullet.getWidth() / 2);
-                            coords[1] = bullets.get(i).getY() + bullet.getHeight();
+                            coords[0] = bullets.get(i).getX();
+                            coords[1] = bullets.get(i).getY();
                             bullets.remove(i);
                             return coords ;
                         }
@@ -182,6 +182,46 @@ public class CollisionDetector {
         }
         return null;
     }
+
+    public float[] fireBallColidedWithBullets(List<Fireball> fireballs, List<Bullet> bullets){
+
+        float[] coords = new float[2];
+        for(int i = 0; i < fireballs.size(); i++)
+        {
+            Fireball fireball = fireballs.get(i);
+            Rect fireballRec = new Rect( (int)fireball.getX(), (int)fireball.getY(), (int)(fireball.getX()+fireball.getWidth()), (int)(fireball.getY() + fireball.getHeight()));
+
+            for(int j = 0; j < bullets.size(); j++)
+            {
+                Bullet bullet = bullets.get(j);
+                Rect bulletRec = new Rect((int)bullet.getX(), (int)bullet.getY(), (int)(bullet.getX() + Bullet.getWidth()), (int)(bullet.getY() + Bullet.getHeight()));
+
+                if(Rect.intersects(fireballRec, bulletRec) )
+                {
+                    Rect collisionBounds = getCollisionBounds(fireballRec, bulletRec);
+                    for (int k = collisionBounds.left; k < collisionBounds.right; k++)
+                    {
+                        for (int L = collisionBounds.top; L < collisionBounds.bottom; L++)
+                        {
+                            int fireballPixel = getBitmapPixel(fireball, k, L);
+                            int robotPixel = getBitmapPixel(bullet, k, L);
+
+                            if(isFilled(fireballPixel) && isFilled(robotPixel))
+                            {
+                                coords[0] = bullets.get(j).getX();
+                                coords[1] = bullets.get(j).getY();
+                                bullets.remove(j);
+                                return coords ;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        return null;
+
+    }  //end fireBallColided
 
     private int getBitmapPixel(Bitmap b, int i, int j, int x, int y) {
         return b.getPixel((i - x), (j - y));

@@ -37,12 +37,12 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private List<Robot> robots;
     private List<Rocket> rockets;
     private List<City> citys;
-    private List<Explosion> explosions;
+    private List<Explosion> explosions = new ArrayList();
     private List<Fireball> fireballs;
     private List<ScreenBackground> screenBackgrounds;
     private List<GreenDot> greenDots;
     private List<Bullet> bullets;
-    private List<BulletExplosion> bulletExplosions;
+    private List<BulletExplosion> bulletExplosions = new ArrayList();
 
     //Drawable managers.
     private RobotManager robotManager = new RobotManager(this);
@@ -96,11 +96,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         robots = robotManager.createRobots(70);
         rockets = rocketManager.createRockets(70, this);
         citys = cityManager.createCitys(1, this, (screenWidth / 2) - 170, screenHeight - 120);
-        explosions = explosionManager.createExplosions(0, this);
         screenBackgrounds = screenBackgroundManager.createScreenBackground(1, this, 0f, 0f);
         greenDots = greenDotManager.createGreenDots(1, this, fireballs);
         bullets = bulletManager.createBullets(0, this);
-        bulletExplosions = bulletExplosionManager.createBulletExplosions(0, this);
 
         slingShot = new SlingShot(20, 10, screenHeight - 50, screenWidth - 10, screenHeight);
 
@@ -173,19 +171,21 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      {
          if(gameOver)
          {
+             explosionManager.checkForRemoval(explosions);
+             bulletExplosionManager.checkForRemoval(bulletExplosions);
              canvas.drawColor(Color.BLACK);
              draw.drawToCanvas(screenBackgroundManager.setAsDrawable(screenBackgrounds), canvas);
              draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
              if(times*40 < screenWidth)
              {
-                 explosions = explosionManager.createExplosions(1, this);
+                 explosions = explosionManager.createExplosions(1, this, explosions);
                  explosionManager.setCoordinates(times * 40, screenHeight - (City.getHeight() - 40), explosions);
                  draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
                  times++;
              }
              else if(multiplyBy*40 < screenWidth)
              {
-                 explosions = explosionManager.createExplosions(1, this);
+                 explosions = explosionManager.createExplosions(1, this, explosions);
                  explosionManager.setCoordinates((multiplyBy * 40), (screenHeight - (City.getHeight() / 2)), explosions);
                  draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
                  multiplyBy++;
@@ -207,95 +207,43 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              robotManager.move(robots);
              bullets = bulletManager.createBullets(robots, bullets, this);
              bulletManager.move(bullets);
+             explosionManager.checkForRemoval(explosions);
+             bulletExplosionManager.checkForRemoval(bulletExplosions);
 
              float[] fireballRocketCollionCoordinates = collisionDetector.fireBallColidedWithRockets(fireballs, rockets, robots);
              float[] rocketCityCollisionCoordinates = collisionDetector.rocketCollidedWithCity(rockets, citys, robots);
-             float[] fireballRocketCollisionCoordinates = collisionDetector.fireBallColidedWithRobots(fireballs, robots, rockets);
+             float[] fireballRobotCollisionCoordinates = collisionDetector.fireBallColidedWithRobots(fireballs, robots, rockets);
              float[] bulletCityCollisionCoordinates = collisionDetector.bulletsCollidedWithCity(bullets, citys);
+             float[] fireballBulletCollisionCoordinates = collisionDetector.fireBallColidedWithBullets(fireballs, bullets);
 
-             if (!(fireballRocketCollionCoordinates == null))
-                 rocketExplosion(true, fireballRocketCollionCoordinates);
-
-             if (!(rocketCityCollisionCoordinates == null))
+             if(fireballRocketCollionCoordinates != null)
              {
-                 this.addHitToCity();
-                 rocketExplosion(true, rocketCityCollisionCoordinates);
+                 explosions = explosionManager.createExplosion(this, explosions, fireballRocketCollionCoordinates[0] - (Explosion.getWidth()/2), fireballRocketCollionCoordinates[1]);
              }
 
-             if (!(fireballRocketCollisionCoordinates == null)) {
-                 rocketExplosion(true, fireballRocketCollisionCoordinates);
+             if(rocketCityCollisionCoordinates != null)
+             {
+                 addHitToCity();
+                 explosions = explosionManager.createExplosion(this, explosions, rocketCityCollisionCoordinates[0] - (Explosion.getWidth()/2), rocketCityCollisionCoordinates[1]);
              }
 
-             if (!(bulletCityCollisionCoordinates == null)) {
-                 bulletExplosion(true, bulletCityCollisionCoordinates);
+             if(fireballRobotCollisionCoordinates != null)
+             {
+                 explosions = explosionManager.createExplosion(this, explosions, fireballRobotCollisionCoordinates[0] - (Explosion.getWidth()/2), fireballRobotCollisionCoordinates[1]);
              }
 
-             //Check to see if rocket explosion animation needs to be played.
-             if(rocketExploded) {
-                 if (prevSec == 0)
-                 {
-                     log("rocket exploded 0 ===============================");
-                     prevSec = System.currentTimeMillis();
-                     explosions = explosionManager.createExplosions(1, this);
-                     explosionManager.setCoordinates(rocketExplodeCoords[0], rocketExplodeCoords[1], explosions);
-                     explosionManager.setIsActive(true, explosions);
-                 }
-                 else
-                 {
-                     log("rocket exploded 1 ===============================");
-                     nowSec = System.currentTimeMillis();
-                     if (nowSec - prevSec > 100)
-                     {
-                         rocketExploded = false;
-                         prevSec = 0;
-                         explosions = explosionManager.createExplosions(0, this);
-                     }
-                     else
-                     {
-                         log("rocket exploded 2 ===============================");
-                         explosions = explosionManager.createExplosions(1, this);
-                         explosionManager.setCoordinates(rocketExplodeCoords[0] - 25, rocketExplodeCoords[1] - 25, explosions);
-                         explosionManager.setIsActive(true, explosions);
-                     }
-
-                 }
-                 if (cityHits == 10) {
-                     gameOver = true;
-                 }
+             if(bulletCityCollisionCoordinates != null)
+             {
+                 //addHitToCity();
+                 bulletExplosions = bulletExplosionManager.createBulletExplosion(this, bulletExplosions, bulletCityCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), bulletCityCollisionCoordinates[1]);
+             }
+             if(fireballBulletCollisionCoordinates != null)
+             {
+                 bulletExplosions = bulletExplosionManager.createBulletExplosion(this, bulletExplosions, fireballBulletCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), fireballBulletCollisionCoordinates[1]);
              }
 
-             //Check to see if bullet explosion animation needs to be played.
-             if(bulletExploded) {
-                 if(prevSecBulletExplosion == 0)
-                 {
-                     log("bullet exploded 0 ===============================");
-                     prevSecBulletExplosion = System.currentTimeMillis();
-                     bulletExplosions = bulletExplosionManager.createBulletExplosions(1, this);
-                     bulletExplosionManager.setCoordinates(bulletExplodeCoords[0], bulletExplodeCoords[1], bulletExplosions);
-                     bulletExplosionManager.setIsActive(true, bulletExplosions);
-                 }
-                 else
-                 {
-                     nowSecBulletExplosion = System.currentTimeMillis();
-                     if (nowSecBulletExplosion - prevSecBulletExplosion > 100)
-                     {
-                         log("bullet exploded 1 ===============================");
-                         bulletExploded = false;
-                         prevSecBulletExplosion = 0;
-                         bulletExplosions = bulletExplosionManager.createBulletExplosions(0, this);
-                     }
-                     else
-                     {
-                         log("bullet exploded 2 ===============================");
-                         bulletExplosions = bulletExplosionManager.createBulletExplosions(1, this);
-                         bulletExplosionManager.setCoordinates(bulletExplodeCoords[0], bulletExplodeCoords[1], bulletExplosions);
-                         bulletExplosionManager.setIsActive(true, bulletExplosions);
-                     }
-
-                 }
-                 if (cityHits == 10) {
-                     gameOver = true;
-                 }
+             if(cityHits == 10) {
+                gameOver = true;
              }
 
              float[] aimerCoordinates = greenDotManager.getAimerCoordinates(greenDots);
