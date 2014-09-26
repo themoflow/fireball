@@ -26,7 +26,7 @@ public class GreenDotManager {
     }
 
     public void move(float length, List<GreenDot> greenDots, List<Fireball> fireballs) {
-        if(fireballs.size() > 0)
+        if(fireballs.size() > 0 && greenDots.size() > 0)
         {
             float [] centerCoordinates = getFireballsCenterCoordinates(fireballs);
             greenDots.get(0).setX(centerCoordinates[0]);

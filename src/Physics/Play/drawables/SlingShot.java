@@ -3,56 +3,42 @@ package Physics.Play.drawables;
 /**
  * Created by morantornesella-brooks on 9/24/14.
  */
-public class SlingShot extends Drawable {
+public class SlingShot {
 
-    float radius, left, top, right, bottom;
+    float leftX = 10, midX, rightX, topY, bottomY;
 
-    public SlingShot(float rad, float l, float t, float r, float b){
-        radius = rad;
-        left = l;
-        top = t;
-        right = r;
-        bottom = b;
+    public SlingShot(float midX, float rightX, float topY){
+        this.midX = midX;
+        this.rightX = rightX;
+        this.topY = topY;
+        this.bottomY = topY;
     }
 
-    public float getRadius() {
-        return radius;
+    public float getLeftX() {
+        return leftX;
     }
 
-    public float getLeft() {
-        return left;
+    public float getMidX() {
+        return midX;
     }
 
-    public float getTop() {
-        return top;
+    public float getRightX() {
+        return rightX;
     }
 
-    public float getRight() {
-        return right;
+    public float getTopY() {
+        return topY;
     }
 
-    public float getBottom() {
-        return bottom;
+    public float getBottomY() {
+        return bottomY;
     }
 
-    public void setRadius(float r) {
-        radius = r;
+    public void setBottomY(float y) {
+        bottomY = y;
     }
 
-    public void setLeft(float l) {
-        left = l;
+    public void setMidX(float x) {
+        midX = x;
     }
-
-    public void setTop(float t) {
-        radius = t;
-    }
-
-    public void setRight(float r) {
-        radius = r;
-    }
-
-    public void setBottom(float b) {
-        radius = b;
-    }
-
 }

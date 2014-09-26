@@ -52,6 +52,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private GreenDotManager greenDotManager = GreenDotManager.getInstance();
     private BulletManager bulletManager = BulletManager.getInstance();
     private BulletExplosionManager bulletExplosionManager = BulletExplosionManager.getInstance();
+    private SlingShotManager slingShotManager = SlingShotManager.getInstance();
 
     private Drawer draw = Drawer.getInstance();
     private SlingShot slingShot;
@@ -98,7 +99,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         greenDots = greenDotManager.createGreenDots(1, this, fireballs);
         bullets = bulletManager.createBullets(0, this);
 
-        slingShot = new SlingShot(20, 10, screenHeight - 50, screenWidth - 10, screenHeight);
+        slingShot = new SlingShot(screenWidth / 2, screenWidth - 10, (screenHeight - (screenHeight / 4)) + (Fireball.getHeight() / 2));
 
         //Add the robots to the rockets and get their movements coordinated..
         robotManager.addRobotsToRockets(rockets, robots);
@@ -155,6 +156,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                dragged = true;
                fireballManager.onDrag(event.getX(), event.getY(), fireballs, this);
                greenDotManager.move(length, greenDots, fireballs);
+               slingShotManager.move(fireballs, slingShot);
             }
         }
         return true;
@@ -168,7 +170,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      if(canvas != null)
      {
          //If getCityHits() == 10 game is over.
-         if(City.getCityHits() == 10)
+         if(City.getCityHits() == 5)
          {
              City.setCityHits(0);
              explosionManager.checkForRemoval(explosions);
@@ -207,6 +209,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              robotManager.move(robots);
              bullets = bulletManager.createBullets(robots, bullets, this);
              bulletManager.move(bullets);
+             slingShotManager.move(fireballs, slingShot);
              explosionManager.checkForRemoval(explosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
 
@@ -254,7 +257,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              draw.drawToCanvas(robotManager.setAsDrawable(robots), canvas);
              draw.drawToCanvas(bulletManager.setAsDrawable(bullets), canvas);
              draw.drawToCanvas(bulletExplosionManager.setAsDrawable(bulletExplosions), canvas);
-             //draw.drawToCanvas(greenDotManager.setAsDrawable(greenDots), canvas);
+             draw.drawLine(slingShot.getLeftX(), slingShot.getTopY(), slingShot.getMidX(), slingShot.getBottomY(), canvas);
+             draw.drawLine(slingShot.getMidX(), slingShot.getBottomY(), slingShot.getRightX(), slingShot.getTopY(), canvas);
              draw.drawLine(aimerCoordinates[0], aimerCoordinates[1], aimerCoordinates[2], aimerCoordinates[3], canvas);
              //draw.drawArch(slingShot.getLeft(), slingShot.getTop(), slingShot.getRight(), slingShot.getBottom(), canvas);
          }

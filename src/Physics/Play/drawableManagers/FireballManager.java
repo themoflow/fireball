@@ -142,20 +142,18 @@ public class FireballManager {
             {
                 fireballs.get(fireballs.size()-1).setX(centerX(x));
                 fireballs.get(fireballs.size()-1).setY(centerY(y));
-
+                //Set the Y coordinate boundry area for the bottom of screen.
                 if(fireballs.get(fireballs.size()-1).getY() > g.getScreenHeight() - Fireball.getHeight())
                     fireballs.get(fireballs.size()-1).setY(g.getScreenHeight() - Fireball.getHeight());
-
+                //Set the y coordinate boundry area for the top.
                 if(fireballs.get(fireballs.size()-1).getY() < Fireball.getOriginY())
                     fireballs.get(fireballs.size()-1).setY(Fireball.getOriginY());
-
-                if(fireballs.get(fireballs.size()-1).getX() < (g.getScreenWidth() / 4))
-                    fireballs.get(fireballs.size()-1).setX(g.getScreenWidth() / 4);
-
-                if(fireballs.get(fireballs.size()-1).getX() > ((g.getScreenWidth() / 4) * 3) - Fireball.getWidth())
-                    fireballs.get(fireballs.size()-1).setX(((g.getScreenWidth() / 4) * 3) - Fireball.getWidth());
-
-
+                //Set the x coordinate boundry area for the left of the screen.
+                if(fireballs.get(fireballs.size()-1).getX() < 0)
+                    fireballs.get(fireballs.size()-1).setX(0);
+                //Set the x coordinate boundry area for the right of the screen.
+                if(fireballs.get(fireballs.size()-1).getX() > g.getScreenWidth() - Fireball.getWidth())
+                    fireballs.get(fireballs.size()-1).setX(g.getScreenWidth() - Fireball.getWidth());
         }
     }
 
