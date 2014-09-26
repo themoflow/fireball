@@ -1,10 +1,9 @@
 package Physics.Play.drawables;
 
-import Physics.Play.main.MainGamePanel;
+import Physics.Play.core.MainGamePanel;
 import Physics.Play.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -21,9 +20,6 @@ public class Fireball extends Drawable {
     private long delay = 50L;
     private long replay = 50L;
     private int imageIndex;
-    private List<Fireball> fireballs = new ArrayList<Fireball>();
-    public static int amountOfFireballs = 0;
-    private MainGamePanel gamePanel;
     private static float xOrigin, yOrigin, width, height;
     public boolean logEnabled = true;
 
@@ -46,15 +42,14 @@ public class Fireball extends Drawable {
         setY(y);
         setImage(imgFireball[0]);
         setTimerTask();
-        this.gamePanel = g;
 
     }
 
-    public static void initializeStaticMembers(float xOrig, float yOrig, MainGamePanel g) {
-        xOrigin = xOrig;
-        yOrigin = yOrig;
+    public static void initializeStaticMembers(float screenWidth, float screenHeight, MainGamePanel g) {
         width = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1).getWidth();
         height = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1).getHeight();
+        xOrigin = (screenWidth / 2) - (width / 2);
+        yOrigin = (screenHeight - (screenHeight / 4));
     }
 
     private void setTimerTask(){

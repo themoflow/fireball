@@ -1,8 +1,7 @@
 package Physics.Play.drawables;
 
 import Physics.Play.R;
-import Physics.Play.main.MainGamePanel;
-import android.graphics.Bitmap;
+import Physics.Play.core.MainGamePanel;
 import android.graphics.BitmapFactory;
 
 /**

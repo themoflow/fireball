@@ -1,22 +1,19 @@
 package Physics.Play.drawables;
 
-import Physics.Play.main.MainGamePanel;
+import Physics.Play.core.MainGamePanel;
 import Physics.Play.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Rocket extends Drawable {
 
     private static float width, height, scrWidth, scrHeight;
-    private int add = 50;
+    private int add = 0;
     private Random rand = new Random();
+    private boolean hasRobot = true;
+    private Robot robot;
+    private boolean destroyed = false;
 
     public Rocket(MainGamePanel g, float y) {
         super();
@@ -50,6 +47,30 @@ public class Rocket extends Drawable {
 
     public float getDistanceIncrement() {
         return add;
+    }
+
+    public void setHasRobot(boolean b) {
+        hasRobot = b;
+    }
+
+    public boolean hasRobot() {
+        return hasRobot;
+    }
+
+    public void setRobot(Robot r) {
+        robot = r;
+    }
+
+    public Robot getRobot() {
+        return robot;
+    }
+
+    public void setDestroyed(boolean b) {
+        destroyed = b;
+    }
+
+    public boolean hasBeenDestroyed() {
+        return destroyed;
     }
 
 }

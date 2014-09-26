@@ -1,10 +1,8 @@
 package Physics.Play.drawables;
 
-import Physics.Play.main.MainGamePanel;
+import Physics.Play.core.MainGamePanel;
 import Physics.Play.R;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 
 /**
  * Created with IntelliJ IDEA.
