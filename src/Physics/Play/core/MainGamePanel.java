@@ -28,8 +28,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private long prevSec, nowSec;
     private long prevSecBulletExplosion, nowSecBulletExplosion;
     private MyActivity activity;
-    private int cityHits;
-    private boolean gameOver;
     private int times, multiplyBy, theEnd;
     private CollisionDetector collisionDetector;
 
@@ -169,8 +167,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      super.onDraw(canvas);
      if(canvas != null)
      {
-         if(gameOver)
+         //If getCityHits() == 10 game is over.
+         if(City.getCityHits() == 10)
          {
+             City.setCityHits(0);
              explosionManager.checkForRemoval(explosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
              canvas.drawColor(Color.BLACK);
@@ -223,8 +223,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
              if(rocketCityCollisionCoordinates != null)
              {
-                 addHitToCity();
-                 explosions = explosionManager.createExplosion(this, explosions, rocketCityCollisionCoordinates[0] - (Explosion.getWidth()/2), rocketCityCollisionCoordinates[1]);
+                 City.addHit();
+                 explosions = explosionManager.createExplosion(this, explosions, rocketCityCollisionCoordinates[0] - (Explosion.getWidth()/2), rocketCityCollisionCoordinates[1] - (Explosion.getHeight() / 2));
              }
 
              if(fireballRobotCollisionCoordinates != null)
@@ -240,10 +240,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              if(fireballBulletCollisionCoordinates != null)
              {
                  bulletExplosions = bulletExplosionManager.createBulletExplosion(this, bulletExplosions, fireballBulletCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), fireballBulletCollisionCoordinates[1]);
-             }
-
-             if(cityHits == 10) {
-                gameOver = true;
              }
 
              float[] aimerCoordinates = greenDotManager.getAimerCoordinates(greenDots);
@@ -266,24 +262,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
      }//end null canvas check.
 
     }//end onDraw
-
-    public void rocketExplosion(boolean b, float[] c){
-        rocketExploded = b;
-        rocketExplodeCoords = c;
-    }
-
-    public void bulletExplosion(boolean b, float[] c){
-        bulletExploded = b;
-        bulletExplodeCoords = c;
-    }
-
-    public void addHitToCity(){
-        cityHits++;
-    }
-
-    public boolean gameOver(){
-        return gameOver;
-    }
 
     public static float getScreenWidth(){
         return screenWidth;

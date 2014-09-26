@@ -1,5 +1,6 @@
 package Physics.Play.core;
 
+import Physics.Play.drawables.City;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
@@ -26,7 +27,8 @@ public class MainThread extends Thread {
         loop: while (running)
         {
             Canvas canvas = null;
-            if(gamePanel.gameOver()) {
+            //If getCityHits() = 10 game is over.
+            if(City.getCityHits() == 10) {
                 try {
                     Thread.sleep(200);
                 } catch (Exception e) {

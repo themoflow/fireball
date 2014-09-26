@@ -94,81 +94,25 @@
       <file leaf-file-name="MainGamePanel.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Physics/Play/core/MainGamePanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25497288" vertical-offset="3159" max-vertical-offset="4605">
-              <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.54068714" vertical-offset="3091" max-vertical-offset="4275">
+              <caret line="226" column="205" selection-start-line="226" selection-start-column="205" selection-end-line="226" selection-end-column="205" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#11994#11995#0" expanded="true" />
-                <element signature="e#12020#12021#0" expanded="true" />
-                <element signature="e#12052#12053#0" expanded="true" />
-                <element signature="e#12083#12084#0" expanded="true" />
-                <element signature="e#12126#12127#0" expanded="true" />
-                <element signature="e#12160#12161#0" expanded="true" />
-                <element signature="e#12204#12205#0" expanded="true" />
-                <element signature="e#12239#12240#0" expanded="true" />
+                <element signature="e#11746#11747#0" expanded="true" />
+                <element signature="e#11780#11781#0" expanded="true" />
+                <element signature="e#11824#11825#0" expanded="true" />
+                <element signature="e#11859#11860#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BulletExplosionManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawableManagers/BulletExplosionManager.java">
+      <file leaf-file-name="City.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawables/City.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="945">
-              <caret line="53" column="32" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CollisionDetector.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Physics/Play/helpers/CollisionDetector.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.192307" vertical-offset="2379" max-vertical-offset="3825">
-              <caret line="185" column="45" selection-start-line="185" selection-start-column="19" selection-end-line="185" selection-end-column="45" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FireballManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawableManagers/FireballManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1491" max-vertical-offset="2460">
-              <caret line="53" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
-              <folding>
-                <element signature="e#1683#1684#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExplosionManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawableManagers/ExplosionManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="915">
-              <caret line="56" column="9" selection-start-line="51" selection-start-column="8" selection-end-line="56" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BulletExplosion.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawables/BulletExplosion.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="203" max-vertical-offset="810">
-              <caret line="52" column="30" selection-start-line="52" selection-start-column="30" selection-end-line="52" selection-end-column="30" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1394#1395#0" expanded="true" />
-                <element signature="e#1423#1424#0" expanded="true" />
-                <element signature="e#1459#1460#0" expanded="true" />
-                <element signature="e#1491#1492#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -183,7 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/Physics/Play/Drawable.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/City.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/Explosion.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/FireballsList.java" />
@@ -204,7 +147,6 @@
         <option value="$PROJECT_DIR$/src/Physics/Play/Managers/ExplosionManager.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/Managers/RocketManager.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/Managers/RobotManager.java" />
-        <option value="$PROJECT_DIR$/src/Physics/Play/drawables/City.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/Managers/FireballManager.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/Logic/Collision.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/Managers/CollisionManager.java" />
@@ -233,6 +175,8 @@
         <option value="$PROJECT_DIR$/src/Physics/Play/drawableManagers/BulletExplosionManager.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/drawables/BulletExplosion.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/helpers/CollisionDetector.java" />
+        <option value="$PROJECT_DIR$/src/Physics/Play/core/MainThread.java" />
+        <option value="$PROJECT_DIR$/src/Physics/Play/drawables/City.java" />
         <option value="$PROJECT_DIR$/src/Physics/Play/core/MainGamePanel.java" />
       </list>
     </option>
@@ -815,12 +759,12 @@
       <workItem from="1411407587731" duration="11592000" />
       <workItem from="1411490472697" duration="12317000" />
       <workItem from="1411579551858" duration="13764000" />
-      <workItem from="1411602144843" duration="23818000" />
+      <workItem from="1411602144843" duration="24919000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113452000" />
+    <option name="totallyTimeSpent" value="114553000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -953,10 +897,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="645">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
           <folding>
-            <element signature="e#841#842#0" expanded="false" />
-            <element signature="e#870#871#0" expanded="false" />
-            <element signature="e#906#907#0" expanded="false" />
-            <element signature="e#934#935#0" expanded="false" />
+            <element signature="e#944#945#0" expanded="true" />
+            <element signature="e#972#973#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1026,14 +968,10 @@
           <caret line="106" column="31" selection-start-line="106" selection-start-column="21" selection-end-line="106" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11994#11995#0" expanded="true" />
-            <element signature="e#12020#12021#0" expanded="true" />
-            <element signature="e#12052#12053#0" expanded="true" />
-            <element signature="e#12083#12084#0" expanded="true" />
-            <element signature="e#12126#12127#0" expanded="true" />
-            <element signature="e#12160#12161#0" expanded="true" />
-            <element signature="e#12204#12205#0" expanded="true" />
-            <element signature="e#12239#12240#0" expanded="true" />
+            <element signature="e#11746#11747#0" expanded="true" />
+            <element signature="e#11780#11781#0" expanded="true" />
+            <element signature="e#11824#11825#0" expanded="true" />
+            <element signature="e#11859#11860#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1096,14 +1034,10 @@
           <caret line="191" column="29" selection-start-line="191" selection-start-column="29" selection-end-line="191" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11994#11995#0" expanded="true" />
-            <element signature="e#12020#12021#0" expanded="true" />
-            <element signature="e#12052#12053#0" expanded="true" />
-            <element signature="e#12083#12084#0" expanded="true" />
-            <element signature="e#12126#12127#0" expanded="true" />
-            <element signature="e#12160#12161#0" expanded="true" />
-            <element signature="e#12204#12205#0" expanded="true" />
-            <element signature="e#12239#12240#0" expanded="true" />
+            <element signature="e#11746#11747#0" expanded="true" />
+            <element signature="e#11780#11781#0" expanded="true" />
+            <element signature="e#11824#11825#0" expanded="true" />
+            <element signature="e#11859#11860#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1194,19 +1128,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawables/City.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="585">
-          <caret line="24" column="89" selection-start-line="24" selection-start-column="89" selection-end-line="24" selection-end-column="89" />
-          <folding>
-            <element signature="e#841#842#0" expanded="false" />
-            <element signature="e#870#871#0" expanded="false" />
-            <element signature="e#906#907#0" expanded="false" />
-            <element signature="e#934#935#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/drawable/background.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -1216,14 +1137,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.42307693" vertical-offset="401" max-vertical-offset="1185">
           <caret line="33" column="31" selection-start-line="33" selection-start-column="31" selection-end-line="33" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Physics/Play/core/MainThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.423077" vertical-offset="0" max-vertical-offset="750">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1469,20 +1382,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Physics/Play/core/MainThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+          <caret line="29" column="30" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Physics/Play/drawables/City.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Physics/Play/core/MainGamePanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25497288" vertical-offset="3159" max-vertical-offset="4605">
-          <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.54068714" vertical-offset="3091" max-vertical-offset="4275">
+          <caret line="226" column="205" selection-start-line="226" selection-start-column="205" selection-end-line="226" selection-end-column="205" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11994#11995#0" expanded="true" />
-            <element signature="e#12020#12021#0" expanded="true" />
-            <element signature="e#12052#12053#0" expanded="true" />
-            <element signature="e#12083#12084#0" expanded="true" />
-            <element signature="e#12126#12127#0" expanded="true" />
-            <element signature="e#12160#12161#0" expanded="true" />
-            <element signature="e#12204#12205#0" expanded="true" />
-            <element signature="e#12239#12240#0" expanded="true" />
+            <element signature="e#11746#11747#0" expanded="true" />
+            <element signature="e#11780#11781#0" expanded="true" />
+            <element signature="e#11824#11825#0" expanded="true" />
+            <element signature="e#11859#11860#0" expanded="true" />
           </folding>
         </state>
       </provider>

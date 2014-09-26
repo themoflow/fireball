@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 public class City extends Drawable {
 
     private static float height, width;
+    private static int cityHits = 0;
 
     public City(MainGamePanel g, float x, float y){
         setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.city));
@@ -29,7 +30,20 @@ public class City extends Drawable {
     public static float getHeight(){
         return height;
     }
+
     public static float getWidth(){
         return width;
+    }
+
+    public static void addHit(){
+        cityHits++;
+    }
+
+    public static int getCityHits(){
+        return cityHits;
+    }
+
+    public static void setCityHits(int h){
+        cityHits = h;
     }
 }
