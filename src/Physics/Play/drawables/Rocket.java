@@ -9,7 +9,7 @@ import java.util.Random;
 public class Rocket extends Drawable {
 
     private static float width, height, scrWidth, scrHeight;
-    private int add = 0;
+    private int add = 1;
     private Random rand = new Random();
     private boolean hasRobot = true;
     private Robot robot;
@@ -23,7 +23,6 @@ public class Rocket extends Drawable {
         setX(generateRandomNumber());
         setY(y);
         setImage(image);
-        add = 1;
     }
 
     public static void initializeStaticMembers(MainGamePanel g, float sw, float sh) {

@@ -6,6 +6,7 @@ import Physics.Play.drawables.*;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.Color;
+import android.util.Log;
 
 
 public class CollisionDetector {
@@ -73,7 +74,7 @@ public class CollisionDetector {
             for(int j = 0; j < robots.size(); j++)
             {
                 Robot robot = robots.get(j);
-                Rect robotRec = new Rect((int)robot.getX(), (int)robot.getY(), (int)(robot.getX() + Robot.getWidth()), (int)(robot.getY() + Robot.getHeight()) );
+                Rect robotRec = new Rect((int)robot.getX(), (int)robot.getY(), (int)(robot.getX() + robot.getCurrentWidth()), (int)(robot.getY() + robot.getCurrentHeight()) );
 
                 if(Rect.intersects(fireballRec, robotRec) )
                 {
@@ -240,15 +241,16 @@ public class CollisionDetector {
     }
 
     private int getBitmapPixel(Bullet bullet, int i, int j) {
+
         return bullet.getImage().getPixel(i-(int)bullet.getX(), j - (int)bullet.getY());
     }
 
      private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
-          int left = Math.max(rect1.left, rect2.left);
-          int top = Math.max(rect1.top, rect2.top);
-          int right = Math.min(rect1.right, rect2.right);
-          int bottom = Math.min(rect1.bottom, rect2.bottom);
-          return new Rect(left, top, right, bottom);
+        int left = Math.max(rect1.left, rect2.left);
+        int top = Math.max(rect1.top, rect2.top);
+        int right = Math.min(rect1.right, rect2.right);
+        int bottom = Math.min(rect1.bottom, rect2.bottom);
+        return new Rect(left, top, right, bottom);
     }
 
     private static boolean isFilled(int pixel) {

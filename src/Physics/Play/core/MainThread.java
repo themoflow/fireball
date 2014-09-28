@@ -28,7 +28,7 @@ public class MainThread extends Thread {
         {
             Canvas canvas = null;
             //If getCityHits() = 10 game is over.
-            if(City.getCityHits() == 10) {
+            if(City.getCityHits() == 5) {
                 try {
                     Thread.sleep(200);
                 } catch (Exception e) {

@@ -46,4 +46,7 @@ public class Drawer {
         oval.set(left, top, right, bottom);
         canvas.drawArc(oval, 10, 50, true, paint);
     }
+    public void drawImage(Bitmap bitmap, float x, float y, Canvas canvas) {
+        canvas.drawBitmap(bitmap, x, y, null);
+    }
 }

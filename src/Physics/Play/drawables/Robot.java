@@ -2,7 +2,12 @@ package Physics.Play.drawables;
 
 import Physics.Play.R;
 import Physics.Play.core.MainGamePanel;
+import Physics.Play.helpers.Coordinate;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by morantornesella-brooks on 9/21/14.
@@ -10,26 +15,69 @@ import android.graphics.BitmapFactory;
 public class Robot extends Drawable {
 
     private boolean isOnRocket = true;
-    private boolean destroyed = false;
-    private static float width, height;
+    private boolean isJumping = false;
+    private static float sittingWidth, sittingHeight;
+    private static float standingWidth, standingHeight;
     private Rocket rocket;
     private double timeOfLastBulletShot = 0;
+    private float add = 0.2f;
+    private List<Coordinate> curveCoordinates = null;
+    private double timeElapsed = 0;
+    private List<Bitmap> bitmaps = new ArrayList();
+    private float currentWidth;
+    private float currentHeight;
+
     public Robot(MainGamePanel g){
         super();
-        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot));
+        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting));
+        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing));
+        setImage(bitmaps.get(0));
+        currentWidth = bitmaps.get(0).getWidth();
+        currentHeight = bitmaps.get(0).getHeight();
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot).getHeight();
+        sittingWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting).getWidth();
+        sittingHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting).getHeight();
+        standingWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing).getWidth();
+        standingHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing).getHeight();
+    }
+
+    public void setRobotJumpingImage() {
+        setImage(bitmaps.get(1));
+    }
+
+    public float getCurrentWidth() {
+        return currentWidth;
+    }
+
+    public float getCurrentHeight() {
+        return currentHeight;
+    }
+
+    public void setCurrentWidth(float w) {
+       currentWidth = w;
+    }
+
+    public void setCurrentHeight(float h) {
+        currentHeight = h;
     }
 
     public static float getHeight() {
-        return height;
+        return sittingHeight;
     }
 
     public static float getWidth(){
-        return width;
+
+        return sittingWidth;
+    }
+
+    public static float getStandingHeight() {
+        return standingHeight;
+    }
+
+    public static float getStandingWidth(){
+        return standingWidth;
     }
 
     public boolean isOnRocket() {
@@ -48,12 +96,14 @@ public class Robot extends Drawable {
         return rocket;
     }
 
-    public void setDestroyed(boolean b) {
-        destroyed = b;
+    public void setIsJumping(boolean j) {
+        isJumping = j;
+        currentWidth = standingWidth;
+        currentHeight = standingHeight;
     }
 
-    public boolean hasBeenDestroyed() {
-        return destroyed;
+    public boolean isJumping() {
+        return isJumping;
     }
 
     public void setTimeOfLastBulletShot(double time) {
@@ -64,5 +114,50 @@ public class Robot extends Drawable {
         return timeOfLastBulletShot;
     }
 
+    public float getAdd() {
+        return add;
+    }
 
+    public void setAdd(float a){
+        add = a;
+    }
+
+    public List<Coordinate> getCurveCoordinates() {
+        return curveCoordinates;
+    }
+
+    public void setCurveCoordinates(List<Coordinate> coordinates) {
+        curveCoordinates = coordinates;
+    }
+
+    public Coordinate getNextCurvedCoordinate() {
+        if(curveCoordinates.size() == 1) {
+            setX(curveCoordinates.get(0).getX());
+            setY(curveCoordinates.get(0).getY());
+        }
+        Coordinate coordinate = curveCoordinates.get(0);
+        curveCoordinates.remove(0);
+        if(curveCoordinates.size() == 0)
+            isJumping = false;
+
+        return coordinate;
+    }
+
+    public void setTimeElapsed(double t) {
+        timeElapsed = t;
+    }
+
+    public double getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public boolean isReadyToJump() {
+        if(getY() > 100)
+            return true;
+        else
+            return false;
+    }
+    public List<Coordinate> getCurvedCoordinates() {
+        return curveCoordinates;
+    }
 }

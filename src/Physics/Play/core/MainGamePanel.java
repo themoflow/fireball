@@ -3,6 +3,7 @@ package Physics.Play.core;
 import Physics.Play.helpers.CollisionDetector;
 import Physics.Play.drawableManagers.*;
 import Physics.Play.drawables.*;
+import Physics.Play.helpers.Coordinate;
 import Physics.Play.helpers.Drawer;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -172,7 +173,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
          //If getCityHits() == 10 game is over.
          if(City.getCityHits() == 5)
          {
-             City.setCityHits(0);
              explosionManager.checkForRemoval(explosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
              canvas.drawColor(Color.BLACK);
@@ -196,6 +196,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              if(theEnd == 15)
              {
                 thread.setRunning(false);
+                 City.setCityHits(0);
                 activity.showDialog("GAME OVER\nYou let the city get destroyed\nTry Again!");
              }
          }
@@ -261,6 +262,20 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              draw.drawLine(slingShot.getMidX(), slingShot.getBottomY(), slingShot.getRightX(), slingShot.getTopY(), canvas);
              draw.drawLine(aimerCoordinates[0], aimerCoordinates[1], aimerCoordinates[2], aimerCoordinates[3], canvas);
              //draw.drawArch(slingShot.getLeft(), slingShot.getTop(), slingShot.getRight(), slingShot.getBottom(), canvas);
+
+             //Testing, for the path of the jumping robots.
+             List<GreenDot> plottedCurve = new ArrayList();
+             for(int i = 0; i < robots.size(); i ++)
+             {
+                 List<Coordinate> c = robots.get(i).getCurveCoordinates();
+                 if(c != null) {
+                     for (int j = 0; j < c.size(); j++)
+                         plottedCurve.add(new GreenDot(this, c.get(j).getX(), c.get(j).getY()));
+                     draw.drawToCanvas(greenDotManager.setAsDrawable(plottedCurve), canvas);
+                 }
+             }
+             //Testing end.
+
          }
 
      }//end null canvas check.
