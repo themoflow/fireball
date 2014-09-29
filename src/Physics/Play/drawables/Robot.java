@@ -19,9 +19,10 @@ public class Robot extends Drawable {
     private static float sittingWidth, sittingHeight;
     private static float standingWidth, standingHeight;
     private Rocket rocket;
+    private Parachute parachute;
     private double timeOfLastBulletShot = 0;
-    private float add = 0.2f;
-    private List<Coordinate> curveCoordinates = null;
+    private float incrementY = 0.2f;
+    private List<Coordinate> jumpCoordinates = null;
     private double timeElapsed = 0;
     private List<Bitmap> bitmaps = new ArrayList();
     private float currentWidth;
@@ -34,6 +35,17 @@ public class Robot extends Drawable {
         setImage(bitmaps.get(0));
         currentWidth = bitmaps.get(0).getWidth();
         currentHeight = bitmaps.get(0).getHeight();
+    }
+
+    public Robot(MainGamePanel g, float x, float y){
+        super();
+        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting));
+        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing));
+        setImage(bitmaps.get(1));
+        currentWidth = bitmaps.get(1).getWidth();
+        currentHeight = bitmaps.get(1).getHeight();
+        setX(x);
+        setY(y);
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
@@ -114,30 +126,30 @@ public class Robot extends Drawable {
         return timeOfLastBulletShot;
     }
 
-    public float getAdd() {
-        return add;
+    public float getIncrementY() {
+        return incrementY;
     }
 
-    public void setAdd(float a){
-        add = a;
+    public void setIncrementY(float y){
+        incrementY = y;
     }
 
-    public List<Coordinate> getCurveCoordinates() {
-        return curveCoordinates;
+    public List<Coordinate> getJumpCoordinates() {
+        return jumpCoordinates;
     }
 
-    public void setCurveCoordinates(List<Coordinate> coordinates) {
-        curveCoordinates = coordinates;
+    public void setJumpCoordinates(List<Coordinate> coordinates) {
+        jumpCoordinates = coordinates;
     }
 
-    public Coordinate getNextCurvedCoordinate() {
-        if(curveCoordinates.size() == 1) {
-            setX(curveCoordinates.get(0).getX());
-            setY(curveCoordinates.get(0).getY());
+    public Coordinate getNextJumpCoordinate() {
+        if(jumpCoordinates.size() == 1) {
+            setX(jumpCoordinates.get(0).getX());
+            setY(jumpCoordinates.get(0).getY());
         }
-        Coordinate coordinate = curveCoordinates.get(0);
-        curveCoordinates.remove(0);
-        if(curveCoordinates.size() == 0)
+        Coordinate coordinate = jumpCoordinates.get(0);
+        jumpCoordinates.remove(0);
+        if(jumpCoordinates.size() == 0)
             isJumping = false;
 
         return coordinate;
@@ -157,7 +169,16 @@ public class Robot extends Drawable {
         else
             return false;
     }
-    public List<Coordinate> getCurvedCoordinates() {
-        return curveCoordinates;
+
+    public void setParachute(Parachute p) {
+        parachute = p;
+    }
+
+    public Parachute getParachute() {
+        return parachute;
+    }
+
+    public Bitmap getRobotStandingBitmap() {
+        return bitmaps.get(1);
     }
 }

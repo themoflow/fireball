@@ -1,10 +1,8 @@
 package Physics.Play.drawableManagers;
 
-import Physics.Play.drawables.Drawable;
-import Physics.Play.drawables.GreenDot;
-import Physics.Play.drawables.Robot;
+import Physics.Play.drawables.*;
 import Physics.Play.core.MainGamePanel;
-import Physics.Play.drawables.Rocket;
+import Physics.Play.helpers.CollisionDetector;
 import Physics.Play.helpers.Coordinate;
 import android.util.Log;
 
@@ -15,17 +13,21 @@ import java.util.*;
  */
 public class RobotManager {
 
-    private MainGamePanel gamePanel;
     private double seconds = 10;
+    private static RobotManager r = new RobotManager();
 
-    public RobotManager(MainGamePanel g) {
-        gamePanel = g;
+    private RobotManager() {
+
     }
 
-    public List<Robot> createRobots(int amount) {
+    public static RobotManager getInstance() {
+        return r;
+    }
+
+    public List<Robot> createRobots(int amount, MainGamePanel g) {
         List<Robot> robots = new ArrayList();
         for(int i = 0; i < amount; i++)
-            robots.add(new Robot(gamePanel));
+            robots.add(new Robot(g));
         return robots;
     }
 
@@ -44,7 +46,7 @@ public class RobotManager {
         }
     }
 
-    public void move(List<Robot> robots) {
+    public void move(List<Robot> robots, CollisionDetector collisionDetector, MainGamePanel g) {
 
         for(int i = 0; i < robots.size(); i++)
         {
@@ -56,11 +58,20 @@ public class RobotManager {
             {
                 if(robots.get(i).isReadyToJump())
                 {
-                    robots.get(i).setIsJumping(true);
-                    robots.get(i).setRobotJumpingImage();
-                    robots.get(i).setIsOnRocket(false);
-                    robots.get(i).getRocket().setHasRobot(false);
-                    jumpRobotOffRocket(robots.get(i));
+                    setJumpCoordinates(robots.get(i));
+                    if(!collisionDetector.willRobotCollideWithAnotherRobot(robots, g))
+                    {
+                        robots.get(i).setIsJumping(true);
+                        robots.get(i).setRobotJumpingImage();
+                        robots.get(i).setIsOnRocket(false);
+                        robots.get(i).getRocket().setHasRobot(false);
+                        robots.get(i).getParachute().setIsActive(true);
+                    }
+                    else
+                    {
+                        robots.get(i).setY(robots.get(i).getRocket().getY() + 15);
+                    }
+
                 }
                 //Else move the robot with the rocket.
                 else
@@ -71,7 +82,7 @@ public class RobotManager {
             else
             {
                 //If the robot is already off the rocket and is now falling at its own speed, with a parachute.
-                robots.get(i).setY(robots.get(i).getY() + robots.get(i).getAdd());
+                robots.get(i).setY(robots.get(i).getY() + robots.get(i).getIncrementY());
             }
         }
 
@@ -83,73 +94,6 @@ public class RobotManager {
             converted.add(robots.get(i));
         return converted;
     }
-
-    /*public List<Coordinate> generateCurve(Coordinate cFrom, Coordinate cTo, float pRadius, float pMinDistance, boolean shortest, boolean side)
-    {
-        List<Coordinate> coordinates = new ArrayList<Coordinate>();
-
-        // Calculate the middle of the two given points.
-        Coordinate mCoordinate = new Coordinate(cFrom.getX() + cTo.getX(), cFrom.getY() + cTo.getY());
-        mCoordinate.setX(mCoordinate.getX() / 2.0f);
-        mCoordinate.setY(mCoordinate.getY() / 2.0f);
-
-        // Calculate the distance between the two points
-        float xDiff = cTo.getX() - cFrom.getX();
-        float yDiff = cTo.getY() - cFrom.getY();
-        float distance = (float) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-
-        if (pRadius * 2.0f < distance) {
-            throw new IllegalArgumentException("The radius is too small! The given points wont fall on the circle.");
-        }
-
-        // Calculate the middle of the expected curve.
-        float factor = (float) Math.sqrt((pRadius * pRadius) / ((cTo.getX() - cFrom.getX()) * (cTo.getX() - cFrom.getX()) + (cTo.getY() - cFrom.getY()) * (cTo.getY() - cFrom.getY())) - 0.25f);
-        Coordinate circleMiddlePoint = new Coordinate(0, 0);
-        if (side) {
-            circleMiddlePoint.setX(0.5f * (cFrom.getX() + cTo.getX()) + factor * (cTo.getY() - cFrom.getY()));
-            circleMiddlePoint.setY(0.5f * (cFrom.getY() + cTo.getY()) + factor * (cFrom.getX() - cTo.getX()));
-        } else {
-            circleMiddlePoint.setX(0.5f * (cFrom.getX() + cTo.getX()) - factor * (cTo.getY() - cFrom.getY()));
-            circleMiddlePoint.setY(0.5f * (cFrom.getY() + cTo.getY()) - factor * (cFrom.getX() - cTo.getX()));
-        }
-
-        // Calculate the two reference angles
-        float angle1 = (float) Math.atan2(cFrom.getY() - circleMiddlePoint.getY(), cFrom.getX() - circleMiddlePoint.getX());
-        float angle2 = (float) Math.atan2(cTo.getY() - circleMiddlePoint.getY(), cTo.getX() - circleMiddlePoint.getX());
-
-        // Calculate the step.
-        float step = pMinDistance / pRadius;
-
-        // Swap them if needed
-        if (angle1 > angle2) {
-            float temp = angle1;
-            angle1 = angle2;
-            angle2 = temp;
-
-        }
-        boolean flipped = false;
-        if (!shortest) {
-            if (angle2 - angle1 < Math.PI) {
-                float temp = angle1;
-                angle1 = angle2;
-                angle2 = temp;
-                angle2 += Math.PI * 2.0f;
-                flipped = true;
-            }
-        }
-        for (float f = angle1; f < angle2; f += step) {
-            Coordinate p = new Coordinate((float) Math.cos(f) * pRadius + circleMiddlePoint.getX(), (float) Math.sin(f) * pRadius + circleMiddlePoint.getY());
-            coordinates.add(p);
-        }
-        Log.i("RobotManager - ","coordinates size = " + coordinates.size());
-        if (flipped ^ side) {
-            coordinates.add(cFrom);
-        } else {
-            coordinates.add(cTo);
-        }
-
-        return coordinates;
-    }*/
 
     public List<Coordinate> generateCurveCoordinates(Coordinate start, Coordinate end, int bezierX, int bezierY) {
         List<Coordinate> coordinates = new ArrayList();
@@ -167,20 +111,16 @@ public class RobotManager {
         double currentTime = System.currentTimeMillis();
         if(currentTime - robot.getTimeElapsed() > seconds)
         {
-            Coordinate coordinate = robot.getNextCurvedCoordinate();
+            Coordinate coordinate = robot.getNextJumpCoordinate();
             robot.setX(coordinate.getX());
             robot.setY(coordinate.getY());
             robot.setTimeElapsed(currentTime);
         }
     }
 
-    private void jumpRobotOffRocket(Robot robot) {
+    private void setJumpCoordinates(Robot robot) {
         Coordinate coordinateFrom = new Coordinate(robot.getX(), robot.getY());
         Coordinate coordinateTo;
-        //int startX=100;
-        //int startY=70;
-        //int endX=70;
-        //int endY=75;
         int bezierX;
         int bezierY=0;
 
@@ -196,6 +136,6 @@ public class RobotManager {
             coordinateTo = new Coordinate(robot.getX() + 50, robot.getY());
         }
         //Get the coordinates of the curve that the robot is supposed to move through.
-        robot.setCurveCoordinates(generateCurveCoordinates(coordinateFrom, coordinateTo, bezierX, bezierY));
+        robot.setJumpCoordinates(generateCurveCoordinates(coordinateFrom, coordinateTo, bezierX, bezierY));
     }
 }

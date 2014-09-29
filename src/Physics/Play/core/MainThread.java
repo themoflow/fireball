@@ -27,8 +27,8 @@ public class MainThread extends Thread {
         loop: while (running)
         {
             Canvas canvas = null;
-            //If getCityHits() = 10 game is over.
-            if(City.getCityHits() == 5) {
+            //If getCityHits() = 5 game is over.
+            if(City.getCityHits() == 5 || MainGamePanel.ROBOT_SIZE == 0 && MainGamePanel.BULLET_SIZE == 0 && MainGamePanel.ROCKET_SIZE == 0) {
                 try {
                     Thread.sleep(200);
                 } catch (Exception e) {

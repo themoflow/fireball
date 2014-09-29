@@ -42,9 +42,10 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private List<GreenDot> greenDots;
     private List<Bullet> bullets;
     private List<BulletExplosion> bulletExplosions = new ArrayList();
+    private List<Parachute> parachutes = new ArrayList();
 
     //Drawable managers.
-    private RobotManager robotManager = new RobotManager(this);
+    private RobotManager robotManager = RobotManager.getInstance();
     private RocketManager rocketManager = RocketManager.getInstance();
     private CityManager cityManager = CityManager.getInstance();
     private ExplosionManager explosionManager = ExplosionManager.getInstance();
@@ -54,9 +55,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private BulletManager bulletManager = BulletManager.getInstance();
     private BulletExplosionManager bulletExplosionManager = BulletExplosionManager.getInstance();
     private SlingShotManager slingShotManager = SlingShotManager.getInstance();
+    private ParachuteManager parachuteManager = ParachuteManager.getInstance();
 
     private Drawer draw = Drawer.getInstance();
     private SlingShot slingShot;
+    public static int ROBOT_SIZE;
+    public static int BULLET_SIZE;
+    public static int ROCKET_SIZE;
 
     public MainGamePanel(Context context) {
         super(context);
@@ -90,20 +95,27 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         Robot.initializeStaticMembers(this);
         Bullet.initializeStaticMembers(this);
         BulletExplosion.initializeStaticMembers(this);
+        Parachute.initializeStaticMembers(this);
 
         //Create drawable lists.
         fireballs = fireballManager.createFireballs(1, this);
-        robots = robotManager.createRobots(70);
+        robots = robotManager.createRobots(70, this);
         rockets = rocketManager.createRockets(70, this);
         citys = cityManager.createCitys(1, this, (screenWidth / 2) - 170, screenHeight - 120);
         screenBackgrounds = screenBackgroundManager.createScreenBackground(1, this, 0f, 0f);
         greenDots = greenDotManager.createGreenDots(1, this, fireballs);
         bullets = bulletManager.createBullets(0, this);
+        parachutes = parachuteManager.createParachutes(70, this);
+
+        ROBOT_SIZE = robots.size();
+        BULLET_SIZE = bullets.size();
+        ROCKET_SIZE = rockets.size();
 
         slingShot = new SlingShot(screenWidth / 2, screenWidth - 10, (screenHeight - (screenHeight / 4)) + (Fireball.getHeight() / 2));
 
-        //Add the robots to the rockets and get their movements coordinated..
+        //Add the robots and the rockets to each other and get their movements coordinated..
         robotManager.addRobotsToRockets(rockets, robots);
+        parachuteManager.addParachutesToRobots(parachutes, robots);
 
         //Start main thread.
         thread = new MainThread(getHolder(), this);
@@ -168,10 +180,13 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     protected void onDraw(Canvas canvas) {
 
      super.onDraw(canvas);
+     ROBOT_SIZE = robots.size();
+     BULLET_SIZE = bullets.size();
+     ROCKET_SIZE = rockets.size();
      if(canvas != null)
      {
-         //If getCityHits() == 10 game is over.
-         if(City.getCityHits() == 5)
+         //If getCityHits() == 5 game is over.
+         if(City.getCityHits() == 5 || ROBOT_SIZE == 0 && BULLET_SIZE == 0 && ROCKET_SIZE == 0)
          {
              explosionManager.checkForRemoval(explosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
@@ -207,7 +222,8 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              fireballManager.checkForFireballCreation(down, fireballs, this);
              fireballManager.addVelocity(fireballs);
              rocketManager.move(rockets);
-             robotManager.move(robots);
+             robotManager.move(robots, collisionDetector, this);
+             parachuteManager.move(parachutes);
              bullets = bulletManager.createBullets(robots, bullets, this);
              bulletManager.move(bullets);
              slingShotManager.move(fireballs, slingShot);
@@ -216,7 +232,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
              float[] fireballRocketCollionCoordinates = collisionDetector.fireBallColidedWithRockets(fireballs, rockets, robots);
              float[] rocketCityCollisionCoordinates = collisionDetector.rocketCollidedWithCity(rockets, citys, robots);
-             float[] fireballRobotCollisionCoordinates = collisionDetector.fireBallColidedWithRobots(fireballs, robots, rockets);
+             float[] fireballRobotCollisionCoordinates = collisionDetector.fireBallColidedWithRobots(fireballs, robots, rockets, parachutes);
              float[] bulletCityCollisionCoordinates = collisionDetector.bulletsCollidedWithCity(bullets, citys);
              float[] fireballBulletCollisionCoordinates = collisionDetector.fireBallColidedWithBullets(fireballs, bullets);
 
@@ -255,6 +271,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              draw.drawToCanvas(fireballManager.setAsDrawable(fireballs), canvas);
              draw.drawToCanvas(rocketManager.setAsDrawable(rockets), canvas);
              draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
+             draw.drawToCanvas(parachuteManager.setAsDrawable(parachutes), canvas);
              draw.drawToCanvas(robotManager.setAsDrawable(robots), canvas);
              draw.drawToCanvas(bulletManager.setAsDrawable(bullets), canvas);
              draw.drawToCanvas(bulletExplosionManager.setAsDrawable(bulletExplosions), canvas);
@@ -264,16 +281,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              //draw.drawArch(slingShot.getLeft(), slingShot.getTop(), slingShot.getRight(), slingShot.getBottom(), canvas);
 
              //Testing, for the path of the jumping robots.
-             List<GreenDot> plottedCurve = new ArrayList();
+             /*List<GreenDot> plottedCurve = new ArrayList();
              for(int i = 0; i < robots.size(); i ++)
              {
-                 List<Coordinate> c = robots.get(i).getCurveCoordinates();
+                 List<Coordinate> c = robots.get(i).getJumpCoordinates();
                  if(c != null) {
                      for (int j = 0; j < c.size(); j++)
                          plottedCurve.add(new GreenDot(this, c.get(j).getX(), c.get(j).getY()));
                      draw.drawToCanvas(greenDotManager.setAsDrawable(plottedCurve), canvas);
                  }
-             }
+             }*/
              //Testing end.
 
          }
