@@ -40,12 +40,7 @@ public class ParachuteManager {
             float parachuteCenterX = Parachute.getWidth(0) / 2;
             float robotCenterX = Robot.getWidth() / 2;
             float x;
-            if(parachuteCenterX > robotCenterX)
-                x = robots.get(i).getX() - (parachuteCenterX - robotCenterX);
-            else
-                x = robots.get(i).getX() + robotCenterX - parachuteCenterX;
-
-            parachutes.get(i).setX(x);
+            parachutes.get(i).setX(robots.get(i).getX() - (parachuteCenterX - robotCenterX));
             parachutes.get(i).setY(robots.get(i).getY() - Parachute.getHeight(0));
             robots.get(i).setParachute(parachutes.get(i));
             parachutes.get(i).setRobot(robots.get(i));

@@ -76,6 +76,7 @@ public class Robot extends Drawable {
     }
 
     public static float getHeight() {
+
         return sittingHeight;
     }
 

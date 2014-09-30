@@ -96,7 +96,7 @@ public class Parachute extends Drawable {
                 switchImage();
             }
         } ;
-        new Timer().schedule(timerTask, 100L);
+        new Timer().schedule(timerTask, 110L);
     }
 
     private void switchImage() {
@@ -105,15 +105,18 @@ public class Parachute extends Drawable {
             imageIndex++;
             super.setImage(bitmaps.get(imageIndex));
             float parachuteCenterX = Parachute.getWidth(imageIndex) / 2;
-            float robotCenterX = Robot.getWidth() / 2;
-            float x;
-            if(parachuteCenterX > robotCenterX)
-                x = robot.getX() - (parachuteCenterX - robotCenterX);
-            else
-                x = robot.getX() + (robotCenterX - parachuteCenterX);
-            setX(x);
+            float robotCenterX = robot.getStandingWidth() / 2;
+            log("switchImage, robot getX() = " + robot.getX());
+            log("switchImage, robot center x = " + (robot.getX() +  robotCenterX));
+            log("switchImage, parachurte center x = " + parachuteCenterX);
+            setX((robot.getX() +  robotCenterX) - (parachuteCenterX));
             setTimerTask();
         }
+
+    }
+
+    private void log(String print){
+        Log.i("Parachute - ", print);
     }
 
 }

@@ -152,22 +152,20 @@ public class CollisionDetector {
         float[] coords = new float[2];
         int y = (int)citys.get(0).getY();
         int x = (int)citys.get(0).getX();
-        Rect city = new Rect(x, y, (int)(x + City.getWidth()), (int)(y + City.getHeight()));
+        Rect cityRec = new Rect(x, y, (int)(x + City.getWidth()), (int)(y + City.getHeight()));
         Bitmap cityImg = citys.get(0).getImage();
 
         for(int i = 0; i < bullets.size(); i++)
         {
             Bullet bullet = bullets.get(i);
-            Rect square = new Rect( (int)bullet.getX(), (int)bullet.getY(), (int)(bullet.getX()+Bullet.getWidth()), (int)(bullet.getY() + Bullet.getHeight()));
-
-            if( Rect.intersects(city, square) )
+            Rect bulletRec = new Rect( (int)bullet.getX(), (int)bullet.getY(), (int)(bullet.getX()+Bullet.getWidth()), (int)(bullet.getY() + Bullet.getHeight()));
+            if(Rect.intersects(cityRec, bulletRec))
             {
-                Rect collisionBounds = getCollisionBounds(city, square);
+                Rect collisionBounds = getCollisionBounds(cityRec, bulletRec);
                 for (int k = collisionBounds.left; k < collisionBounds.right; k++)
                 {
                     for (int L = collisionBounds.top; L < collisionBounds.bottom; L++)
                     {
-
                         int cityPixel = getBitmapPixel(cityImg, k, L, x, y);
                         int squarePixel = getBitmapPixel(bullet, k, L);
 
@@ -241,14 +239,12 @@ public class CollisionDetector {
                         Rect robot2Rec = new Rect((int) robot2.getX(), (int) robot2.getY(), (int) (robot2.getX() + robot2.getCurrentWidth()), (int) (robot2.getY() + robot2.getCurrentHeight()));
                         if(Rect.intersects(robotRec, robot2Rec))
                         {
-                            log("they intersect");
                             return true;
                         }
                     }
                 }
             }
         }
-        log("do not intersect");
         return false;
     }
 
@@ -269,8 +265,7 @@ public class CollisionDetector {
     }
 
     private int getBitmapPixel(Bullet bullet, int i, int j) {
-
-        return bullet.getImage().getPixel(i-(int)bullet.getX(), j - (int)bullet.getY());
+        return bullet.getImage().getPixel(i - (int)bullet.getX(), j - (int)bullet.getY());
     }
 
      private static Rect getCollisionBounds(Rect rect1, Rect rect2) {
