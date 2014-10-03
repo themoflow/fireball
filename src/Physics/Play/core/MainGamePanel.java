@@ -3,7 +3,6 @@ package Physics.Play.core;
 import Physics.Play.helpers.CollisionDetector;
 import Physics.Play.drawableManagers.*;
 import Physics.Play.drawables.*;
-import Physics.Play.helpers.Coordinate;
 import Physics.Play.helpers.Drawer;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -36,19 +35,22 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private List<Robot> robots;
     private List<Rocket> rockets;
     private List<City> citys;
-    private List<Explosion> explosions = new ArrayList();
+    private List<RocketExplosion> rocketExplosions = new ArrayList();
     private List<Fireball> fireballs;
     private List<ScreenBackground> screenBackgrounds;
     private List<GreenDot> greenDots;
     private List<Bullet> bullets;
     private List<BulletExplosion> bulletExplosions = new ArrayList();
     private List<Parachute> parachutes = new ArrayList();
+    private List<RobotExplosion> robotExplosions = new ArrayList();
+    private List<AtomicExplosion> atomicExplosions = new ArrayList();
+    private List<CityExplosion> cityExplosions = new ArrayList();
 
     //Drawable managers.
     private RobotManager robotManager = RobotManager.getInstance();
     private RocketManager rocketManager = RocketManager.getInstance();
     private CityManager cityManager = CityManager.getInstance();
-    private ExplosionManager explosionManager = ExplosionManager.getInstance();
+    private RocketExplosionManager rocketExplosionManager = RocketExplosionManager.getInstance();
     private FireballManager fireballManager = FireballManager.getInstance();
     private ScreenBackgroundManager screenBackgroundManager = ScreenBackgroundManager.getInstance();
     private GreenDotManager greenDotManager = GreenDotManager.getInstance();
@@ -56,12 +58,15 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private BulletExplosionManager bulletExplosionManager = BulletExplosionManager.getInstance();
     private SlingShotManager slingShotManager = SlingShotManager.getInstance();
     private ParachuteManager parachuteManager = ParachuteManager.getInstance();
+    private RobotExplosionManager robotExplosionManager = RobotExplosionManager.getInstance();
+    private AtomicExplosionManager atomicExplosionManager = AtomicExplosionManager.getInstance();
+    private CityExplosionManager cityExplosionManager = CityExplosionManager.getInstance();
 
     private Drawer draw = Drawer.getInstance();
     private SlingShot slingShot;
-    public static int ROBOT_SIZE;
-    public static int BULLET_SIZE;
-    public static int ROCKET_SIZE;
+
+    public static boolean GAME_OVER = false;
+    private boolean gameOverSequenceHasStarted = false;
 
     public MainGamePanel(Context context) {
         super(context);
@@ -88,7 +93,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         //Initialize drawable objects.
         Rocket.initializeStaticMembers(this, screenWidth, screenHeight);
-        Explosion.initializeStaticMembers(this);
+        RocketExplosion.initializeStaticMembers(this);
         ScreenBackground.initializeStaticMembers(this);
         City.initializeStaticMembers(this);
         GreenDot.initializeStaticMembers(this);
@@ -96,6 +101,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         Bullet.initializeStaticMembers(this);
         BulletExplosion.initializeStaticMembers(this);
         Parachute.initializeStaticMembers(this);
+        RobotExplosion.initializeStaticMembers(this);
+        AtomicExplosion.initializeStaticMembers(this);
+        CityExplosion.initializeStaticMembers(this);
 
         //Create drawable lists.
         fireballs = fireballManager.createFireballs(1, this);
@@ -106,10 +114,6 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         greenDots = greenDotManager.createGreenDots(1, this, fireballs);
         bullets = bulletManager.createBullets(0, this);
         parachutes = parachuteManager.createParachutes(70, this);
-
-        ROBOT_SIZE = robots.size();
-        BULLET_SIZE = bullets.size();
-        ROCKET_SIZE = rockets.size();
 
         slingShot = new SlingShot(screenWidth / 2, screenWidth - 10, (screenHeight - (screenHeight / 4)) + (Fireball.getHeight() / 2));
 
@@ -180,40 +184,67 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     protected void onDraw(Canvas canvas) {
 
      super.onDraw(canvas);
-     ROBOT_SIZE = robots.size();
-     BULLET_SIZE = bullets.size();
-     ROCKET_SIZE = rockets.size();
+
      if(canvas != null)
      {
-         //If getCityHits() == 5 game is over.
-         if(City.getCityHits() == 5 || ROBOT_SIZE == 0 && BULLET_SIZE == 0 && ROCKET_SIZE == 0)
+         if(GAME_OVER)
          {
-             explosionManager.checkForRemoval(explosions);
+             if(!gameOverSequenceHasStarted)
+             {
+                 gameOverSequenceHasStarted = true;
+                 cityExplosionManager.createExplosion(this, cityExplosions, screenWidth, screenHeight, "left");
+                 cityExplosionManager.createExplosion(this, cityExplosions, screenWidth, screenHeight, "right");
+                 atomicExplosionManager.createExplosion(this, atomicExplosions, screenWidth, screenHeight);
+                 cityManager.setDestroyedCityImage(citys);
+                 canvas.drawColor(Color.BLACK);
+                 draw.drawToCanvas(screenBackgroundManager.setAsDrawable(screenBackgrounds), canvas);
+                 draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
+                 draw.drawToCanvas(cityExplosionManager.setAsDrawable(cityExplosions), canvas);
+                 draw.drawToCanvas(atomicExplosionManager.setAsDrawable(atomicExplosions), canvas);
+             }
+             else
+             {
+                 atomicExplosionManager.checkForRemoval(atomicExplosions);
+                 cityExplosionManager.checkForRemoval(cityExplosions);
+                 canvas.drawColor(Color.BLACK);
+                 draw.drawToCanvas(screenBackgroundManager.setAsDrawable(screenBackgrounds), canvas);
+                 draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
+                 draw.drawToCanvas(cityExplosionManager.setAsDrawable(cityExplosions), canvas);
+                 draw.drawToCanvas(atomicExplosionManager.setAsDrawable(atomicExplosions), canvas);
+                 if(atomicExplosions.size() == 0 && cityExplosions.size() == 0)
+                 {
+                     thread.setRunning(false);
+                     City.HITS = 0;
+                     GAME_OVER = false;
+                     activity.showDialog("GAME OVER\nYou let the city get destroyed\nTry Again!");
+                 }
+             }
+             /*rocketExplosionManager.checkForRemoval(rocketExplosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
              canvas.drawColor(Color.BLACK);
              draw.drawToCanvas(screenBackgroundManager.setAsDrawable(screenBackgrounds), canvas);
              draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
              if(times*40 < screenWidth)
              {
-                 explosions = explosionManager.createExplosions(1, this, explosions);
-                 explosionManager.setCoordinates(times * 40, screenHeight - (City.getHeight() - 40), explosions);
-                 draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
+                 rocketExplosions = rocketExplosionManager.createExplosions(1, this, rocketExplosions);
+                 rocketExplosionManager.setCoordinates(times * 40, screenHeight - (City.getHeight() - 40), rocketExplosions);
+                 draw.drawToCanvas(rocketExplosionManager.setAsDrawable(rocketExplosions), canvas);
                  times++;
              }
              else if(multiplyBy*40 < screenWidth)
              {
-                 explosions = explosionManager.createExplosions(1, this, explosions);
-                 explosionManager.setCoordinates((multiplyBy * 40), (screenHeight - (City.getHeight() / 2)), explosions);
-                 draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
+                 rocketExplosions = rocketExplosionManager.createExplosions(1, this, rocketExplosions);
+                 rocketExplosionManager.setCoordinates((multiplyBy * 40), (screenHeight - (City.getHeight() / 2)), rocketExplosions);
+                 draw.drawToCanvas(rocketExplosionManager.setAsDrawable(rocketExplosions), canvas);
                  multiplyBy++;
              }
              theEnd++;
              if(theEnd == 15)
              {
                 thread.setRunning(false);
-                 City.setCityHits(0);
+                City.HITS = 0;
                 activity.showDialog("GAME OVER\nYou let the city get destroyed\nTry Again!");
-             }
+             }*/
          }
          else
          {
@@ -227,8 +258,9 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              bullets = bulletManager.createBullets(robots, bullets, this);
              bulletManager.move(bullets);
              slingShotManager.move(fireballs, slingShot);
-             explosionManager.checkForRemoval(explosions);
+             rocketExplosionManager.checkForRemoval(rocketExplosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
+             robotExplosionManager.checkForRemoval(robotExplosions);
 
              float[] fireballRocketCollionCoordinates = collisionDetector.fireBallColidedWithRockets(fireballs, rockets, robots);
              float[] rocketCityCollisionCoordinates = collisionDetector.rocketCollidedWithCity(rockets, citys, robots);
@@ -238,28 +270,29 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
 
              if(fireballRocketCollionCoordinates != null)
              {
-                 explosions = explosionManager.createExplosion(this, explosions, fireballRocketCollionCoordinates[0] - (Explosion.getWidth()/2), fireballRocketCollionCoordinates[1]);
+                 rocketExplosionManager.createExplosion(this, rocketExplosions, fireballRocketCollionCoordinates[0] - (RocketExplosion.getWidth()/2), fireballRocketCollionCoordinates[1]);
              }
 
              if(rocketCityCollisionCoordinates != null)
              {
-                 City.addHit();
-                 explosions = explosionManager.createExplosion(this, explosions, rocketCityCollisionCoordinates[0] - (Explosion.getWidth()/2), rocketCityCollisionCoordinates[1] - (Explosion.getHeight() / 2));
+                 if(City.HITS++ == 5)
+                     GAME_OVER = true;
+                 rocketExplosionManager.createExplosion(this, rocketExplosions, rocketCityCollisionCoordinates[0] - (RocketExplosion.getWidth()/2), rocketCityCollisionCoordinates[1] - (RocketExplosion.getHeight() / 2));
              }
 
              if(fireballRobotCollisionCoordinates != null)
              {
-                 explosions = explosionManager.createExplosion(this, explosions, fireballRobotCollisionCoordinates[0] - (Explosion.getWidth()/2), fireballRobotCollisionCoordinates[1]);
+                  robotExplosionManager.createRobotExplosion(this, robotExplosions, fireballRobotCollisionCoordinates[0] - (RocketExplosion.getWidth() / 2), fireballRobotCollisionCoordinates[1]);
              }
 
              if(bulletCityCollisionCoordinates != null)
              {
                  //addHitToCity();
-                 bulletExplosions = bulletExplosionManager.createBulletExplosion(this, bulletExplosions, bulletCityCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), bulletCityCollisionCoordinates[1]);
+                 bulletExplosionManager.createBulletExplosion(this, bulletExplosions, bulletCityCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), bulletCityCollisionCoordinates[1]);
              }
              if(fireballBulletCollisionCoordinates != null)
              {
-                 bulletExplosions = bulletExplosionManager.createBulletExplosion(this, bulletExplosions, fireballBulletCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), fireballBulletCollisionCoordinates[1]);
+                 bulletExplosionManager.createBulletExplosion(this, bulletExplosions, fireballBulletCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), fireballBulletCollisionCoordinates[1]);
              }
 
              float[] aimerCoordinates = greenDotManager.getAimerCoordinates(greenDots);
@@ -270,15 +303,16 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
              draw.drawToCanvas(fireballManager.setAsDrawable(fireballs), canvas);
              draw.drawToCanvas(rocketManager.setAsDrawable(rockets), canvas);
-             draw.drawToCanvas(explosionManager.setAsDrawable(explosions), canvas);
+             draw.drawToCanvas(rocketExplosionManager.setAsDrawable(rocketExplosions), canvas);
              draw.drawToCanvas(parachuteManager.setAsDrawable(parachutes), canvas);
              draw.drawToCanvas(robotManager.setAsDrawable(robots), canvas);
              draw.drawToCanvas(bulletManager.setAsDrawable(bullets), canvas);
+             draw.drawToCanvas(robotExplosionManager.setAsDrawable(robotExplosions), canvas);
              draw.drawToCanvas(bulletExplosionManager.setAsDrawable(bulletExplosions), canvas);
              draw.drawLine(slingShot.getLeftX(), slingShot.getTopY(), slingShot.getMidX(), slingShot.getBottomY(), canvas);
              draw.drawLine(slingShot.getMidX(), slingShot.getBottomY(), slingShot.getRightX(), slingShot.getTopY(), canvas);
              draw.drawLine(aimerCoordinates[0], aimerCoordinates[1], aimerCoordinates[2], aimerCoordinates[3], canvas);
-             //draw.drawArch(slingShot.getLeft(), slingShot.getTop(), slingShot.getRight(), slingShot.getBottom(), canvas);
+
 
              //Testing, for the path of the jumping robots.
              /*List<GreenDot> plottedCurve = new ArrayList();

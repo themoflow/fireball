@@ -3,7 +3,6 @@ package Physics.Play.drawableManagers;
 import Physics.Play.core.MainGamePanel;
 import Physics.Play.drawables.BulletExplosion;
 import Physics.Play.drawables.Drawable;
-import Physics.Play.drawables.Explosion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +48,8 @@ public class BulletExplosionManager {
     public void checkForRemoval(List<BulletExplosion> bulletExplosions) {
         for(int i = 0; i < bulletExplosions.size(); i++)
         {
-            double startTime = bulletExplosions.get(i).getStartTime();
-            if(System.currentTimeMillis() - startTime > 100)
-                bulletExplosions.remove(i);
+           if(bulletExplosions.get(i).hasExploded())
+               bulletExplosions.remove(i);
         }
     }
 

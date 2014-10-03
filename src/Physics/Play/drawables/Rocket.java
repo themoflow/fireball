@@ -9,7 +9,7 @@ import java.util.Random;
 public class Rocket extends Drawable {
 
     private static float width, height, scrWidth, scrHeight;
-    private int add = 1;
+    private int add = 2;
     private Random rand = new Random();
     private boolean hasRobot = true;
     private Robot robot;

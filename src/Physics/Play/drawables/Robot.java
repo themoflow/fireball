@@ -21,7 +21,7 @@ public class Robot extends Drawable {
     private Rocket rocket;
     private Parachute parachute;
     private double timeOfLastBulletShot = 0;
-    private float incrementY = 0.2f;
+    private float incrementY = 0.4f;
     private List<Coordinate> jumpCoordinates = null;
     private double timeElapsed = 0;
     private List<Bitmap> bitmaps = new ArrayList();

@@ -2,6 +2,7 @@ package Physics.Play.drawables;
 
 import Physics.Play.core.MainGamePanel;
 import Physics.Play.R;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
@@ -13,11 +14,17 @@ import android.graphics.BitmapFactory;
  */
 public class City extends Drawable {
 
-    private static float height, width;
-    private static int cityHits = 0;
+    private static float height, width, destroyedWidth, destroyedHeight;
+    private float currentWidth, currentHeight;
+    public static int HITS = 0;
+    private Bitmap[] bitmaps = new Bitmap[2];
 
     public City(MainGamePanel g, float x, float y){
-        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.city));
+        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city);
+        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed);
+        setImage(bitmaps[0]);
+        currentWidth = width;
+        currentHeight = height;
         setX(x);
         setY(y);
     }
@@ -25,6 +32,8 @@ public class City extends Drawable {
     public static void initializeStaticMembers(MainGamePanel g) {
         width = BitmapFactory.decodeResource(g.getResources(), R.drawable.city).getWidth();
         height = BitmapFactory.decodeResource(g.getResources(), R.drawable.city).getHeight();
+        destroyedWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed).getWidth();
+        destroyedHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed).getHeight();
     }
 
     public static float getHeight(){
@@ -35,15 +44,21 @@ public class City extends Drawable {
         return width;
     }
 
+    public float getCurrentHeight(){
+        return currentHeight;
+    }
+
+    public float getCurrentWidth(){
+        return currentWidth;
+    }
+
     public static void addHit(){
-        cityHits++;
+       HITS++;
     }
 
-    public static int getCityHits(){
-        return cityHits;
+    public void switchImage() {
+        super.setImage(bitmaps[1]);
+
     }
 
-    public static void setCityHits(int h){
-        cityHits = h;
-    }
 }

@@ -33,4 +33,9 @@ public class CityManager {
             converted.add(citys.get(i));
         return converted;
     }
+
+    public void setDestroyedCityImage(List<City> citys) {
+        for(int i = 0; i < citys.size(); i++)
+            citys.get(0).switchImage();
+    }
 }

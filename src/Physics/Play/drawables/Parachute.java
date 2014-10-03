@@ -24,6 +24,7 @@ public class Parachute extends Drawable {
     private Robot robot;
     private TimerTask timerTask;
     private int imageIndex = 0;
+    private boolean logEnabled = false;
 
     public Parachute(MainGamePanel g) {
         super();
@@ -112,11 +113,12 @@ public class Parachute extends Drawable {
             setX((robot.getX() +  robotCenterX) - (parachuteCenterX));
             setTimerTask();
         }
-
     }
 
     private void log(String print){
-        Log.i("Parachute - ", print);
+
+        if(logEnabled)
+            Log.i("Parachute - ", print);
     }
 
 }

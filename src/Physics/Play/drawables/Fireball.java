@@ -42,7 +42,6 @@ public class Fireball extends Drawable {
         setY(y);
         setImage(imgFireball[0]);
         setTimerTask();
-
     }
 
     public static void initializeStaticMembers(float screenWidth, float screenHeight, MainGamePanel g) {
@@ -72,7 +71,6 @@ public class Fireball extends Drawable {
         super.setImage(imgFireball[imageIndex]);
 
     }
-
 
     public  static float getHeight() {
         return height;

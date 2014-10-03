@@ -2,6 +2,7 @@ package Physics.Play.helpers;
 
 import Physics.Play.drawables.*;
 import android.graphics.*;
+import android.util.Log;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class Drawer {
 
     private static Drawer d = new Drawer();
+    private boolean logEnabled = false;
 
     private Drawer() {
     }
@@ -21,8 +23,13 @@ public class Drawer {
 
     public void drawToCanvas(List<Drawable> drawables, Canvas c) {
         for(int i = 0; i < drawables.size(); i++)
-            if(drawables.get(i).isActive())
+            if(drawables.get(i).isActive()) {
+                   if(drawables.get(i).getImage() == null){
+                       log("drawable " + i + " is null = " + drawables.get(i).getClass());
+                       log("drawable " + i + " is null = " + drawables.get(i));
+                   }
                 c.drawBitmap(drawables.get(i).getImage(), drawables.get(i).getX(), drawables.get(i).getY(), null);
+            }
     }
 
     public void backgroundColor(int color, Canvas c) {
@@ -48,5 +55,10 @@ public class Drawer {
     }
     public void drawImage(Bitmap bitmap, float x, float y, Canvas canvas) {
         canvas.drawBitmap(bitmap, x, y, null);
+    }
+
+    private void log(String print) {
+        if(logEnabled)
+            Log.i("Drawer.java - ", print);
     }
 }
