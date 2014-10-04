@@ -17,6 +17,51 @@ public class CollisionDetector {
     private CollisionDetector() {
     }
 
+    /*public float[] detectCollision(List<Drawable> drawables1, List<Drawable> drawables2){
+
+        float[] coordinates = new float[4];
+        for(int i = 0; i < drawables1.size(); i++)
+        {
+            Drawable d1 = drawables1.get(i);
+            Rect rec1 = new Rect((int)d1.getX(), (int)d1.getY(), (int)(d1.getX() + d1.getWidth()), (int)(d1.getY() + d1.getHeight()));
+
+            for(int j = 0; j < drawables2.size(); j++)
+            {
+                Drawable d2 = drawables2.get(j);
+                Rect rec2 = new Rect( (int)d2.getX(), (int)d2.getY(), (int)(d2.getX() + d2.getWidth()), (int)(d2.getY() + d2.getHeight()));
+
+                if(Rect.intersects(rec1, rec2) )
+                {
+                    Rect collisionBounds = getCollisionBounds(rec1, rec2);
+                    for (int k = collisionBounds.left; k < collisionBounds.right; k++)
+                    {
+                        for (int L = collisionBounds.top; L < collisionBounds.bottom; L++)
+                        {
+                            int d1_pixel = getBitmapPixel(d1, k, L);
+                            int d2_pixel = getBitmapPixel(d2, k, L);
+
+                            if(isFilled(d1_pixel) && isFilled(d2_pixel))
+                            {
+                                coordinates[0] = drawables1.get(j).getX();
+                                coordinates[1] = drawables1.get(j).getY();
+                                coordinates[2] = drawables2.get(j).getX();
+                                coordinates[3] = drawables2.get(j).getY();
+                                if(rockets.get(j).hasRobot())
+                                    robots.remove(rockets.get(j).getRobot());
+                                fireballs.remove(i);
+                                rockets.remove(j);
+                                return coords ;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        return null;
+
+    }  //end fireBallColidedWithRockets.*/
+
     public static CollisionDetector getInstance() {
         return d;
     }
@@ -223,22 +268,55 @@ public class CollisionDetector {
 
     }  //end fireBallCollided.
 
+    public float[] rocketsCollidedWithShield(List<Shield> shields, List<Rocket> rockets, List<Robot> robots){
+
+        float[] coords = new float[2];
+        if(Shield.getHits() < 15) {
+            for (int i = 0; i < shields.size(); i++) {
+                Shield shield = shields.get(i);
+                Rect shieldRec = new Rect((int) shield.getX(), (int) shield.getY(), (int) (shield.getX() + shield.getWidth()), (int) (shield.getY() + shield.getHeight()));
+
+                for (int j = 0; j < rockets.size(); j++) {
+                    Rocket rocket = rockets.get(j);
+                    Rect rocketRec = new Rect((int) rocket.getX(), (int) rocket.getY(), (int) (rocket.getX() + Rocket.getWidth()), (int) (rocket.getY() + Rocket.getHeight()));
+
+                    if (Rect.intersects(shieldRec, rocketRec)) {
+                        Rect collisionBounds = getCollisionBounds(shieldRec, rocketRec);
+                        for (int k = collisionBounds.left; k < collisionBounds.right; k++) {
+                            for (int L = collisionBounds.top; L < collisionBounds.bottom; L++) {
+                                int shieldPixel = getBitmapPixel(shield, k, L);
+                                int rocketPixel = getBitmapPixel(rocket, k, L);
+
+                                if (isFilled(shieldPixel) && isFilled(rocketPixel)) {
+                                    coords[0] = rockets.get(j).getX();
+                                    coords[1] = rockets.get(j).getY();
+                                    if (rockets.get(j).hasRobot())
+                                        robots.remove(rockets.get(j).getRobot());
+                                    rockets.remove(j);
+                                    Shield.addHit();
+                                    return coords;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+
+    }  //end fireBallCollided.
+
     public boolean willRobotCollideWithAnotherRobot(List<Robot> robots, MainGamePanel g) {
-        for(int A = 0; A < robots.size(); A++)
-        {
-            if(robots.get(A).isOnRocket() && robots.get(A).getJumpCoordinates() != null)
-            {
+        for (int A = 0; A < robots.size(); A++) {
+            if (robots.get(A).isOnRocket() && robots.get(A).getJumpCoordinates() != null) {
                 List<Coordinate> CC = robots.get(A).getJumpCoordinates();
-                Coordinate coordinate = CC.get(CC.size()-1);
+                Coordinate coordinate = CC.get(CC.size() - 1);
                 Rect robotRec = new Rect((int) coordinate.getX(), (int) coordinate.getY(), (int) (coordinate.getX() + Robot.getStandingWidth()), (int) (coordinate.getY() + Robot.getStandingHeight()));
-                for (int B = 0; B < robots.size(); B++)
-                {
+                for (int B = 0; B < robots.size(); B++) {
                     Robot robot2 = robots.get(B);
-                    if(robot2.getY() > 0 && A != B)
-                    {
+                    if (robot2.getY() > 0 && A != B) {
                         Rect robot2Rec = new Rect((int) robot2.getX(), (int) robot2.getY(), (int) (robot2.getX() + robot2.getCurrentWidth()), (int) (robot2.getY() + robot2.getCurrentHeight()));
-                        if(Rect.intersects(robotRec, robot2Rec))
-                        {
+                        if (Rect.intersects(robotRec, robot2Rec)) {
                             return true;
                         }
                     }
@@ -266,6 +344,10 @@ public class CollisionDetector {
 
     private int getBitmapPixel(Bullet bullet, int i, int j) {
         return bullet.getImage().getPixel(i - (int)bullet.getX(), j - (int)bullet.getY());
+    }
+
+    private int getBitmapPixel(Shield shield, int i, int j) {
+        return shield.getImage().getPixel(i - (int)shield.getX(), j - (int)shield.getY());
     }
 
      private static Rect getCollisionBounds(Rect rect1, Rect rect2) {

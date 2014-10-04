@@ -45,6 +45,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private List<RobotExplosion> robotExplosions = new ArrayList();
     private List<AtomicExplosion> atomicExplosions = new ArrayList();
     private List<CityExplosion> cityExplosions = new ArrayList();
+    private List<Shield> shields = new ArrayList();
 
     //Drawable managers.
     private RobotManager robotManager = RobotManager.getInstance();
@@ -61,6 +62,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
     private RobotExplosionManager robotExplosionManager = RobotExplosionManager.getInstance();
     private AtomicExplosionManager atomicExplosionManager = AtomicExplosionManager.getInstance();
     private CityExplosionManager cityExplosionManager = CityExplosionManager.getInstance();
+    private ShieldManager shieldManager = ShieldManager.getInstance();
 
     private Drawer draw = Drawer.getInstance();
     private SlingShot slingShot;
@@ -104,6 +106,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         RobotExplosion.initializeStaticMembers(this);
         AtomicExplosion.initializeStaticMembers(this);
         CityExplosion.initializeStaticMembers(this);
+        Shield.initializeStaticMembers(this);
 
         //Create drawable lists.
         fireballs = fireballManager.createFireballs(1, this);
@@ -114,7 +117,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
         greenDots = greenDotManager.createGreenDots(1, this, fireballs);
         bullets = bulletManager.createBullets(0, this);
         parachutes = parachuteManager.createParachutes(70, this);
-
+        shields = shieldManager.createShields(this, screenWidth, screenHeight);
         slingShot = new SlingShot(screenWidth / 2, screenWidth - 10, (screenHeight - (screenHeight / 4)) + (Fireball.getHeight() / 2));
 
         //Add the robots and the rockets to each other and get their movements coordinated..
@@ -215,36 +218,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
                  {
                      thread.setRunning(false);
                      City.HITS = 0;
+                     Shield.setHits(0);
                      GAME_OVER = false;
                      activity.showDialog("GAME OVER\nYou let the city get destroyed\nTry Again!");
                  }
              }
-             /*rocketExplosionManager.checkForRemoval(rocketExplosions);
-             bulletExplosionManager.checkForRemoval(bulletExplosions);
-             canvas.drawColor(Color.BLACK);
-             draw.drawToCanvas(screenBackgroundManager.setAsDrawable(screenBackgrounds), canvas);
-             draw.drawToCanvas(cityManager.setAsDrawable(citys), canvas);
-             if(times*40 < screenWidth)
-             {
-                 rocketExplosions = rocketExplosionManager.createExplosions(1, this, rocketExplosions);
-                 rocketExplosionManager.setCoordinates(times * 40, screenHeight - (City.getHeight() - 40), rocketExplosions);
-                 draw.drawToCanvas(rocketExplosionManager.setAsDrawable(rocketExplosions), canvas);
-                 times++;
-             }
-             else if(multiplyBy*40 < screenWidth)
-             {
-                 rocketExplosions = rocketExplosionManager.createExplosions(1, this, rocketExplosions);
-                 rocketExplosionManager.setCoordinates((multiplyBy * 40), (screenHeight - (City.getHeight() / 2)), rocketExplosions);
-                 draw.drawToCanvas(rocketExplosionManager.setAsDrawable(rocketExplosions), canvas);
-                 multiplyBy++;
-             }
-             theEnd++;
-             if(theEnd == 15)
-             {
-                thread.setRunning(false);
-                City.HITS = 0;
-                activity.showDialog("GAME OVER\nYou let the city get destroyed\nTry Again!");
-             }*/
          }
          else
          {
@@ -261,12 +239,14 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              rocketExplosionManager.checkForRemoval(rocketExplosions);
              bulletExplosionManager.checkForRemoval(bulletExplosions);
              robotExplosionManager.checkForRemoval(robotExplosions);
+             shieldManager.checkForRemoval(shields);
 
              float[] fireballRocketCollionCoordinates = collisionDetector.fireBallColidedWithRockets(fireballs, rockets, robots);
              float[] rocketCityCollisionCoordinates = collisionDetector.rocketCollidedWithCity(rockets, citys, robots);
              float[] fireballRobotCollisionCoordinates = collisionDetector.fireBallColidedWithRobots(fireballs, robots, rockets, parachutes);
              float[] bulletCityCollisionCoordinates = collisionDetector.bulletsCollidedWithCity(bullets, citys);
              float[] fireballBulletCollisionCoordinates = collisionDetector.fireBallColidedWithBullets(fireballs, bullets);
+             float[] shieldCollisionCoordinates = collisionDetector.rocketsCollidedWithShield(shields, rockets, robots);
 
              if(fireballRocketCollionCoordinates != null)
              {
@@ -294,6 +274,11 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              {
                  bulletExplosionManager.createBulletExplosion(this, bulletExplosions, fireballBulletCollisionCoordinates[0] - (BulletExplosion.getWidth()/2), fireballBulletCollisionCoordinates[1]);
              }
+             if(shieldCollisionCoordinates != null)
+             {
+                 shieldManager.createShield(shields, this, screenWidth, screenHeight);
+                 rocketExplosionManager.createExplosion(this, rocketExplosions, shieldCollisionCoordinates[0] - (Rocket.getWidth()/2), shieldCollisionCoordinates[1]);
+             }
 
              float[] aimerCoordinates = greenDotManager.getAimerCoordinates(greenDots);
 
@@ -309,6 +294,7 @@ public class MainGamePanel extends SurfaceView implements SurfaceHolder.Callback
              draw.drawToCanvas(bulletManager.setAsDrawable(bullets), canvas);
              draw.drawToCanvas(robotExplosionManager.setAsDrawable(robotExplosions), canvas);
              draw.drawToCanvas(bulletExplosionManager.setAsDrawable(bulletExplosions), canvas);
+             draw.drawToCanvas(shieldManager.setAsDrawable(shields), canvas);
              draw.drawLine(slingShot.getLeftX(), slingShot.getTopY(), slingShot.getMidX(), slingShot.getBottomY(), canvas);
              draw.drawLine(slingShot.getMidX(), slingShot.getBottomY(), slingShot.getRightX(), slingShot.getTopY(), canvas);
              draw.drawLine(aimerCoordinates[0], aimerCoordinates[1], aimerCoordinates[2], aimerCoordinates[3], canvas);
