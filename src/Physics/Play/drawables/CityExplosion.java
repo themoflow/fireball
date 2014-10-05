@@ -10,8 +10,6 @@ import java.util.TimerTask;
 
 public class CityExplosion extends Drawable {
 
-    private static float width, height;
-    private float currentWidth, currentHeight;
     private double startTime;
     private Bitmap[] bitmaps = new Bitmap[30];
     private TimerTask timerTask;
@@ -51,7 +49,9 @@ public class CityExplosion extends Drawable {
         bitmaps[27] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_28);
         bitmaps[28] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_29);
         bitmaps[29] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_30);
-        super.setImage(bitmaps[0]);
+        setImage(bitmaps[0]);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
         startAnimation();
     }
 
@@ -87,15 +87,15 @@ public class CityExplosion extends Drawable {
         bitmaps[27] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_28);
         bitmaps[28] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_29);
         bitmaps[29] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_30);
-        super.setImage(bitmaps[0]);
+        setImage(bitmaps[0]);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
         setX(x);
         setY(y);
         startAnimation();
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight();
     }
 
     public void setIsActive(boolean b) {
@@ -106,36 +106,12 @@ public class CityExplosion extends Drawable {
         return super.isActive();
     }
 
-    public static float getHeight(){
-        return height;
-    }
-
-    public static float getWidth(){
-        return width;
-    }
-
     public void setStartTime(double s) {
         startTime = s;
     }
 
     public double getStartTime() {
         return startTime;
-    }
-
-    public float getCurentWidth() {
-        return currentWidth;
-    }
-
-    public float getCurentHeight() {
-        return currentHeight;
-    }
-
-    public void setCurrentWidth(float c) {
-        currentWidth = c;
-    }
-
-    public void setCurrentHeight(float c) {
-        currentHeight = c;
     }
 
     public boolean hasExploded() {

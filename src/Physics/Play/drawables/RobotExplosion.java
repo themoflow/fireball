@@ -13,67 +13,41 @@ import java.util.TimerTask;
 
 public class RobotExplosion extends Drawable {
 
-    private static float width, height;
-    private float currentWidth, currentHeight;
     private double startTime;
-    private List<Bitmap> bitmaps = new ArrayList();
+    private Bitmap[] bitmaps = new Bitmap[17];
     private TimerTask timerTask;
     private int imageIndex = 0;
     private boolean hasExploded = false;
 
-    public RobotExplosion(MainGamePanel g) {
-        super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_1));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_2));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_3));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_4));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_5));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_6));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_7));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_8));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_9));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_10));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_11));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_12));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_13));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_14));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_15));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_16));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_17));
-        setImage(bitmaps.get(0));
-        startTime = System.currentTimeMillis();
-        setTimerTask();
-    }
-
     public RobotExplosion(MainGamePanel g, float x, float y) {
         super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_1));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_2));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_3));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_4));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_5));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_6));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_7));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_8));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_9));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_10));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_11));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_12));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_13));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_14));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_15));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_16));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_17));
-        setImage(bitmaps.get(0));
+        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_1);
+        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_2);
+        bitmaps[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_3);
+        bitmaps[3] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_4);
+        bitmaps[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_5);
+        bitmaps[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_6);
+        bitmaps[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_7);
+        bitmaps[7] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_8);
+        bitmaps[8] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_9);
+        bitmaps[9] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_1);
+        bitmaps[10] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_11);
+        bitmaps[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_12);
+        bitmaps[12] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_13);
+        bitmaps[13] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_14);
+        bitmaps[14] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_15);
+        bitmaps[15] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_16);
+        bitmaps[16] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_17);
+        setImage(bitmaps[0]);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
         startTime = System.currentTimeMillis();
         setX(x);
         setY(y);
-        setTimerTask();
+        startAnimation();
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_1).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_explosion_1).getHeight();
     }
 
     public void setIsActive(boolean b) {
@@ -84,14 +58,6 @@ public class RobotExplosion extends Drawable {
         return super.isActive();
     }
 
-    public static float getHeight(){
-        return height;
-    }
-
-    public static float getWidth(){
-        return width;
-    }
-
     public void setStartTime(double s) {
         startTime = s;
     }
@@ -100,42 +66,28 @@ public class RobotExplosion extends Drawable {
         return startTime;
     }
 
-    public float getCurentWidth() {
-        return currentWidth;
-    }
-
-    public float getCurentHeight() {
-        return currentHeight;
-    }
-
-    public void setCurrentWidth(float c) {
-        currentWidth = c;
-    }
-
-    public void setCurrentHeight(float c) {
-        currentHeight = c;
-    }
-
     public boolean hasExploded() {
         return hasExploded;
     }
 
-    private void setTimerTask(){
+    private void startAnimation(){
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                setImage();
+                switchImage();
             }
         } ;
         new Timer().schedule(timerTask, 30L);
     }
 
-    private void setImage(){
+    private void switchImage(){
         if(imageIndex < 15)
         {
             imageIndex++;
-            super.setImage(bitmaps.get(imageIndex));
-            setTimerTask();
+            setImage(bitmaps[imageIndex]);
+            setWidth(bitmaps[imageIndex].getWidth());
+            setHeight(bitmaps[imageIndex].getHeight());
+            startAnimation();
         }
         else
         {

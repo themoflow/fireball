@@ -16,81 +16,40 @@ public class Robot extends Drawable {
 
     private boolean isOnRocket = true;
     private boolean isJumping = false;
-    private static float sittingWidth, sittingHeight;
-    private static float standingWidth, standingHeight;
     private Rocket rocket;
     private Parachute parachute;
     private double timeOfLastBulletShot = 0;
     private float incrementY = 0.4f;
     private List<Coordinate> jumpCoordinates = null;
     private double timeElapsed = 0;
-    private List<Bitmap> bitmaps = new ArrayList();
-    private float currentWidth;
-    private float currentHeight;
+    private Bitmap[] bitmaps = new Bitmap[2];
 
     public Robot(MainGamePanel g){
         super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing));
-        setImage(bitmaps.get(0));
-        currentWidth = bitmaps.get(0).getWidth();
-        currentHeight = bitmaps.get(0).getHeight();
+        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting);
+        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing);
+        setImage(bitmaps[0]);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
     }
 
     public Robot(MainGamePanel g, float x, float y){
         super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing));
-        setImage(bitmaps.get(1));
-        currentWidth = bitmaps.get(1).getWidth();
-        currentHeight = bitmaps.get(1).getHeight();
+        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting);
+        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing);
+        setImage(bitmaps[0]);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
         setX(x);
         setY(y);
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        sittingWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting).getWidth();
-        sittingHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_sitting).getHeight();
-        standingWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing).getWidth();
-        standingHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.robot_standing).getHeight();
+
     }
 
     public void setRobotJumpingImage() {
-        setImage(bitmaps.get(1));
-    }
-
-    public float getCurrentWidth() {
-        return currentWidth;
-    }
-
-    public float getCurrentHeight() {
-        return currentHeight;
-    }
-
-    public void setCurrentWidth(float w) {
-       currentWidth = w;
-    }
-
-    public void setCurrentHeight(float h) {
-        currentHeight = h;
-    }
-
-    public static float getHeight() {
-
-        return sittingHeight;
-    }
-
-    public static float getWidth(){
-
-        return sittingWidth;
-    }
-
-    public static float getStandingHeight() {
-        return standingHeight;
-    }
-
-    public static float getStandingWidth(){
-        return standingWidth;
+        setImage(bitmaps[1]);
     }
 
     public boolean isOnRocket() {
@@ -111,8 +70,8 @@ public class Robot extends Drawable {
 
     public void setIsJumping(boolean j) {
         isJumping = j;
-        currentWidth = standingWidth;
-        currentHeight = standingHeight;
+        setWidth(bitmaps[1].getWidth());
+        setHeight(bitmaps[1].getHeight());
     }
 
     public boolean isJumping() {
@@ -180,6 +139,6 @@ public class Robot extends Drawable {
     }
 
     public Bitmap getRobotStandingBitmap() {
-        return bitmaps.get(1);
+        return bitmaps[1];
     }
 }

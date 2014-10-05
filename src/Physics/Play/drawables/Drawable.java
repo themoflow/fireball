@@ -7,7 +7,8 @@ import android.graphics.Bitmap;
  */
 public class Drawable {
 
-    private float x,y;
+    private float x, y;
+    private  float width, height;
     private Bitmap image;
     private boolean isActive = true;
 
@@ -39,6 +40,22 @@ public class Drawable {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public float getHeight(){
+        return height;
+    }
+
+    public float getWidth(){
+        return width;
+    }
+
+    public void setHeight(float h){
+        height = h;
+    }
+
+    public void setWidth(float w){
+        width = w;
     }
 
 

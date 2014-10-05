@@ -14,8 +14,6 @@ import android.graphics.BitmapFactory;
  */
 public class City extends Drawable {
 
-    private static float height, width, destroyedWidth, destroyedHeight;
-    private float currentWidth, currentHeight;
     public static int HITS = 0;
     private Bitmap[] bitmaps = new Bitmap[2];
 
@@ -23,33 +21,14 @@ public class City extends Drawable {
         bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city);
         bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed);
         setImage(bitmaps[0]);
-        currentWidth = width;
-        currentHeight = height;
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
         setX(x);
         setY(y);
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.city).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.city).getHeight();
-        destroyedWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed).getWidth();
-        destroyedHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed).getHeight();
-    }
 
-    public static float getHeight(){
-        return height;
-    }
-
-    public static float getWidth(){
-        return width;
-    }
-
-    public float getCurrentHeight(){
-        return currentHeight;
-    }
-
-    public float getCurrentWidth(){
-        return currentWidth;
     }
 
     public static void addHit(){
@@ -57,7 +36,9 @@ public class City extends Drawable {
     }
 
     public void switchImage() {
-        super.setImage(bitmaps[1]);
+        setImage(bitmaps[1]);
+        setWidth(bitmaps[1].getWidth());
+        setHeight(bitmaps[1].getHeight());
 
     }
 

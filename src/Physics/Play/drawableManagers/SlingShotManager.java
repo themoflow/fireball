@@ -20,8 +20,8 @@ public class SlingShotManager {
 
     public void move(List<Fireball> fireballs, SlingShot slingShot) {
         if(fireballs.size() > 0) {
-            float x = fireballs.get(fireballs.size() - 1).getX() + (Fireball.getWidth() / 2);
-            float y = fireballs.get(fireballs.size() - 1).getY() + (Fireball.getHeight() / 2);
+            float x = fireballs.get(fireballs.size() - 1).getX() + (fireballs.get(0).getWidth() / 2);
+            float y = fireballs.get(fireballs.size() - 1).getY() + (fireballs.get(0).getHeight() / 2);
             slingShot.setMidX(x);
             slingShot.setBottomY(y);
         }

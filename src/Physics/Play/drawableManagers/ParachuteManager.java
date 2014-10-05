@@ -37,11 +37,11 @@ public class ParachuteManager {
     public void addParachutesToRobots(List<Parachute> parachutes, List<Robot> robots) {
         for(int i = 0; i < parachutes.size(); i++)
         {
-            float parachuteCenterX = Parachute.getWidth(0) / 2;
-            float robotCenterX = Robot.getWidth() / 2;
+            float parachuteCenterX = parachutes.get(i).getWidth() / 2;
+            float robotCenterX = robots.get(0).getWidth() / 2;
             float x;
             parachutes.get(i).setX(robots.get(i).getX() - (parachuteCenterX - robotCenterX));
-            parachutes.get(i).setY(robots.get(i).getY() - Parachute.getHeight(0));
+            parachutes.get(i).setY(robots.get(i).getY() - parachutes.get(i).getHeight());
             robots.get(i).setParachute(parachutes.get(i));
             parachutes.get(i).setRobot(robots.get(i));
         }
@@ -52,7 +52,13 @@ public class ParachuteManager {
 
         for (int i = 0; i < parachutes.size(); i++)
         {
-            parachutes.get(i).setY(parachutes.get(i).getRobot().getY() - (Parachute.getHeight(0) - 20));
+            parachutes.get(i).setY(parachutes.get(i).getRobot().getY() - (parachutes.get(i).getHeight() - 20));
         }
+    }
+
+    public void removeParachutes(List<Parachute> parachutes) {
+        for(int i = 0; i < parachutes.size(); i++)
+            if(parachutes.get(i).getY() < 0)
+                parachutes.remove(i);
     }
 }

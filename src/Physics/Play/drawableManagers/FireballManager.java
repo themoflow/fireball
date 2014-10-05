@@ -1,8 +1,11 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.R;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Fireball;
 import Physics.Play.core.MainGamePanel;
+import android.graphics.BitmapFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +22,10 @@ public class FireballManager {
         return f;
     }
 
-    public List<Fireball> createFireballs(int amount, MainGamePanel g) {
+    public List<Fireball> createFireballs(int amount, MainGamePanel g, float scrWidth, float scrHeight) {
         List<Fireball> fireballs = new ArrayList();
         for(int i = 0; i < amount; i++) {
-            fireballs.add(new Fireball(g, Fireball.getOriginX(), Fireball.getOriginY()));
+            fireballs.add(new Fireball(g, scrWidth, scrHeight));
         }
         return fireballs;
     }
@@ -69,12 +72,12 @@ public class FireballManager {
         {
             float lastX = getLastXCoord(fireballs);
             float lastY = getLastYCoord(fireballs);
-            double horiDistance = lastX - Fireball.getOriginX();
-            double vertDistance = lastY - Fireball.getOriginY();
+            double horiDistance = lastX - fireballs.get(0).getOriginX();
+            double vertDistance = lastY - fireballs.get(0).getOriginY();
             double angle = Math.atan2(vertDistance,horiDistance);
             float xScale = (float)Math.cos(angle);
             float yScale =  (float)Math.sin(angle);
-            float dis = (float) Math.sqrt(Math.pow(lastX - Fireball.getOriginX(), 2) + Math.pow(lastY - Fireball.getOriginY(), 2));
+            float dis = (float) Math.sqrt(Math.pow(lastX - fireballs.get(0).getOriginX(), 2) + Math.pow(lastY - fireballs.get(0).getOriginY(), 2));
             float speed = (dis / length);
             float xVelocity = (speed*xScale);
             float yVelocity = (speed*yScale);
@@ -82,11 +85,10 @@ public class FireballManager {
         }
     }
 
-    public void isAtleastOneFireball(List<Fireball> fireballs, MainGamePanel g){
-
+    public void isAtleastOneFireball(List<Fireball> fireballs, MainGamePanel g, float scrWidth, float scrHeight){
         if(fireballs.size() <= 0)
         {
-            fireballs.add(new Fireball(g, Fireball.getOriginX(), Fireball.getOriginY()));
+            fireballs.add(new Fireball(g, scrWidth, scrHeight));
         }
     }
 
@@ -94,7 +96,7 @@ public class FireballManager {
 
         for(int i = 0; i < fireballs.size(); i++)
         {
-            if(fireballs.get(i).getX() <= 0 - Fireball.getWidth() || fireballs.get(i).getX() > g.getScreenWidth() || fireballs.get(i).getY() < 0 - Fireball.getHeight() || fireballs.get(i).getY() > g.getScreenHeight())
+            if(fireballs.get(i).getX() <= 0 - fireballs.get(i).getWidth() || fireballs.get(i).getX() > g.getScreenWidth() || fireballs.get(i).getY() < 0 - fireballs.get(i).getHeight() || fireballs.get(i).getY() > g.getScreenHeight())
             {
                 fireballs.remove(i);
             }
@@ -102,21 +104,21 @@ public class FireballManager {
 
     }
 
-    public void checkForFireballCreation(boolean down, List<Fireball> fireballs, MainGamePanel g){
+    public void checkForFireballCreation(boolean down, List<Fireball> fireballs, MainGamePanel g, float scrWidth, float scrHeight){
 
         if(fireballs.size() > 0)
         {
-            if(fireballs.get(fireballs.size()-1).getY() + 48 < Fireball.getOriginY())
+            if(fireballs.get(fireballs.size()-1).getY() + 48 < fireballs.get(0).getOriginY())
             {
-                fireballs.add(new Fireball(g, Fireball.getOriginX(), Fireball.getOriginY()));
+                fireballs.add(new Fireball(g, scrWidth, scrHeight));
             }
-            else if(down == false && fireballs.get(fireballs.size()-1).getY() <= Fireball.getOriginY() && fireballs.get(fireballs.size()-1).getX()+48 < Fireball.getOriginX())
+            else if(down == false && fireballs.get(fireballs.size()-1).getY() <= fireballs.get(0).getOriginY() && fireballs.get(fireballs.size()-1).getX()+48 < fireballs.get(0).getOriginX())
             {
-                fireballs.add(new Fireball(g, Fireball.getOriginX(), Fireball.getOriginY()));
+                fireballs.add(new Fireball(g, scrWidth, scrHeight));
             }
-            else if (down == false && fireballs.get(fireballs.size()-1).getY() <= Fireball.getOriginY() && fireballs.get(fireballs.size()-1).getX() > Fireball.getOriginX()+48)
+            else if (down == false && fireballs.get(fireballs.size()-1).getY() <= fireballs.get(0).getOriginY() && fireballs.get(fireballs.size()-1).getX() > fireballs.get(0).getOriginX()+48)
             {
-                fireballs.add(new Fireball(g,Fireball.getOriginX(),Fireball.getOriginY()));
+                fireballs.add(new Fireball(g, scrWidth, scrHeight));
             }
 
 
@@ -125,8 +127,8 @@ public class FireballManager {
 
     public boolean checkForFireballTouch(float x, float y, List<Fireball> fireballs){
 
-        if((int)x >= getLastXCoord(fireballs) - Fireball.getWidth() && (int)x <= getLastXCoord(fireballs) + (Fireball.getWidth()*2) &&
-                (int)y >= getLastYCoord(fireballs) - Fireball.getHeight() && (int)y <= getLastYCoord(fireballs) + (Fireball.getHeight()*2))
+        if((int)x >= getLastXCoord(fireballs) - fireballs.get(0).getWidth() && (int)x <= getLastXCoord(fireballs) + (fireballs.get(0).getWidth()*2) &&
+                (int)y >= getLastYCoord(fireballs) - fireballs.get(0).getHeight() && (int)y <= getLastYCoord(fireballs) + (fireballs.get(0).getHeight()*2))
         {
             return true;
         }
@@ -140,29 +142,29 @@ public class FireballManager {
     public void onDrag(float x, float y, List<Fireball> fireballs, MainGamePanel g){
             if(fireballs.size() > 0)
             {
-                fireballs.get(fireballs.size()-1).setX(centerX(x));
-                fireballs.get(fireballs.size()-1).setY(centerY(y));
+                fireballs.get(fireballs.size()-1).setX(centerX(x, fireballs));
+                fireballs.get(fireballs.size()-1).setY(centerY(y, fireballs));
                 //Set the Y coordinate boundry area for the bottom of screen.
-                if(fireballs.get(fireballs.size()-1).getY() > g.getScreenHeight() - Fireball.getHeight())
-                    fireballs.get(fireballs.size()-1).setY(g.getScreenHeight() - Fireball.getHeight());
+                if(fireballs.get(fireballs.size()-1).getY() > g.getScreenHeight() - fireballs.get(0).getHeight())
+                    fireballs.get(fireballs.size()-1).setY(g.getScreenHeight() - fireballs.get(0).getHeight());
                 //Set the y coordinate boundry area for the top.
-                if(fireballs.get(fireballs.size()-1).getY() < Fireball.getOriginY())
-                    fireballs.get(fireballs.size()-1).setY(Fireball.getOriginY());
+                if(fireballs.get(fireballs.size()-1).getY() < fireballs.get(0).getOriginY())
+                    fireballs.get(fireballs.size()-1).setY(fireballs.get(0).getOriginY());
                 //Set the x coordinate boundry area for the left of the screen.
                 if(fireballs.get(fireballs.size()-1).getX() < 0)
                     fireballs.get(fireballs.size()-1).setX(0);
                 //Set the x coordinate boundry area for the right of the screen.
-                if(fireballs.get(fireballs.size()-1).getX() > g.getScreenWidth() - Fireball.getWidth())
-                    fireballs.get(fireballs.size()-1).setX(g.getScreenWidth() - Fireball.getWidth());
+                if(fireballs.get(fireballs.size()-1).getX() > g.getScreenWidth() - fireballs.get(0).getWidth())
+                    fireballs.get(fireballs.size()-1).setX(g.getScreenWidth() - fireballs.get(0).getWidth());
         }
     }
 
-    private float centerX(float x){
-        return x - (Fireball.getWidth() / 2);
+    private float centerX(float x, List<Fireball> fireballs){
+        return x - (fireballs.get(0).getWidth() / 2);
     }
 
-    private float centerY(float y){
-        return y - (Fireball.getWidth() / 2);
+    private float centerY(float y, List<Fireball> fireballs){
+        return y - (fireballs.get(0).getWidth() / 2);
     }
 
 }

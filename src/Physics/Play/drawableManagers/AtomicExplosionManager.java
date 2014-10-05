@@ -1,8 +1,10 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.R;
 import Physics.Play.core.MainGamePanel;
 import Physics.Play.drawables.AtomicExplosion;
 import Physics.Play.drawables.Drawable;
+import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +21,21 @@ public class AtomicExplosionManager {
         return e;
     }
 
-    public List<AtomicExplosion> createExplosions(int amount, MainGamePanel g, List<AtomicExplosion> cityExplosions, String explosionType) {
+    public List<AtomicExplosion> createExplosions(int amount, MainGamePanel g, List<AtomicExplosion> atomicExplosions, String explosionType) {
         for(int i = 0; i < amount; i++) {
-            cityExplosions.add(new AtomicExplosion(g, explosionType));
+            atomicExplosions.add(new AtomicExplosion(g));
         }
-        return cityExplosions;
+        return atomicExplosions;
     }
 
-    public List<AtomicExplosion> createExplosion(MainGamePanel g, List<AtomicExplosion> cityExplosions, float screenWidth, float screenHeight) {
-        float cityExplosionCenterX = AtomicExplosion.getWidth() / 2;
+    public List<AtomicExplosion> createExplosion(MainGamePanel g, List<AtomicExplosion> atomicExplosions, float screenWidth, float screenHeight) {
+        float cityExplosionCenterX = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_1).getWidth() / 2;
         float screenCenterX = screenWidth / 2;
         float x = screenCenterX - cityExplosionCenterX;
-        float y = screenHeight - (AtomicExplosion.getHeight() - 20);
-        cityExplosions.add(new AtomicExplosion(g, x, y));
+        float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_1).getHeight() - 20);
+        atomicExplosions.add(new AtomicExplosion(g, x, y));
 
-        return cityExplosions;
+        return atomicExplosions;
     }
 
     public List<Drawable> setAsDrawable(List<AtomicExplosion> cityExplosions) {

@@ -8,40 +8,27 @@ import java.util.Random;
 
 public class Rocket extends Drawable {
 
-    private static float width, height, scrWidth, scrHeight;
     private int add = 2;
     private Random rand = new Random();
     private boolean hasRobot = true;
     private Robot robot;
     private boolean destroyed = false;
 
-    public Rocket(MainGamePanel g, float y) {
+    public Rocket(MainGamePanel g, float y, float scrWidth) {
         super();
-        Bitmap image = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket);
-        width = image.getWidth();
-        height = image.getHeight();
-        setX(generateRandomNumber());
+        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket));
+        setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getWidth());
+        setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getHeight());
+        setX(generateRandomNumber(scrWidth));
         setY(y);
-        setImage(image);
     }
 
     public static void initializeStaticMembers(MainGamePanel g, float sw, float sh) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getHeight();
-        scrWidth = sw;
-        scrHeight = sh;
+
     }
 
-    private float generateRandomNumber() {
-        return (float)rand.nextInt((int)(scrWidth-getWidth()));
-    }
-
-    public static float getWidth() {
-        return width;
-    }
-
-    public static float getHeight() {
-        return height;
+    private float generateRandomNumber(float scrWidth) {
+        return (float)rand.nextInt((int)(scrWidth - getWidth()));
     }
 
     public float getDistanceIncrement() {

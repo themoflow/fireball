@@ -12,7 +12,6 @@ import java.util.TimerTask;
  * Created by morantornesella-brooks on 9/25/14.
  */
 public class BulletExplosion extends Drawable {
-    private static float width, height;
     private double startTime;
     private TimerTask timerTask;
     private int imageIndex = 0;
@@ -38,7 +37,9 @@ public class BulletExplosion extends Drawable {
         bitmaps[14] = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion_15);
         bitmaps[15] = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion_16);
         bitmaps[16] = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion_17);
-        super.setImage(bitmaps[0]);
+        setImage(bitmaps[0]);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
         startAnimation();
     }
 
@@ -61,15 +62,16 @@ public class BulletExplosion extends Drawable {
         bitmaps[14] = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion_15);
         bitmaps[15] = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion_16);
         bitmaps[16] = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion_17);
-        super.setImage(bitmaps[0]);
+        setImage(bitmaps[0]);
         startAnimation();
         setX(x);
         setY(y);
+        setWidth(bitmaps[0].getWidth());
+        setHeight(bitmaps[0].getHeight());
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet_explosion).getHeight();
+
     }
 
     public boolean hasExploded() {
@@ -82,14 +84,6 @@ public class BulletExplosion extends Drawable {
 
     public boolean isActive() {
         return super.isActive();
-    }
-
-    public static float getHeight(){
-        return height;
-    }
-
-    public static float getWidth(){
-        return width;
     }
 
     public void setStartTime(double s) {
@@ -114,7 +108,9 @@ public class BulletExplosion extends Drawable {
         if(imageIndex < 15)
         {
             imageIndex++;
-            super.setImage(bitmaps[imageIndex]);
+            setWidth(bitmaps[imageIndex].getWidth());
+            setHeight(bitmaps[imageIndex].getHeight());
+            setImage(bitmaps[imageIndex]);
             startAnimation();
         }
         else

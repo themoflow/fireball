@@ -31,12 +31,12 @@ public class GreenDotManager {
             float [] centerCoordinates = getFireballsCenterCoordinates(fireballs);
             greenDots.get(0).setX(centerCoordinates[0]);
             greenDots.get(0).setY(centerCoordinates[1]);
-            double horiDistance = fireballs.get(fireballs.size()-1).getX() - Fireball.getOriginX();
-            double vertDistance = fireballs.get(fireballs.size()-1).getY() - Fireball.getOriginY();
+            double horiDistance = fireballs.get(fireballs.size()-1).getX() - fireballs.get(0).getOriginX();
+            double vertDistance = fireballs.get(fireballs.size()-1).getY() - fireballs.get(0).getOriginY();
             double angle = Math.atan2(vertDistance,horiDistance);
             float xScale = (float)Math.cos(angle);
             float yScale =  (float)Math.sin(angle);
-            float dis = (float) Math.sqrt(Math.pow(fireballs.get(fireballs.size()-1).getX() - Fireball.getOriginX(), 2) + Math.pow(fireballs.get(fireballs.size()-1).getY() - Fireball.getOriginY(), 2));
+            float dis = (float) Math.sqrt(Math.pow(fireballs.get(fireballs.size()-1).getX() - fireballs.get(0).getOriginX(), 2) + Math.pow(fireballs.get(fireballs.size()-1).getY() - fireballs.get(0).getOriginY(), 2));
             float speed = (dis / length);
             float angleX = (speed*xScale);
             float angleY = (speed*yScale);
@@ -46,14 +46,14 @@ public class GreenDotManager {
                 aimX -= angleX;
                 aimY -= angleY;
             }
-            setAngle(aimX, aimY + (Fireball.getHeight() / 2), greenDots);
+            setAngle(aimX, aimY + (fireballs.get(0).getHeight() / 2), greenDots);
         }
     }
 
     public List<GreenDot> createGreenDots(int amount, MainGamePanel g, List<Fireball> fireballs) {
         List<GreenDot> greenDots = new ArrayList();
-        float x = fireballs.get(fireballs.size()-1).getX() + Fireball.getWidth() / 2;
-        float y = fireballs.get(fireballs.size()-1).getY() + Fireball.getHeight() / 2;
+        float x = fireballs.get(fireballs.size()-1).getX() + fireballs.get(fireballs.size()-1).getWidth() / 2;
+        float y = fireballs.get(fireballs.size()-1).getY() + fireballs.get(fireballs.size()-1).getHeight() / 2;
         for(int i = 0; i < amount; i++)
             greenDots.add(new GreenDot(g, x, y));
         return greenDots;
@@ -67,10 +67,10 @@ public class GreenDotManager {
     }
 
     public void reset(List<GreenDot> greenDots){
-        greenDots.get(0).setX(GreenDot.getOriginX());
-        greenDots.get(0).setY(GreenDot.getOriginY());
-        greenDots.get(0).setAngleX(GreenDot.getOriginX());
-        greenDots.get(0).setAngleY(GreenDot.getOriginY());
+        greenDots.get(0).setX(greenDots.get(0).getOriginX());
+        greenDots.get(0).setY(greenDots.get(0).getOriginY());
+        greenDots.get(0).setAngleX(greenDots.get(0).getOriginX());
+        greenDots.get(0).setAngleY(greenDots.get(0).getOriginY());
     }
 
     private void setAngle(float angleX, float angleY, List<GreenDot> greenDots) {
@@ -82,8 +82,8 @@ public class GreenDotManager {
 
     private float[] getFireballsCenterCoordinates(List<Fireball> fireballs) {
         float[] centerCoordinates = new float[2];
-        centerCoordinates[0] = fireballs.get(fireballs.size()-1).getX() + (Fireball.getWidth() / 2);
-        centerCoordinates[1] = fireballs.get(fireballs.size()-1).getY() + (Fireball.getHeight() / 2);
+        centerCoordinates[0] = fireballs.get(fireballs.size()-1).getX() + (fireballs.get(fireballs.size()-1).getWidth() / 2);
+        centerCoordinates[1] = fireballs.get(fireballs.size()-1).getY() + (fireballs.get(fireballs.size()-1).getHeight() / 2);
         return centerCoordinates;
     }
 

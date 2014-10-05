@@ -52,9 +52,9 @@ public class BulletManager {
             if ((currentTime - robots.get(i).getTimeOfLastBulletShot()) > seconds && robots.get(i).getY() > 0)
             {
                 float x = robots.get(i).getX();
-                float y = robots.get(i).getY() + Robot.getHeight();
+                float y = robots.get(i).getY() + robots.get(i).getHeight();
                 Bullet leftBullet = new Bullet(g, x, y);
-                Bullet rightBullet = new Bullet(g, x + Robot.getWidth(), y);
+                Bullet rightBullet = new Bullet(g, x + robots.get(i).getWidth(), y);
                 bullets.add(leftBullet);
                 bullets.add(rightBullet);
                 robots.get(i).setTimeOfLastBulletShot(currentTime);

@@ -14,8 +14,6 @@ import java.util.TimerTask;
 
 public class RocketExplosion extends Drawable {
 
-    private static float width, height;
-    private float currentWidth, currentHeight;
     private double startTime;
     private List<Bitmap> bitmaps = new ArrayList();
     private TimerTask timerTask;
@@ -43,6 +41,8 @@ public class RocketExplosion extends Drawable {
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_16));
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_17));
         setImage(bitmaps.get(0));
+        setWidth(bitmaps.get(0).getWidth());
+        setHeight(bitmaps.get(0).getHeight());
         startTime = System.currentTimeMillis();
         setTimerTask();
     }
@@ -67,6 +67,8 @@ public class RocketExplosion extends Drawable {
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_16));
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_17));
         setImage(bitmaps.get(0));
+        setWidth(bitmaps.get(0).getWidth());
+        setHeight(bitmaps.get(0).getHeight());
         startTime = System.currentTimeMillis();
         setX(x);
         setY(y);
@@ -74,8 +76,6 @@ public class RocketExplosion extends Drawable {
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_1).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_1).getHeight();
     }
 
     public void setIsActive(boolean b) {
@@ -86,36 +86,12 @@ public class RocketExplosion extends Drawable {
         return super.isActive();
     }
 
-    public static float getHeight(){
-        return height;
-    }
-
-    public static float getWidth(){
-        return width;
-    }
-
     public void setStartTime(double s) {
         startTime = s;
     }
 
     public double getStartTime() {
         return startTime;
-    }
-
-    public float getCurentWidth() {
-        return currentWidth;
-    }
-
-    public float getCurentHeight() {
-        return currentHeight;
-    }
-
-    public void setCurrentWidth(float c) {
-        currentWidth = c;
-    }
-
-    public void setCurrentHeight(float c) {
-        currentHeight = c;
     }
 
     public boolean hasExploded() {
@@ -126,17 +102,19 @@ public class RocketExplosion extends Drawable {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                setImage();
+                switchImage();
             }
         } ;
         new Timer().schedule(timerTask, 30L);
     }
 
-    private void setImage(){
+    private void switchImage(){
         if(imageIndex < 15)
         {
             imageIndex++;
-            super.setImage(bitmaps.get(imageIndex));
+            setImage(bitmaps.get(imageIndex));
+            setWidth(bitmaps.get(imageIndex).getWidth());
+            setHeight(bitmaps.get(imageIndex).getHeight());
             setTimerTask();
         }
         else

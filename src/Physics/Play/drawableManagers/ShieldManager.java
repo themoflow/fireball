@@ -1,10 +1,12 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.R;
 import Physics.Play.core.MainGamePanel;
 import Physics.Play.drawables.AtomicExplosion;
 import Physics.Play.drawables.City;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Shield;
+import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +26,16 @@ public class ShieldManager {
 
     public List<Shield> createShields(MainGamePanel g, float screenWidth, float screenHeight) {
         List<Shield> shields = new ArrayList();
-        float x = (screenWidth / 2) - (Shield.getWidth() / 2);
-        float y = screenHeight - (Shield.getHeight() - 40);
+        float x = (screenWidth / 2) - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getWidth() / 2);
+        float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getHeight() - 40);
         Shield shield = new Shield(g, x, y);
         shields.add(shield);
         return shields;
     }
 
     public void createShield(List<Shield> shields, MainGamePanel g, float screenWidth, float screenHeight) {
-        float x = (screenWidth / 2) - (Shield.getWidth() / 2);
-        float y = screenHeight - (Shield.getHeight() - 40);
+        float x = (screenWidth / 2) - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getWidth() / 2);
+        float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getHeight() - 40);
         Shield shield = new Shield(g, x, y);
         shields.add(shield);
     }

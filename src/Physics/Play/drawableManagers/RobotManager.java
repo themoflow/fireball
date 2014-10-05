@@ -34,8 +34,8 @@ public class RobotManager {
     public void addRobotsToRockets(List<Rocket> rockets, List<Robot> robots) {
         for(int i = 0; i < robots.size(); i++)
         {
-            float rocketWidthCenter = Rocket.getWidth() / 2;
-            float robotWidthCenter = Robot.getWidth() / 2;
+            float rocketWidthCenter = rockets.get(0).getWidth() / 2;
+            float robotWidthCenter = robots.get(0).getWidth() / 2;
             float robotOffset = robotWidthCenter - rocketWidthCenter;
             float x = rockets.get(i).getX() - robotOffset;
 
@@ -137,5 +137,13 @@ public class RobotManager {
         }
         //Get the coordinates of the curve that the robot is supposed to move through.
         robot.setJumpCoordinates(generateCurveCoordinates(coordinateFrom, coordinateTo, bezierX, bezierY));
+    }
+
+    public void removeRobots(List<Robot> robots, List<Parachute> parachutes) {
+        for(int i = 0; i < robots.size(); i++)
+            if(robots.get(i).getY() < 0) {
+                parachutes.remove(robots.get(i).getParachute());
+                robots.remove(i);
+            }
     }
 }

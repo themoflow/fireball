@@ -16,9 +16,6 @@ import java.util.TimerTask;
  */
 public class Parachute extends Drawable {
 
-    private static float[] parachuteWidths = new float[4];
-    private static float[] parachuteHeights = new float[4];
-    private float currentWidth, currentHeight;
     private List<Bitmap> bitmaps = new ArrayList();
     private boolean isOpening = false;
     private Robot robot;
@@ -32,21 +29,14 @@ public class Parachute extends Drawable {
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_2));
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_3));
         bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_open));
-        currentWidth = bitmaps.get(0).getWidth();
-        currentHeight = bitmaps.get(0).getHeight();
-        super.setIsActive(false);
+        setWidth(bitmaps.get(0).getWidth());
+        setHeight(bitmaps.get(0).getHeight());
         setImage(bitmaps.get(0));
+        super.setIsActive(false);
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        parachuteWidths[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_1).getWidth();
-        parachuteHeights[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_1).getHeight();
-        parachuteWidths[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_2).getWidth();
-        parachuteHeights[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_2).getHeight();
-        parachuteWidths[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_3).getWidth();
-        parachuteHeights[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_3).getHeight();
-        parachuteWidths[3] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_open).getWidth();
-        parachuteHeights[3] = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_open).getHeight();
+
     }
 
     public void setIsActive(boolean b) {
@@ -56,22 +46,6 @@ public class Parachute extends Drawable {
 
     public boolean isActive() {
         return super.isActive();
-    }
-
-    public static float getHeight(int index){
-        return parachuteHeights[index];
-    }
-
-    public static float getWidth(int index){
-        return parachuteWidths[index];
-    }
-
-    public float getCurrentHeight(){
-        return currentHeight;
-    }
-
-    public float getCurrentWidth(){
-        return currentWidth ;
     }
 
     public boolean isOpening() {
@@ -104,9 +78,11 @@ public class Parachute extends Drawable {
         if(imageIndex < 3)
         {
             imageIndex++;
-            super.setImage(bitmaps.get(imageIndex));
-            float parachuteCenterX = Parachute.getWidth(imageIndex) / 2;
-            float robotCenterX = robot.getStandingWidth() / 2;
+            setImage(bitmaps.get(imageIndex));
+            setWidth(bitmaps.get(imageIndex).getWidth());
+            setHeight(bitmaps.get(imageIndex).getHeight());
+            float parachuteCenterX = getWidth() / 2;
+            float robotCenterX = robot.getWidth() / 2;
             log("switchImage, robot getX() = " + robot.getX());
             log("switchImage, robot center x = " + (robot.getX() +  robotCenterX));
             log("switchImage, parachurte center x = " + parachuteCenterX);

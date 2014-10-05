@@ -13,7 +13,6 @@ import java.util.TimerTask;
  */
 public class Shield extends Drawable {
 
-    private static float height, width;
     private static int hits = 0;
     private static boolean firstShield = true;
     private TimerTask timerTask;
@@ -23,7 +22,9 @@ public class Shield extends Drawable {
     public Shield(MainGamePanel g, float x, float y){
         super();
         if(firstShield) {
-            super.setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter));
+            setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter));
+            setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getWidth());
+            setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getHeight());
             firstShield = false;
         }
         else if(hits <= 5) {
@@ -34,7 +35,9 @@ public class Shield extends Drawable {
             bitmaps[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_green_5);
             bitmaps[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_green_6);
             bitmaps[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_green_7);
-            super.setImage(bitmaps[0]);
+            setImage(bitmaps[0]);
+            setWidth(bitmaps[0].getWidth());
+            setHeight(bitmaps[0].getHeight());
             startAnimation();
         }
         else if(hits <= 10) {
@@ -45,7 +48,9 @@ public class Shield extends Drawable {
             bitmaps[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_yellow_5);
             bitmaps[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_yellow_6);
             bitmaps[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_yellow_7);
-            super.setImage(bitmaps[0]);
+            setImage(bitmaps[0]);
+            setWidth(bitmaps[0].getWidth());
+            setHeight(bitmaps[0].getHeight());
             startAnimation();
         }
         else {
@@ -56,24 +61,16 @@ public class Shield extends Drawable {
             bitmaps[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_red_5);
             bitmaps[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_red_6);
             bitmaps[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_red_7);
-            super.setImage(bitmaps[0]);
+            setImage(bitmaps[0]);
+            setWidth(bitmaps[0].getWidth());
+            setHeight(bitmaps[0].getHeight());
             startAnimation();
         }
-        super.setX(x);
-        super.setY(y);
+        setX(x);
+        setY(y);
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_green_1).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_green_1).getHeight();
-    }
-
-    public static float getHeight(){
-        return height;
-    }
-
-    public static float getWidth(){
-        return width;
     }
 
     public static void addHit(){

@@ -20,11 +20,11 @@ public class Fireball extends Drawable {
     private long delay = 50L;
     private long replay = 50L;
     private int imageIndex;
-    private static float xOrigin, yOrigin, width, height;
+    private float xOrigin, yOrigin;
     public boolean logEnabled = true;
 
 
-    public Fireball(MainGamePanel g, float x, float y){
+    public Fireball(MainGamePanel g, float scrWidth, float scrHeight){
         super();
         imgFireball[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1);
         imgFireball[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1a);
@@ -38,17 +38,17 @@ public class Fireball extends Drawable {
         imgFireball[9] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4);
         imgFireball[10] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4a);
         imgFireball[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball4b);
-        setX(x);
-        setY(y);
+        setWidth(imgFireball[0].getWidth());
+        setHeight(imgFireball[0].getHeight());
         setImage(imgFireball[0]);
+        xOrigin = (scrWidth / 2) - (imgFireball[0].getWidth() / 2);
+        yOrigin = (scrHeight - (scrHeight / 4));
+        setX(xOrigin);
+        setY(yOrigin);
         setTimerTask();
     }
 
     public static void initializeStaticMembers(float screenWidth, float screenHeight, MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.fireball1).getHeight();
-        xOrigin = (screenWidth / 2) - (width / 2);
-        yOrigin = (screenHeight - (screenHeight / 4));
     }
 
     private void setTimerTask(){
@@ -72,13 +72,6 @@ public class Fireball extends Drawable {
 
     }
 
-    public  static float getHeight() {
-        return height;
-    }
-
-    public static float getWidth() {
-        return width;
-    }
 
     public float getVelocityX() {
         return xVeloc;
@@ -96,19 +89,19 @@ public class Fireball extends Drawable {
         return yVeloc = v;
     }
 
-    public static float getOriginX() {
+    public float getOriginX() {
         return xOrigin;
     }
 
-    public static void setOriginX(float o) {
+    public void setOriginX(float o) {
         xOrigin = o;
     }
 
-    public static float getOriginY() {
+    public float getOriginY() {
         return yOrigin;
     }
 
-    public static void setOriginY(float o) {
+    public void setOriginY(float o) {
         yOrigin = o;
     }
 

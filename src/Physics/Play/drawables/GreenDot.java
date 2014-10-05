@@ -9,32 +9,26 @@ import android.graphics.BitmapFactory;
  */
 public class GreenDot extends Drawable {
 
-    public static float width, height;
     private float angleX, angleY;
-    private static float originX, originY;
+    private float originX, originY;
 
     public GreenDot(MainGamePanel g, float x, float y) {
         setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot));
+        setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot).getWidth());
+        setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot).getHeight());
         setX(x);
         setY(y);
         originX = x;
         originY = y;
         angleX = x;
         angleY = y;
+
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot).getHeight();
+
     }
 
-    public static float getWidth() {
-        return width;
-    }
-
-    public static float getHeight() {
-        return height;
-    }
 
     public float getAngleX() {
         return angleX;
@@ -52,19 +46,19 @@ public class GreenDot extends Drawable {
         angleY = y;
     }
 
-    public static void setOriginX(float x) {
+    public void setOriginX(float x) {
          originX = x;
     }
 
-    public static float getOriginX() {
+    public float getOriginX() {
         return originX;
     }
 
-    public static void setOriginY(float y) {
+    public void setOriginY(float y) {
         originY = y;
     }
 
-    public static float getOriginY() {
+    public float getOriginY() {
         return originY;
     }
 }

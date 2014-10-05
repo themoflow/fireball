@@ -9,11 +9,11 @@ import android.graphics.BitmapFactory;
  */
 public class Bullet extends Drawable {
 
-    private static float width, height;
-
     public Bullet(MainGamePanel g) {
         super();
         setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet));
+        setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getWidth());
+        setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getHeight());
     }
 
     public Bullet(MainGamePanel g, float x, float y) {
@@ -21,11 +21,12 @@ public class Bullet extends Drawable {
         setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet));
         setX(x);
         setY(y);
+        setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getWidth());
+        setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getHeight());
     }
 
     public static void initializeStaticMembers(MainGamePanel g) {
-        width = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getWidth();
-        height = BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getHeight();
+
     }
 
     public void setIsActive(boolean b) {
@@ -36,11 +37,5 @@ public class Bullet extends Drawable {
         return super.isActive();
     }
 
-    public static float getHeight(){
-        return height;
-    }
 
-    public static float getWidth(){
-        return width;
-    }
 }

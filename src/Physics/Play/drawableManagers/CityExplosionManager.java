@@ -1,9 +1,11 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.R;
 import Physics.Play.core.MainGamePanel;
 import Physics.Play.drawables.CityExplosion;
 import Physics.Play.drawables.CityExplosion;
 import Physics.Play.drawables.Drawable;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -32,13 +34,13 @@ public class CityExplosionManager {
     public void createExplosion(MainGamePanel g, List<CityExplosion> cityExplosions, float screenWidth, float screenHeight, String position) {
         if(position.equals("left"))
         {
-            float y = screenHeight - (CityExplosion.getHeight() - (CityExplosion.getHeight() / 4));
+            float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight() - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight() / 4));
             cityExplosions.add(new CityExplosion(g, -60, y));
         }
         else if(position.equals("right"))
         {
-            float x = screenWidth - (CityExplosion.getWidth() - 60);
-            float y = screenHeight - (CityExplosion.getHeight() - (CityExplosion.getHeight() / 4));
+            float x = screenWidth - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getWidth() - 60);
+            float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight() - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight() / 4));
             cityExplosions.add(new CityExplosion(g, x, y));
         }
     }
