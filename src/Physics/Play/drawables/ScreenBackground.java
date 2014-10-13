@@ -1,26 +1,27 @@
 package Physics.Play.drawables;
 
-import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
-import android.graphics.BitmapFactory;
+import Physics.Play.bitmaps.ScreenBackgroundBitmaps;
+import Physics.Play.views.MainGameView;
+import android.graphics.Bitmap;
 
 /**
  * Created by morantornesella-brooks on 9/21/14.
  */
 public class ScreenBackground extends Drawable {
 
+    private int imageIndex = 0;
 
-    public ScreenBackground(MainGamePanel g, float x, float y){
+    public ScreenBackground(MainGameView g, float x, float y){
         super();
-        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.screen_background));
-        setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.screen_background).getWidth());
-        setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.screen_background).getHeight());
+        setWidth(ScreenBackgroundBitmaps.getImage(0).getWidth());
+        setHeight(ScreenBackgroundBitmaps.getImage(0).getHeight());
         setX(x);
         setY(y);
     }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
-
+    @Override
+    public Bitmap getImage() {
+        return ScreenBackgroundBitmaps.getImage(imageIndex);
     }
 
 }

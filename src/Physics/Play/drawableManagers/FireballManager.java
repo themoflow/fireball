@@ -1,10 +1,9 @@
 package Physics.Play.drawableManagers;
 
-import Physics.Play.R;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Fireball;
-import Physics.Play.core.MainGamePanel;
-import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,7 @@ import java.util.List;
 public class FireballManager {
 
     private static FireballManager f = new FireballManager();
+    private boolean logEnabled = false;
 
     private FireballManager(){}
 
@@ -22,12 +22,10 @@ public class FireballManager {
         return f;
     }
 
-    public List<Fireball> createFireballs(int amount, MainGamePanel g, float scrWidth, float scrHeight) {
-        List<Fireball> fireballs = new ArrayList();
+    public void createFireballs(int amount, List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight) {
         for(int i = 0; i < amount; i++) {
             fireballs.add(new Fireball(g, scrWidth, scrHeight));
         }
-        return fireballs;
     }
 
     public List<Drawable> setAsDrawable(List<Fireball> fireballs) {
@@ -49,16 +47,22 @@ public class FireballManager {
         }
     }
 
-    public void addFireball(float x, float y, List<Fireball> fireballs, MainGamePanel g){
+    public void addFireball(float x, float y, List<Fireball> fireballs, MainGameView g){
         fireballs.add(new Fireball(g,x,y));
     }
 
     public float getLastXCoord(List<Fireball> fireballs){
-        return fireballs.get(fireballs.size()-1).getX();
+        if(fireballs.size() > 0)
+            return fireballs.get(fireballs.size()-1).getX();
+        else
+            return 0;
     }
 
     public float getLastYCoord(List<Fireball> fireballs){
-        return fireballs.get(fireballs.size()-1).getY();
+        if(fireballs.size() > 0)
+            return fireballs.get(fireballs.size()-1).getY();
+        else
+            return 0;
     }
 
     public void setVelocity(float x, float y, List<Fireball> fireballs){
@@ -85,14 +89,14 @@ public class FireballManager {
         }
     }
 
-    public void isAtleastOneFireball(List<Fireball> fireballs, MainGamePanel g, float scrWidth, float scrHeight){
+    public void isAtleastOneFireball(List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight){
         if(fireballs.size() <= 0)
         {
             fireballs.add(new Fireball(g, scrWidth, scrHeight));
         }
     }
 
-    public void checkForFireBallRemoval(List<Fireball> fireballs, MainGamePanel g){
+    public void checkForFireBallRemoval(List<Fireball> fireballs, MainGameView g){
 
         for(int i = 0; i < fireballs.size(); i++)
         {
@@ -104,7 +108,7 @@ public class FireballManager {
 
     }
 
-    public void checkForFireballCreation(boolean down, List<Fireball> fireballs, MainGamePanel g, float scrWidth, float scrHeight){
+    public void checkForFireballCreation(boolean down, List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight){
 
         if(fireballs.size() > 0)
         {
@@ -126,8 +130,12 @@ public class FireballManager {
     }
 
     public boolean checkForFireballTouch(float x, float y, List<Fireball> fireballs){
-
-        if((int)x >= getLastXCoord(fireballs) - fireballs.get(0).getWidth() && (int)x <= getLastXCoord(fireballs) + (fireballs.get(0).getWidth()*2) &&
+        log("fireball size = " + fireballs.size());
+        if(getLastXCoord(fireballs) == 0 || getLastYCoord(fireballs) == 0)
+        {
+            return false;
+        }
+        else if((int)x >= getLastXCoord(fireballs) - fireballs.get(0).getWidth() && (int)x <= getLastXCoord(fireballs) + (fireballs.get(0).getWidth()*2) &&
                 (int)y >= getLastYCoord(fireballs) - fireballs.get(0).getHeight() && (int)y <= getLastYCoord(fireballs) + (fireballs.get(0).getHeight()*2))
         {
             return true;
@@ -139,7 +147,7 @@ public class FireballManager {
 
     }
 
-    public void onDrag(float x, float y, List<Fireball> fireballs, MainGamePanel g){
+    public void onDrag(float x, float y, List<Fireball> fireballs, MainGameView g){
             if(fireballs.size() > 0)
             {
                 fireballs.get(fireballs.size()-1).setX(centerX(x, fireballs));
@@ -165,6 +173,22 @@ public class FireballManager {
 
     private float centerY(float y, List<Fireball> fireballs){
         return y - (fireballs.get(0).getWidth() / 2);
+    }
+
+    public void checkForRemoval(List<Fireball> fireballs) {
+        for(int i = 0; i < fireballs.size(); i++)
+            if(fireballs.get(i).isActive() == false)
+                fireballs.remove(i);
+    }
+
+    public void removeFireballs(List<Fireball> fireballs) {
+        for(int i = 0; i < fireballs.size(); i ++)
+            fireballs.remove(i);
+    }
+
+    private void log(String print) {
+        if(logEnabled)
+            Log.i(":::: FireballManager.java :::: ", print);
     }
 
 }

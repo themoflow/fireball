@@ -1,6 +1,6 @@
 package Physics.Play.drawableManagers;
 
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.BulletExplosion;
 import Physics.Play.drawables.Drawable;
 
@@ -20,7 +20,7 @@ public class BulletExplosionManager {
         return be;
     }
 
-    public List<BulletExplosion> createBulletExplosions(int amount, MainGamePanel g) {
+    public List<BulletExplosion> createBulletExplosions(int amount, MainGameView g) {
         List<BulletExplosion> bulletExplosions = new ArrayList();
         for(int i = 0; i < amount; i++) {
             bulletExplosions.add(new BulletExplosion(g));
@@ -28,7 +28,7 @@ public class BulletExplosionManager {
         return bulletExplosions;
     }
 
-    public List<BulletExplosion> createBulletExplosion(MainGamePanel g, List<BulletExplosion> bulletExplosions, float x, float y) {
+    public List<BulletExplosion> createBulletExplosion(MainGameView g, List<BulletExplosion> bulletExplosions, float x, float y) {
         bulletExplosions.add(new BulletExplosion(g, x, y));
         return bulletExplosions;
     }
@@ -48,7 +48,7 @@ public class BulletExplosionManager {
     public void checkForRemoval(List<BulletExplosion> bulletExplosions) {
         for(int i = 0; i < bulletExplosions.size(); i++)
         {
-           if(bulletExplosions.get(i).hasExploded())
+           if(!bulletExplosions.get(i).isActive())
                bulletExplosions.remove(i);
         }
     }

@@ -1,7 +1,8 @@
 package Physics.Play.drawables;
 
 import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.views.MainGameView;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
@@ -12,8 +13,7 @@ public class GreenDot extends Drawable {
     private float angleX, angleY;
     private float originX, originY;
 
-    public GreenDot(MainGamePanel g, float x, float y) {
-        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot));
+    public GreenDot(MainGameView g, float x, float y) {
         setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot).getWidth());
         setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.green_dot).getHeight());
         setX(x);
@@ -25,10 +25,9 @@ public class GreenDot extends Drawable {
 
     }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
-
+    public Bitmap getImage() {
+        return null;
     }
-
 
     public float getAngleX() {
         return angleX;

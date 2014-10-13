@@ -1,101 +1,38 @@
 package Physics.Play.drawables;
 
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.R;
+import Physics.Play.bitmaps.CityExplosionBitmaps;
+import Physics.Play.views.MainGameView;
+import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class CityExplosion extends Drawable {
 
-    private double startTime;
-    private Bitmap[] bitmaps = new Bitmap[30];
     private TimerTask timerTask;
     private int imageIndex = 0;
-    private boolean hasExploded = false;
     private boolean logEnabled = false;
 
-    public CityExplosion(MainGamePanel g) {
+    public CityExplosion(MainGameView g) {
         super();
-        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1);
-        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_2);
-        bitmaps[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_3);
-        bitmaps[3] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_4);
-        bitmaps[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_5);
-        bitmaps[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_6);
-        bitmaps[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_7);
-        bitmaps[7] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_8);
-        bitmaps[8] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_9);
-        bitmaps[9] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_10);
-        bitmaps[10] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_11);
-        bitmaps[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_12);
-        bitmaps[12] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_13);
-        bitmaps[13] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_14);
-        bitmaps[14] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_15);
-        bitmaps[15] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_16);
-        bitmaps[16] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_17);
-        bitmaps[17] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_18);
-        bitmaps[18] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_19);
-        bitmaps[19] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_20);
-        bitmaps[20] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_21);
-        bitmaps[21] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_22);
-        bitmaps[22] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_23);
-        bitmaps[23] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_24);
-        bitmaps[24] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_25);
-        bitmaps[25] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_26);
-        bitmaps[26] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_27);
-        bitmaps[27] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_28);
-        bitmaps[28] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_29);
-        bitmaps[29] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_30);
-        setImage(bitmaps[0]);
-        setWidth(bitmaps[0].getWidth());
-        setHeight(bitmaps[0].getHeight());
+        setWidth(CityExplosionBitmaps.getImage(0).getWidth());
+        setHeight(CityExplosionBitmaps.getImage(0).getHeight());
         startAnimation();
     }
 
-    public CityExplosion(MainGamePanel g, float x, float y) {
+    public CityExplosion(MainGameView g, float x, float y) {
         super();
-        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1);
-        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_2);
-        bitmaps[2] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_3);
-        bitmaps[3] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_4);
-        bitmaps[4] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_5);
-        bitmaps[5] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_6);
-        bitmaps[6] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_7);
-        bitmaps[7] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_8);
-        bitmaps[8] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_9);
-        bitmaps[9] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_10);
-        bitmaps[10] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_11);
-        bitmaps[11] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_12);
-        bitmaps[12] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_13);
-        bitmaps[13] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_14);
-        bitmaps[14] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_15);
-        bitmaps[15] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_16);
-        bitmaps[16] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_17);
-        bitmaps[17] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_18);
-        bitmaps[18] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_19);
-        bitmaps[19] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_20);
-        bitmaps[20] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_21);
-        bitmaps[21] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_22);
-        bitmaps[22] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_23);
-        bitmaps[23] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_24);
-        bitmaps[24] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_25);
-        bitmaps[25] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_26);
-        bitmaps[26] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_27);
-        bitmaps[27] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_28);
-        bitmaps[28] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_29);
-        bitmaps[29] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_30);
-        setImage(bitmaps[0]);
-        setWidth(bitmaps[0].getWidth());
-        setHeight(bitmaps[0].getHeight());
+        setWidth(CityExplosionBitmaps.getImage(0).getWidth());
+        setHeight(CityExplosionBitmaps.getImage(0).getHeight());
         setX(x);
         setY(y);
         startAnimation();
     }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
+    @Override
+    public Bitmap getImage() {
+        return CityExplosionBitmaps.getImage(imageIndex);
     }
 
     public void setIsActive(boolean b) {
@@ -106,37 +43,19 @@ public class CityExplosion extends Drawable {
         return super.isActive();
     }
 
-    public void setStartTime(double s) {
-        startTime = s;
-    }
-
-    public double getStartTime() {
-        return startTime;
-    }
-
-    public boolean hasExploded() {
-        return hasExploded;
-    }
-
-    private void startAnimation(){
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                switchImage();
-            }
-        } ;
+    public void startAnimation(){
+        timerTask = new SerializableTimer(this);
         new Timer().schedule(timerTask, 150L);
 
     }
 
-    private void switchImage(){
-        if (imageIndex < 29) {
+    public void switchImage(){
+        if (imageIndex < CityExplosionBitmaps.getSize()-1) {
             imageIndex++;
-            log("bitmap at index " + imageIndex + " = " + bitmaps[imageIndex]);
-            super.setImage(bitmaps[imageIndex]);
+            log("bitmap at index " + imageIndex + " = " + CityExplosionBitmaps.getImage(imageIndex));
             startAnimation();
         } else {
-            hasExploded = true;
+            setIsActive(false);
         }
     }
 

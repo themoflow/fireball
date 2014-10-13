@@ -1,11 +1,9 @@
 package Physics.Play.drawableManagers;
 
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Fireball;
 import Physics.Play.drawables.GreenDot;
-import Physics.Play.drawables.Rocket;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +39,7 @@ public class GreenDotManager {
             float angleX = (speed*xScale);
             float angleY = (speed*yScale);
             float aimX = fireballs.get(fireballs.size()-1).getX(), aimY = fireballs.get(fireballs.size()-1).getY();
-            while(aimX < MainGamePanel.getScreenWidth() && aimX > 0 && aimY > 0)
+            while(aimX < MainGameView.getScreenWidth() && aimX > 0 && aimY > 0)
             {
                 aimX -= angleX;
                 aimY -= angleY;
@@ -50,13 +48,11 @@ public class GreenDotManager {
         }
     }
 
-    public List<GreenDot> createGreenDots(int amount, MainGamePanel g, List<Fireball> fireballs) {
-        List<GreenDot> greenDots = new ArrayList();
+    public void createGreenDots(int amount, List<GreenDot> greenDots, MainGameView g, List<Fireball> fireballs) {
         float x = fireballs.get(fireballs.size()-1).getX() + fireballs.get(fireballs.size()-1).getWidth() / 2;
         float y = fireballs.get(fireballs.size()-1).getY() + fireballs.get(fireballs.size()-1).getHeight() / 2;
         for(int i = 0; i < amount; i++)
             greenDots.add(new GreenDot(g, x, y));
-        return greenDots;
     }
 
     public List<Drawable> setAsDrawable(List<GreenDot> greenDots) {

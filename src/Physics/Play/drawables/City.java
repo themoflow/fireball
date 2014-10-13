@@ -1,9 +1,8 @@
 package Physics.Play.drawables;
 
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.R;
+import Physics.Play.bitmaps.CityBitmaps;
+import Physics.Play.views.MainGameView;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,19 +14,16 @@ import android.graphics.BitmapFactory;
 public class City extends Drawable {
 
     public static int HITS = 0;
-    private Bitmap[] bitmaps = new Bitmap[2];
+    private int imageIndex = 0;
 
-    public City(MainGamePanel g, float x, float y){
-        bitmaps[0] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city);
-        bitmaps[1] = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_destroyed);
-        setImage(bitmaps[0]);
-        setWidth(bitmaps[0].getWidth());
-        setHeight(bitmaps[0].getHeight());
+    public City(MainGameView g, float x, float y){
+        setWidth(CityBitmaps.getImage(0).getWidth());
+        setHeight(CityBitmaps.getImage(0).getHeight());
         setX(x);
         setY(y);
     }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
+    public static void initializeStaticMembers(MainGameView g) {
 
     }
 
@@ -36,10 +32,16 @@ public class City extends Drawable {
     }
 
     public void switchImage() {
-        setImage(bitmaps[1]);
-        setWidth(bitmaps[1].getWidth());
-        setHeight(bitmaps[1].getHeight());
+        //setImage(CityBitmaps.getImage(1));
+        imageIndex++;
+        setWidth(CityBitmaps.getImage(1).getWidth());
+        setHeight(CityBitmaps.getImage(1).getHeight());
 
+    }
+
+    @Override
+    public Bitmap getImage() {
+        return CityBitmaps.getImage(imageIndex);
     }
 
 }

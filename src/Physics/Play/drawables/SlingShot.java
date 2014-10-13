@@ -1,9 +1,11 @@
 package Physics.Play.drawables;
 
+import java.io.Serializable;
+
 /**
  * Created by morantornesella-brooks on 9/24/14.
  */
-public class SlingShot {
+public class SlingShot implements Serializable {
 
     float leftX = 10, midX, rightX, topY, bottomY;
 

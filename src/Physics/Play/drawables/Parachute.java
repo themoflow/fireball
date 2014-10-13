@@ -1,13 +1,11 @@
 package Physics.Play.drawables;
 
-import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.bitmaps.ParachuteBitmaps;
+import Physics.Play.views.MainGameView;
+import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,78 +14,56 @@ import java.util.TimerTask;
  */
 public class Parachute extends Drawable {
 
-    private List<Bitmap> bitmaps = new ArrayList();
     private boolean isOpening = false;
-    private Robot robot;
     private TimerTask timerTask;
     private int imageIndex = 0;
     private boolean logEnabled = false;
 
-    public Parachute(MainGamePanel g) {
+    public Parachute(MainGameView g, float x, float y) {
         super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_1));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_2));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_3));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_open));
-        setWidth(bitmaps.get(0).getWidth());
-        setHeight(bitmaps.get(0).getHeight());
-        setImage(bitmaps.get(0));
-        super.setIsActive(false);
-    }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
-
+        setWidth(ParachuteBitmaps.getImage(0).getWidth());
+        setHeight(ParachuteBitmaps.getImage(0).getHeight());
+        setX(x);
+        setY(y);
+        startAnimation();
     }
 
     public void setIsActive(boolean b) {
         super.setIsActive(b);
-        setTimerTask();
+    }
+
+    @Override
+    public Bitmap getImage() {
+        return ParachuteBitmaps.getImage(imageIndex);
     }
 
     public boolean isActive() {
         return super.isActive();
     }
 
-    public boolean isOpening() {
-        return isOpening;
+
+
+    public void startAnimation() {
+        timerTask = new SerializableTimer(this);
+        new Timer().schedule(timerTask, 50L);
     }
 
-    public void setIsOpening(boolean o) {
-        isOpening = o;
-    }
-
-    public Robot getRobot() {
-        return robot;
-    }
-
-    public void setRobot(Robot r) {
-        robot = r;
-    }
-
-    private void setTimerTask() {
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                switchImage();
-            }
-        } ;
-        new Timer().schedule(timerTask, 110L);
-    }
-
-    private void switchImage() {
-        if(imageIndex < 3)
+    public void switchImage() {
+        if(imageIndex < ParachuteBitmaps.getSize()-1)
         {
+            Drawable robot = getDrawable(Robot.class);
             imageIndex++;
-            setImage(bitmaps.get(imageIndex));
-            setWidth(bitmaps.get(imageIndex).getWidth());
-            setHeight(bitmaps.get(imageIndex).getHeight());
+            setWidth(ParachuteBitmaps.getImage(imageIndex).getWidth());
+            setHeight(ParachuteBitmaps.getImage(imageIndex).getHeight());
             float parachuteCenterX = getWidth() / 2;
             float robotCenterX = robot.getWidth() / 2;
-            log("switchImage, robot getX() = " + robot.getX());
-            log("switchImage, robot center x = " + (robot.getX() +  robotCenterX));
-            log("switchImage, parachurte center x = " + parachuteCenterX);
             setX((robot.getX() +  robotCenterX) - (parachuteCenterX));
-            setTimerTask();
+            startAnimation();
+        }
+        else
+        {
+            isOpening = false;
         }
     }
 

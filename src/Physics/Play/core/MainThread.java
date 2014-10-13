@@ -1,6 +1,5 @@
 package Physics.Play.core;
 
-import Physics.Play.drawables.City;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
@@ -8,10 +7,10 @@ import android.view.SurfaceHolder;
 public class MainThread extends Thread {
 
     private SurfaceHolder surfaceHolder;
-    private MainGamePanel gamePanel;
+    private MainGameView gamePanel;
     private boolean running;
 
-    public MainThread(SurfaceHolder surfaceHolder, MainGamePanel gamePanel) {
+    public MainThread(SurfaceHolder surfaceHolder, MainGameView gamePanel) {
         super();
         this.surfaceHolder = surfaceHolder;
         this.gamePanel = gamePanel;

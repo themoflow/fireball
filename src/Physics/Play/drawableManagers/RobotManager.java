@@ -1,9 +1,11 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.R;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.*;
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.helpers.CollisionDetector;
-import Physics.Play.helpers.Coordinate;
+import Physics.Play.logic.CollisionDetector;
+import Physics.Play.model.Coordinate;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.util.*;
@@ -15,6 +17,7 @@ public class RobotManager {
 
     private double seconds = 10;
     private static RobotManager r = new RobotManager();
+    private boolean logEnabled = false;
 
     private RobotManager() {
 
@@ -24,29 +27,24 @@ public class RobotManager {
         return r;
     }
 
-    public List<Robot> createRobots(int amount, MainGamePanel g) {
-        List<Robot> robots = new ArrayList();
-        for(int i = 0; i < amount; i++)
-            robots.add(new Robot(g));
-        return robots;
+    public Robot createRobot(List<Robot> robots, MainGameView g) {
+        Robot robot = new Robot(g);
+        robots.add(robot);
+        return robot;
     }
 
-    public void addRobotsToRockets(List<Rocket> rockets, List<Robot> robots) {
-        for(int i = 0; i < robots.size(); i++)
-        {
-            float rocketWidthCenter = rockets.get(0).getWidth() / 2;
-            float robotWidthCenter = robots.get(0).getWidth() / 2;
+    public void addRobotToRocket(Robot robot, Rocket rocket) {
+            float rocketWidthCenter = rocket.getWidth() / 2;
+            float robotWidthCenter = robot.getWidth() / 2;
             float robotOffset = robotWidthCenter - rocketWidthCenter;
-            float x = rockets.get(i).getX() - robotOffset;
-
-            robots.get(i).setX(x);
-            robots.get(i).setY(rockets.get(i).getY());
-            rockets.get(i).setRobot(robots.get(i));
-            robots.get(i).setRocket(rockets.get(i));
-        }
+            float x = rocket.getX() - robotOffset;
+            robot.setX(x);
+            robot.setY(rocket.getY());
+            rocket.addDrawable(robot);
+            robot.addDrawable(rocket);
     }
 
-    public void move(List<Robot> robots, CollisionDetector collisionDetector, MainGamePanel g) {
+    public void move(List<Robot> robots, List<Parachute> parachutes, CollisionDetector collisionDetector, MainGameView g) {
 
         for(int i = 0; i < robots.size(); i++)
         {
@@ -62,21 +60,29 @@ public class RobotManager {
                     if(!collisionDetector.willRobotCollideWithAnotherRobot(robots, g))
                     {
                         robots.get(i).setIsJumping(true);
-                        robots.get(i).setRobotJumpingImage();
                         robots.get(i).setIsOnRocket(false);
-                        robots.get(i).getRocket().setHasRobot(false);
-                        robots.get(i).getParachute().setIsActive(true);
+                        float pWidth = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_1).getWidth();
+                        float pHeight = BitmapFactory.decodeResource(g.getResources(), R.drawable.parachute_1).getHeight();
+                        float parachuteCenterX = pWidth / 2;
+                        float robotCenterX = robots.get(i).getWidth() / 2;
+                        Parachute parachute = new Parachute(g, (robots.get(i).getX() - (parachuteCenterX - robotCenterX)), (robots.get(i).getY() - pHeight));
+                        robots.get(i).getDrawable(Rocket.class).removeDrawable(Robot.class);
+                        robots.get(i).removeDrawable(Rocket.class);
+                        robots.get(i).addDrawable(parachute);
+                        parachute.addDrawable(robots.get(i));
+                        parachutes.add(parachute);
+
                     }
                     else
                     {
-                        robots.get(i).setY(robots.get(i).getRocket().getY() + 15);
+                        robots.get(i).setY(robots.get(i).getDrawable(Rocket.class).getY() + 15);
                     }
 
                 }
                 //Else move the robot with the rocket.
                 else
                 {
-                    robots.get(i).setY(robots.get(i).getRocket().getY() + 15);
+                    robots.get(i).setY(robots.get(i).getDrawable(Rocket.class).getY() + 15);
                 }
             }
             else
@@ -125,25 +131,36 @@ public class RobotManager {
         int bezierY=0;
 
         //Make sure the robot jumps off the rocket towards the bigger half of the phones screen.
-        if(robot.getX() > MainGamePanel.getScreenWidth() / 2)
+        if(robot.getX() > MainGameView.getScreenWidth() / 2)
         {
             bezierX = (int)robot.getX() - 25;
-            coordinateTo = new Coordinate(robot.getX() - 50, robot.getY());
+            coordinateTo = new Coordinate(robot.getX() - 50, robot.getY() + 75);
         }
         else
         {
             bezierX = (int)robot.getX() + 25;
-            coordinateTo = new Coordinate(robot.getX() + 50, robot.getY());
+            coordinateTo = new Coordinate(robot.getX() + 50, robot.getY() + 75);
         }
         //Get the coordinates of the curve that the robot is supposed to move through.
         robot.setJumpCoordinates(generateCurveCoordinates(coordinateFrom, coordinateTo, bezierX, bezierY));
     }
 
-    public void removeRobots(List<Robot> robots, List<Parachute> parachutes) {
+    public void removeRobots(List<Robot> robots) {
         for(int i = 0; i < robots.size(); i++)
             if(robots.get(i).getY() < 0) {
-                parachutes.remove(robots.get(i).getParachute());
+                log("ROBOT REMOVED y = " + robots.get(i).getY());
                 robots.remove(i);
             }
+    }
+
+    public void checkForRemoval(List<Robot> robots) {
+        for(int i = 0; i < robots.size(); i++)
+            if(robots.get(i).isActive() == false)
+                robots.remove(i);
+    }
+
+    private void log(String print) {
+        if(logEnabled)
+            Log.i(":::: RobotManager.java :::: ", print);
     }
 }

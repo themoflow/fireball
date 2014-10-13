@@ -1,7 +1,9 @@
 package Physics.Play.drawables;
 
 import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.bitmaps.BulletBitmaps;
+import Physics.Play.views.MainGameView;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 /**
@@ -9,24 +11,25 @@ import android.graphics.BitmapFactory;
  */
 public class Bullet extends Drawable {
 
-    public Bullet(MainGamePanel g) {
+    private int imageIndex = 0;
+
+    public Bullet(MainGameView g) {
         super();
-        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet));
-        setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getWidth());
-        setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getHeight());
+        setWidth(BulletBitmaps.getImage(0).getWidth());
+        setHeight(BulletBitmaps.getImage(0).getHeight());
     }
 
-    public Bullet(MainGamePanel g, float x, float y) {
+    public Bullet(MainGameView g, float x, float y) {
         super();
-        setImage(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet));
         setX(x);
         setY(y);
         setWidth(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getWidth());
         setHeight(BitmapFactory.decodeResource(g.getResources(), R.drawable.bullet).getHeight());
     }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
-
+    @Override
+    public Bitmap getImage() {
+        return BulletBitmaps.getImage(imageIndex);
     }
 
     public void setIsActive(boolean b) {

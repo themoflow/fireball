@@ -1,8 +1,9 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.RocketExplosion;
-import Physics.Play.core.MainGamePanel;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public class RocketExplosionManager {
 
     private static RocketExplosionManager e = new RocketExplosionManager();
+    private boolean logEnabled = true;
 
     private RocketExplosionManager(){}
 
@@ -20,14 +22,14 @@ public class RocketExplosionManager {
         return e;
     }
 
-    public List<RocketExplosion> createExplosions(int amount, MainGamePanel g, List<RocketExplosion> explosions) {
+    public List<RocketExplosion> createExplosions(int amount, MainGameView g, List<RocketExplosion> explosions) {
         for(int i = 0; i < amount; i++) {
             explosions.add(new RocketExplosion(g));
         }
         return explosions;
     }
 
-    public List<RocketExplosion> createExplosion(MainGamePanel g, List<RocketExplosion> explosions, float x, float y) {
+    public List<RocketExplosion> createExplosion(MainGameView g, List<RocketExplosion> explosions, float x, float y) {
         explosions.add(new RocketExplosion(g, x, y));
         return explosions;
     }
@@ -51,8 +53,17 @@ public class RocketExplosionManager {
     public void checkForRemoval(List<RocketExplosion> explosions) {
         for(int i = 0; i < explosions.size(); i++)
         {
-            if(explosions.get(i).hasExploded())
+            if(!explosions.get(i).isActive())
+            {
+                log("rocketExplosion removed");
                 explosions.remove(i);
+            }
+
         }
+    }
+
+    private void log(String print) {
+        if(logEnabled)
+            Log.i("RocketExplosionManager.java - ", print + " ::::");
     }
 }

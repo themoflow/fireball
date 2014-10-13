@@ -1,8 +1,8 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.ScreenBackground;
-import Physics.Play.core.MainGamePanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +20,10 @@ public class ScreenBackgroundManager {
         return s;
     }
 
-    public List<ScreenBackground> createScreenBackground(int amount, MainGamePanel g, float x, float y) {
-        List<ScreenBackground> screenBackgrounds = new ArrayList();
+    public void createScreenBackground(int amount, List<ScreenBackground> screenBackgrounds, MainGameView g, float x, float y) {
         for(int i = 0; i < amount; i++) {
             screenBackgrounds.add(new ScreenBackground(g, x, y));
         }
-        return screenBackgrounds;
     }
 
     public List<Drawable> setAsDrawable(List<ScreenBackground> screenBackground) {

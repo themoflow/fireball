@@ -1,81 +1,41 @@
 package Physics.Play.drawables;
 
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.R;
+import Physics.Play.bitmaps.RocketExplosionBitmaps;
+import Physics.Play.views.MainGameView;
+import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 public class RocketExplosion extends Drawable {
 
-    private double startTime;
-    private List<Bitmap> bitmaps = new ArrayList();
     private TimerTask timerTask;
     private int imageIndex = 0;
-    private boolean hasExploded = false;
-    private boolean logEnabled = false;
+    private boolean logEnabled = true;
 
-    public RocketExplosion(MainGamePanel g) {
+    public RocketExplosion(MainGameView g) {
         super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_1));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_2));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_3));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_4));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_5));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_6));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_7));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_8));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_9));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_10));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_11));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_12));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_13));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_14));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_15));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_16));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_17));
-        setImage(bitmaps.get(0));
-        setWidth(bitmaps.get(0).getWidth());
-        setHeight(bitmaps.get(0).getHeight());
-        startTime = System.currentTimeMillis();
-        setTimerTask();
+        setWidth(RocketExplosionBitmaps.getImage(0).getWidth());
+        setHeight(RocketExplosionBitmaps.getImage(0).getHeight());
+        startAnimation();
     }
 
-    public RocketExplosion(MainGamePanel g, float x, float y) {
+    public RocketExplosion(MainGameView g, float x, float y) {
         super();
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_1));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_2));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_3));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_4));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_5));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_6));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_7));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_8));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_9));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_10));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_11));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_12));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_13));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_14));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_15));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_16));
-        bitmaps.add(BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket_explosion_17));
-        setImage(bitmaps.get(0));
-        setWidth(bitmaps.get(0).getWidth());
-        setHeight(bitmaps.get(0).getHeight());
-        startTime = System.currentTimeMillis();
+        setWidth(RocketExplosionBitmaps.getImage(0).getWidth());
+        setHeight(RocketExplosionBitmaps.getImage(0).getHeight());
         setX(x);
         setY(y);
-        setTimerTask();
+        startAnimation();
     }
 
-    public static void initializeStaticMembers(MainGamePanel g) {
+    @Override
+    public Bitmap getImage() {
+        log("getImage() imageIndex = " + imageIndex);
+        return RocketExplosionBitmaps.getImage(imageIndex);
     }
 
     public void setIsActive(boolean b) {
@@ -86,45 +46,29 @@ public class RocketExplosion extends Drawable {
         return super.isActive();
     }
 
-    public void setStartTime(double s) {
-        startTime = s;
-    }
-
-    public double getStartTime() {
-        return startTime;
-    }
-
-    public boolean hasExploded() {
-        return hasExploded;
-    }
-
-    private void setTimerTask(){
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                switchImage();
-            }
-        } ;
+    public void startAnimation(){
+        timerTask = new SerializableTimer(this);
         new Timer().schedule(timerTask, 30L);
     }
 
-    private void switchImage(){
-        if(imageIndex < 15)
+    public void switchImage(){
+        log("switchImage() imageIndex = " + imageIndex);
+        if(imageIndex < RocketExplosionBitmaps.getSize()-1)
         {
             imageIndex++;
-            setImage(bitmaps.get(imageIndex));
-            setWidth(bitmaps.get(imageIndex).getWidth());
-            setHeight(bitmaps.get(imageIndex).getHeight());
-            setTimerTask();
+            setWidth(RocketExplosionBitmaps.getImage(imageIndex).getWidth());
+            setHeight(RocketExplosionBitmaps.getImage(imageIndex).getHeight());
+            startAnimation();
         }
         else
         {
-            hasExploded = true;
+            log("switchImage() setIsActive(false)");
+            setIsActive(false);
         }
     }
 
     private void log(String print) {
         if(logEnabled)
-            Log.i("RocketExplosion - ", print);
+            Log.i(":::: RocketExplosion.java - ", print);
     }
 }

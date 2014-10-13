@@ -1,8 +1,9 @@
 package Physics.Play.drawableManagers;
 
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.City;
 import Physics.Play.drawables.Drawable;
-import Physics.Play.core.MainGamePanel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,10 @@ public class CityManager {
         return c;
     }
 
-    public List<City> createCitys(int amount, MainGamePanel g, float cityX, float cityY) {
-        List<City> citys = new ArrayList();
+    public void createCitys(int amount, List<City> citys, MainGameView g, float cityX, float cityY) {
         for(int i = 0; i < amount; i++) {
             citys.add(new City(g, cityX, cityY));
         }
-        return citys;
     }
 
     public List<Drawable> setAsDrawable(List<City> citys) {

@@ -1,12 +1,11 @@
 package Physics.Play.drawableManagers;
 
 import Physics.Play.R;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
-import Physics.Play.drawables.Robot;
 import Physics.Play.drawables.Rocket;
-import Physics.Play.core.MainGamePanel;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
 public class RocketManager {
 
     private static RocketManager r = new RocketManager();
+    private boolean logEnabled = false;
 
     private RocketManager(){}
 
@@ -24,13 +24,11 @@ public class RocketManager {
         return r;
     }
 
-    public List<Rocket> createRockets(int amount, MainGamePanel g, float scrWidth) {
+    public Rocket createRocket(List<Rocket> rockets, MainGameView g, float scrWidth) {
         float height = BitmapFactory.decodeResource(g.getResources(), R.drawable.rocket).getHeight();
-        List<Rocket> rockets = new ArrayList();
-        for(int i = 0; i < amount; i++) {
-            rockets.add(new Rocket(g, (i * 2) * (- height), scrWidth));
-        }
-        return rockets;
+        Rocket rocket = new Rocket(g, 0 - height, scrWidth);
+        rockets.add(rocket);
+        return rocket;
     }
 
     public void move(List<Rocket> rockets) {
@@ -41,6 +39,15 @@ public class RocketManager {
         }
     }
 
+    public boolean timeToCreateRocket(List<Rocket> rockets) {
+        if(!(rockets.size() > 0))
+            return true;
+        else if(rockets.get(rockets.size()-1).getY() - rockets.get(rockets.size()-1).getHeight() > 0)
+            return true;
+        else
+            return false;
+    }
+
     public List<Drawable> setAsDrawable(List<Rocket> rockets) {
         List<Drawable> converted = new ArrayList();
         for(int i = 0; i < rockets.size(); i++)
@@ -48,13 +55,24 @@ public class RocketManager {
         return converted;
     }
 
-    public void removeRobots(List<Rocket> rockets, List<Robot> robots) {
+    public void removeRockets(List<Rocket> rockets) {
         for(int i = 0; i < rockets.size(); i++)
-            if(rockets.get(i).getY() < 0) {
-                if(rockets.get(i).hasRobot())
-                    robots.remove(rockets.get(i).getRobot());
+            if(rockets.get(i).getY() < 0)
+            {
+                log("ROCKET REMOVED Y = " + rockets.get(i).getY());
                 rockets.remove(i);
             }
+    }
+
+    public void checkForRemoval(List<Rocket> rockets) {
+        for(int i = 0; i < rockets.size(); i++)
+            if(rockets.get(i).isActive() == false)
+                rockets.remove(i);
+    }
+
+    private void log(String print) {
+        if(logEnabled)
+            Log.i(":::: RocketManager.java :::: ", print);
     }
 
 }

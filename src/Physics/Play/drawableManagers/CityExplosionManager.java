@@ -1,8 +1,7 @@
 package Physics.Play.drawableManagers;
 
 import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.drawables.CityExplosion;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.CityExplosion;
 import Physics.Play.drawables.Drawable;
 import android.graphics.BitmapFactory;
@@ -24,14 +23,14 @@ public class CityExplosionManager {
         return e;
     }
 
-    public List<CityExplosion> createExplosions(int amount, MainGamePanel g, List<CityExplosion> cityExplosions) {
+    public List<CityExplosion> createExplosions(int amount, MainGameView g, List<CityExplosion> cityExplosions) {
         for(int i = 0; i < amount; i++) {
             cityExplosions.add(new CityExplosion(g));
         }
         return cityExplosions;
     }
 
-    public void createExplosion(MainGamePanel g, List<CityExplosion> cityExplosions, float screenWidth, float screenHeight, String position) {
+    public void createExplosion(MainGameView g, List<CityExplosion> cityExplosions, float screenWidth, float screenHeight, String position) {
         if(position.equals("left"))
         {
             float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight() - (BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_2_1).getHeight() / 4));
@@ -64,7 +63,7 @@ public class CityExplosionManager {
     public void checkForRemoval(List<CityExplosion> cityExplosions) {
         for(int i = 0; i < cityExplosions.size(); i++)
         {
-            if(cityExplosions.get(i).hasExploded())
+            if(!cityExplosions.get(i).isActive())
                 cityExplosions.remove(i);
         }
     }

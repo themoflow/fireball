@@ -1,9 +1,7 @@
 package Physics.Play.drawableManagers;
 
 import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.drawables.AtomicExplosion;
-import Physics.Play.drawables.City;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Shield;
 import android.graphics.BitmapFactory;
@@ -24,16 +22,14 @@ public class ShieldManager {
         return s;
     }
 
-    public List<Shield> createShields(MainGamePanel g, float screenWidth, float screenHeight) {
-        List<Shield> shields = new ArrayList();
+    public void createShields(MainGameView g, List<Shield> shields, float screenWidth, float screenHeight) {
         float x = (screenWidth / 2) - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getWidth() / 2);
         float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getHeight() - 40);
         Shield shield = new Shield(g, x, y);
         shields.add(shield);
-        return shields;
     }
 
-    public void createShield(List<Shield> shields, MainGamePanel g, float screenWidth, float screenHeight) {
+    public void createShield(List<Shield> shields, MainGameView g, float screenWidth, float screenHeight) {
         float x = (screenWidth / 2) - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getWidth() / 2);
         float y = screenHeight - (BitmapFactory.decodeResource(g.getResources(), R.drawable.shield_perimeter).getHeight() - 40);
         Shield shield = new Shield(g, x, y);
@@ -47,11 +43,19 @@ public class ShieldManager {
         return converted;
     }
 
+    public void addHit(List<Shield> shields) {
+        for(int i = 0; i < shields.size(); i++)
+            shields.get(i).addHit();
+    }
+
+    public void setHits(List<Shield> shields, int amount) {
+        for(int i = 0; i < shields.size(); i++)
+            shields.get(i).setHits(amount);
+    }
+
     public void checkForRemoval(List<Shield> shields) {
         for(int i = 0; i < shields.size(); i++)
-        {
-            if(!shields.get(i).isActive() || Shield.getHits() >= 15)
+            if(!shields.get(i).isActive())
                 shields.remove(i);
-        }
     }
 }

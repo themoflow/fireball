@@ -1,7 +1,7 @@
 package Physics.Play.drawableManagers;
 
 import Physics.Play.R;
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.AtomicExplosion;
 import Physics.Play.drawables.Drawable;
 import android.graphics.BitmapFactory;
@@ -13,6 +13,7 @@ import java.util.List;
  * Created by morantornesella-brooks on 10/1/14.
  */
 public class AtomicExplosionManager {
+
     private static AtomicExplosionManager e = new AtomicExplosionManager();
 
     private AtomicExplosionManager(){}
@@ -21,14 +22,14 @@ public class AtomicExplosionManager {
         return e;
     }
 
-    public List<AtomicExplosion> createExplosions(int amount, MainGamePanel g, List<AtomicExplosion> atomicExplosions, String explosionType) {
+    public List<AtomicExplosion> createExplosions(int amount, MainGameView g, List<AtomicExplosion> atomicExplosions, String explosionType) {
         for(int i = 0; i < amount; i++) {
             atomicExplosions.add(new AtomicExplosion(g));
         }
         return atomicExplosions;
     }
 
-    public List<AtomicExplosion> createExplosion(MainGamePanel g, List<AtomicExplosion> atomicExplosions, float screenWidth, float screenHeight) {
+    public List<AtomicExplosion> createExplosion(MainGameView g, List<AtomicExplosion> atomicExplosions, float screenWidth, float screenHeight) {
         float cityExplosionCenterX = BitmapFactory.decodeResource(g.getResources(), R.drawable.city_explosion_1).getWidth() / 2;
         float screenCenterX = screenWidth / 2;
         float x = screenCenterX - cityExplosionCenterX;
@@ -54,11 +55,11 @@ public class AtomicExplosionManager {
         cityExplosions.get(0).setIsActive(b);
     }
 
-    public void checkForRemoval(List<AtomicExplosion> cityExplosions) {
-        for(int i = 0; i < cityExplosions.size(); i++)
+    public void checkForRemoval(List<AtomicExplosion> atomicExplosions) {
+        for(int i = 0; i < atomicExplosions.size(); i++)
         {
-            if(cityExplosions.get(i).hasExploded())
-                cityExplosions.remove(i);
+            if(!atomicExplosions.get(i).isActive())
+                atomicExplosions.remove(i);
         }
     }
 }

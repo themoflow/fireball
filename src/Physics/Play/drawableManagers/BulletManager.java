@@ -1,6 +1,6 @@
 package Physics.Play.drawableManagers;
 
-import Physics.Play.core.MainGamePanel;
+import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Bullet;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Robot;
@@ -23,12 +23,10 @@ public class BulletManager {
         return b;
     }
 
-    public List<Bullet> createBullets(int amount, MainGamePanel g) {
-        List<Bullet> bullets = new ArrayList();
+    public void createBullets(int amount, List<Bullet> bullets, MainGameView g) {
         for(int i = 0; i < amount; i++) {
             bullets.add(new Bullet(g));
         }
-        return bullets;
     }
 
     public void move(List<Bullet> bullets) {
@@ -45,7 +43,7 @@ public class BulletManager {
         return converted;
     }
 
-    public List<Bullet> createBullets(List<Robot> robots, List<Bullet> bullets, MainGamePanel g) {
+    public void createBullets(List<Robot> robots, List<Bullet> bullets, MainGameView g) {
         double currentTime = System.currentTimeMillis();
         for(int i = 0; i < robots.size(); i++)
         {
@@ -60,8 +58,13 @@ public class BulletManager {
                 robots.get(i).setTimeOfLastBulletShot(currentTime);
             }
         }
-        return bullets;
 
+    }
+
+    public void checkForRemoval(List<Bullet> bullets) {
+        for(int i = 0; i < bullets.size(); i++)
+            if(bullets.get(i).isActive() == false)
+                bullets.remove(i);
     }
 
     private void log(String print) {

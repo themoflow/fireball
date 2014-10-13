@@ -1,6 +1,6 @@
 package Physics.Play.helpers;
 
-import Physics.Play.drawables.*;
+import Physics.Play.model.drawables.*;
 import android.graphics.*;
 import android.util.Log;
 
@@ -24,10 +24,6 @@ public class Drawer {
     public void drawToCanvas(List<Drawable> drawables, Canvas c) {
         for(int i = 0; i < drawables.size(); i++)
             if(drawables.get(i).isActive()) {
-                   if(drawables.get(i).getImage() == null){
-                       log("drawable " + i + " is null = " + drawables.get(i).getClass());
-                       log("drawable " + i + " is null = " + drawables.get(i));
-                   }
                 c.drawBitmap(drawables.get(i).getImage(), drawables.get(i).getX(), drawables.get(i).getY(), null);
             }
     }

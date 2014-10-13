@@ -1,14 +1,5 @@
 package Physics.Play.helpers.backups;
 
-import java.util.List;
-
-import Physics.Play.core.MainGamePanel;
-import Physics.Play.drawables.*;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.graphics.Color;
-import android.util.Log;
-
 
 public class BACK_UP_CollisionDetector {
 

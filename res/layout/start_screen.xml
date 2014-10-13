@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/startScreen"
+            android:background="#ed0000"
+            android:orientation="vertical"
+            android:gravity="center">
+
+    <Button android:layout_width="300dip"
+            android:layout_height="75dip"
+            android:layout_marginTop="-20dip"
+            android:layout_marginBottom="20dip"
+            android:id="@+id/startBtn"
+            android:text="Start New Game"
+            android:background="#999999"
+            android:textColor="#ffffff"
+            android:textSize="30dip"
+            android:typeface="serif"/>
+
+    <Button android:layout_width="300dip"
+            android:layout_height="75dip"
+            android:id="@+id/continueBtn"
+            android:text="Continue"
+            android:background="#999999"
+            android:textColor="#ffffff"
+            android:textSize="30dip"
+            android:typeface="serif"/>
+
+</LinearLayout>
+
