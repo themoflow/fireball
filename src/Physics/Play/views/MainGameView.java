@@ -23,7 +23,7 @@ import java.util.List;
 
 public class MainGameView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
     private MainThread thread;
     private MainGameActivity activity;
     private GameState gameState = null;
@@ -200,7 +200,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                     {
                         City.HITS = 0;
                         shieldManager.setHits(gameState.getShields(), 0);
-                        activity.showDialog("GAME OVER\nYou let the city get destroyed\nTry Again!");
+                        activity.displayGameOverMessage("GAME OVER\nYou let the city get destroyed\nTry Again!");
                         killThread();
                         return;
                     }
@@ -271,7 +271,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
 
             if(rocketCityCollisionDetails != null)
             {
-                if (City.HITS++ == 5 && gameState.isGameOver() == false)
+                if (City.HITS++ >= 5 && gameState.isGameOver() == false)
                     gameState.setGameOver(true);
                 rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketCityCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket_explosion_1).getWidth() / 2), rocketCityCollisionDetails.getY());
                 if(rocketCityCollisionDetails.getDrawable2().getDrawables().size() > 0)
@@ -318,7 +318,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 gameState.getBullets().remove(bulletCityExplosionDetails.getDrawable2());
             }
             if(robotCityCollisionDetails != null) {
-                if (City.HITS++ == 5 && gameState.isGameOver() == false)
+                if (City.HITS++ >= 5 && gameState.isGameOver() == false)
                     gameState.setGameOver(true);
                 robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), robotCityCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.robot_explosion_1).getWidth() / 2), robotCityCollisionDetails.getY());
                 if(robotCityCollisionDetails.getDrawable2().getDrawables().size() > 0)
@@ -484,7 +484,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
 
     public void log(String string) {
         if(logEnabled)
-            Log.i("MainGamePanel.java :::: ", string + " ::::");
+            Log.i("MainGameView.java :::: ", string + " ::::");
     }
 
     public GameState getGameState() {

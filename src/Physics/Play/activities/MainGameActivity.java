@@ -1,25 +1,28 @@
 package Physics.Play.activities;
 
+import Physics.Play.R;
 import Physics.Play.views.MainGameView;
 import Physics.Play.database.DatabaseManager;
 import Physics.Play.model.GameState;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.*;
+import android.widget.PopupWindow;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainGameActivity extends Activity {
 
     private AlertDialog.Builder builder;
-    private Bundle reset;
     private Looper looper;
-    private String displayText;
     private MainGameView mainGameView;
     private DatabaseManager dbm;
     private boolean logEnabled = true;
+    private PopupWindow popupWindow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,6 @@ public class MainGameActivity extends Activity {
         super.onStop();
         log("onStop() called");
         if(!mainGameView.getGameState().isGameOver()) {
-            log("isGAmeOver() = false");
             dbm.saveGameState(mainGameView.getGameState());
         }
     }
@@ -68,10 +70,36 @@ public class MainGameActivity extends Activity {
         log("onDestroy() called :::: ");
     }
 
+    public void createPopup() {
+        /*LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.game_over, null, false);
+        popupWindow = new PopupWindow(layout, 300, 300, true);
+        popupWindow.showAtLocation(layout, Gravity.NO_GRAVITY, 0, 0);*/
+    }
 
+    public void closePopup() {
+        /*popupWindow.dismiss();*/
+    }
 
-    public void showDialog(String text){
-        displayText = text;
+    public void displayGameOverMessage(String text){
+        MainGameActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                Timer timer = new Timer();
+                TimerTask timerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                    log("dismissing pop up");
+                    Intent intent = new Intent(MainGameActivity.this, StartScreenActivity.class);
+                    intent.putExtra("gameOver","true");
+                    MainGameActivity.this.startActivity(intent);
+                    dbm.clearSavedGameState();
+                    MainGameActivity.this.finish();
+                    }
+                };//end timertask();
+                timer.schedule(timerTask, 1000L);
+            }//end run()
+        });
+        /*displayText = text;
         MainGameActivity.this.runOnUiThread(new Runnable() {
             public void run() {
                 builder.setMessage(displayText).setCancelable(false).setPositiveButton("Play Again!", new DialogInterface.OnClickListener() {
@@ -93,13 +121,11 @@ public class MainGameActivity extends Activity {
                 AlertDialog alert = builder.create();
                 alert.show();
             }
-        });
+        });*/
     }
-
-
 
     private void log(String print) {
         if(logEnabled != false)
-            Log.i(":::: MyActivity.java - ", print + " ::::");
+            Log.i(":::: MainGameActivity.java - ", print + " ::::");
     }
 }

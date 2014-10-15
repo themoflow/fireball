@@ -12,7 +12,7 @@ import java.util.List;
 public class Drawer {
 
     private static Drawer d = new Drawer();
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
 
     private Drawer() {
     }

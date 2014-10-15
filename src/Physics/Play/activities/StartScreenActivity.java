@@ -25,6 +25,13 @@ public class StartScreenActivity extends Activity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.start_screen);
+        if(getIntent().getExtras() != null)
+        {
+            if(getIntent().getExtras().getString("gameOver").equals("true")) {
+                findViewById(R.id.gameOverText1).setVisibility(View.VISIBLE);
+                findViewById(R.id.gameOverText2).setVisibility(View.VISIBLE);
+            }
+        }
         Button[] buttons =  new Button[2];
         buttons[0] = (Button)findViewById(R.id.startBtn);
         buttons[1] = (Button)findViewById(R.id.continueBtn);

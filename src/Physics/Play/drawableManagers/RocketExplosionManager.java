@@ -14,7 +14,7 @@ import java.util.List;
 public class RocketExplosionManager {
 
     private static RocketExplosionManager e = new RocketExplosionManager();
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
 
     private RocketExplosionManager(){}
 

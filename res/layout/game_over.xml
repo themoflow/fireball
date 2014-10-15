@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:id="@+id/gameOverPopup"
+              android:background="#ed0000"
+              android:orientation="vertical"
+              android:gravity="top|center">
+
+    <TextView android:id="@+id/gameOverText1"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="You let the city get destroyed"
+              android:gravity="center"
+              android:textSize="30dip"/>
+
+    <TextView android:id="@+id/gameOverText2"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="GAME OVER"
+              android:gravity="center"
+              android:textSize="50dip"/>
+
+    <TextView android:id="@+id/gameOverText3"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="Restarting ........"
+              android:gravity="center"
+              android:textSize="20dip"/>
+
+</LinearLayout>

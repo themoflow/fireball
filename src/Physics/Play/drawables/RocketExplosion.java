@@ -14,7 +14,7 @@ public class RocketExplosion extends Drawable {
 
     private TimerTask timerTask;
     private int imageIndex = 0;
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
 
     public RocketExplosion(MainGameView g) {
         super();
