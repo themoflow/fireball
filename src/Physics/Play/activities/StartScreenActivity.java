@@ -14,7 +14,7 @@ import android.widget.Button;
  */
 public class StartScreenActivity extends Activity {
 
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
     private DatabaseManager dbm;
 
     @Override
@@ -25,8 +25,10 @@ public class StartScreenActivity extends Activity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.start_screen);
+        log("getIntent().getExtras() = " + getIntent().getExtras());
         if(getIntent().getExtras() != null)
         {
+            log("getIntent().getExtras().getString('gameOver')" + getIntent().getExtras().getString("gameOver"));
             if(getIntent().getExtras().getString("gameOver").equals("true")) {
                 findViewById(R.id.gameOverText1).setVisibility(View.VISIBLE);
                 findViewById(R.id.gameOverText2).setVisibility(View.VISIBLE);
@@ -38,6 +40,7 @@ public class StartScreenActivity extends Activity {
         if(!dbm.isGameStateSaved())
             buttons[1].setVisibility(View.GONE);
         setListeners(buttons, this);
+        dbm.closeDB();
     }
 
     public void setListeners(Button[] buttons, final StartScreenActivity activity){

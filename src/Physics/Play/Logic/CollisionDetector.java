@@ -85,7 +85,16 @@ public class CollisionDetector {
     }
 
     private int getBitmapPixel(Drawable drawable, int i, int j) {
-        return drawable.getImage().getPixel(i - (int)drawable.getX(), j - (int)drawable.getY());
+        int x, y;
+        if(i - (int)drawable.getX() < 0)
+            x = 0;
+        else
+            x = i - (int)drawable.getX();
+        if(j - (int)drawable.getY() < 0)
+            y = 0;
+        else
+            y = j - (int)drawable.getY();
+        return drawable.getImage().getPixel(x, y);
     }
 
      private static Rect getCollisionBounds(Rect rect1, Rect rect2) {

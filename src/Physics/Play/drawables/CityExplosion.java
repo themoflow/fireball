@@ -1,8 +1,8 @@
 package Physics.Play.drawables;
 
 import Physics.Play.bitmaps.CityExplosionBitmaps;
+import Physics.Play.serializables.SerializableTimerTask;
 import Physics.Play.views.MainGameView;
-import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
 import android.util.Log;
 import java.util.Timer;
@@ -12,7 +12,7 @@ public class CityExplosion extends Drawable {
 
     private TimerTask timerTask;
     private int imageIndex = 0;
-    private boolean logEnabled = false;
+    private boolean logEnabled = true;
 
     public CityExplosion(MainGameView g) {
         super();
@@ -44,12 +44,13 @@ public class CityExplosion extends Drawable {
     }
 
     public void startAnimation(){
-        timerTask = new SerializableTimer(this);
-        new Timer().schedule(timerTask, 150L);
-
+        timerTask = new SerializableTimerTask(this);
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 150L);
     }
 
     public void switchImage(){
+        log("switchImage() called");
         if (imageIndex < CityExplosionBitmaps.getSize()-1) {
             imageIndex++;
             log("bitmap at index " + imageIndex + " = " + CityExplosionBitmaps.getImage(imageIndex));
@@ -61,6 +62,6 @@ public class CityExplosion extends Drawable {
 
     private void log(String print) {
         if(logEnabled)
-            Log.i("CityExplosion.class - ", print);
+            Log.i(":::: CityExplosion.java - ", print + " ::::");
     }
 }

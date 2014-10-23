@@ -1,8 +1,8 @@
 package Physics.Play.drawables;
 
 import Physics.Play.bitmaps.RingExplosionBitmaps;
+import Physics.Play.serializables.SerializableTimerTask;
 import Physics.Play.views.MainGameView;
-import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -16,7 +16,7 @@ public class RingExplosion extends Drawable {
 
     private TimerTask timerTask;
     private int imageIndex = 0;
-    private boolean logEnabled = false;
+    private boolean logEnabled = true;
 
     public RingExplosion(MainGameView g, float x, float y) {
         super();
@@ -41,11 +41,13 @@ public class RingExplosion extends Drawable {
     }
 
     public void startAnimation(){
-        timerTask = new SerializableTimer(this);
-        new Timer().schedule(timerTask, 75L);
+        timerTask = new SerializableTimerTask(this);
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 75L);
     }
 
     public void switchImage(){
+        log("switchImage() called");
         if(imageIndex < RingExplosionBitmaps.getSize() - 1)
         {
             imageIndex++;
@@ -62,6 +64,6 @@ public class RingExplosion extends Drawable {
 
     public void log(String string) {
         if(logEnabled)
-            Log.i("RingExplosion.java :::: ", string);
+            Log.i(":::: RingExplosion.java -> ", string + " ::::");
     }
 }

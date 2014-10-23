@@ -10,6 +10,7 @@ import Physics.Play.model.CollisionDetails;
 import Physics.Play.model.GameState;
 import Physics.Play.drawables.*;
 import Physics.Play.logic.Drawer;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class MainGameView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private boolean logEnabled = false;
+    private boolean logEnabled = true;
     private MainThread thread;
     private MainGameActivity activity;
     private GameState gameState = null;
@@ -92,7 +93,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
             gameState.setLength(slingDistance / 10);
 
             //Create drawable lists.
-            fireballManager.createFireballs(1, gameState.getFireballs(), this, screenWidth, screenHeight);
+            fireballManager.createFireballs(activity, 1, gameState.getFireballs(), this, screenWidth, screenHeight);
             Robot robot = robotManager.createRobot(gameState.getRobots(), this);
             Rocket rocket = rocketManager.createRocket(gameState.getRockets(), this, screenWidth);
             //Add the robots and the rockets to each other and get their movements coordinated..
@@ -114,7 +115,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        log("surfaceDestroyed() called");
+        //log("surfaceDestroyed() called");
         killThread();
     } // end surfaceDestroyed()
 
@@ -139,7 +140,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
     @Override
     synchronized public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-
+        log("DOES event.getAction() EQUAL MotionEvent.ACTION_DOWN = " + (event.getAction() == MotionEvent.ACTION_DOWN));
         if(event.getAction() == MotionEvent.ACTION_DOWN)
         {
             gameState.setDown(fireballManager.checkForFireballTouch(event.getX(), event.getY(), gameState.getFireballs()));
@@ -159,6 +160,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
 
         if(event.getAction() == MotionEvent.ACTION_MOVE)
         {
+            log("gameState.isDown() = " + gameState.isDown());
             if(gameState.isDown())
             {
                 gameState.setDragged(true);
@@ -207,9 +209,9 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
             }
             if(!gameState.isGameOver()) {
-                fireballManager.isAtleastOneFireball(gameState.getFireballs(), this, screenWidth, screenHeight);
+                fireballManager.isAtleastOneFireball(gameState.getFireballs(), this, screenWidth, screenHeight, activity);
                 fireballManager.checkForFireBallRemoval(gameState.getFireballs(), this);
-                fireballManager.checkForFireballCreation(gameState.isDown(), gameState.getFireballs(), this, screenWidth, screenHeight);
+                fireballManager.checkForFireballCreation(gameState.isDown(), gameState.getFireballs(), this, screenWidth, screenHeight, activity);
                 fireballManager.addVelocity(gameState.getFireballs());
 
                 if (rocketManager.timeToCreateRocket(gameState.getRockets())) {
@@ -235,40 +237,49 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
             parachuteManager.checkForRemoval(gameState.getParachutes());
             shieldManager.checkForRemoval(gameState.getShields());
 
-            //Fireball collision details.
-            CollisionDetails fireballRocketCollisionDetails = collisionDetector.detectCollision(fireballManager.setAsDrawable(gameState.getFireballs()), rocketManager.setAsDrawable(gameState.getRockets()));
-            CollisionDetails fireballRobotCollisionDetails = collisionDetector.detectCollision(fireballManager.setAsDrawable(gameState.getFireballs()), robotManager.setAsDrawable(gameState.getRobots()));
-            CollisionDetails fireballBulletCollisionDetails = collisionDetector.detectCollision(fireballManager.setAsDrawable(gameState.getFireballs()), bulletManager.setAsDrawable(gameState.getBullets()));
-            //Rocket collision details.
-            CollisionDetails rocketCityCollisionDetails = collisionDetector.detectCollision(cityManager.setAsDrawable(gameState.getCitys()), rocketManager.setAsDrawable(gameState.getRockets()));
-            CollisionDetails rocketShieldCollisionDetails = collisionDetector.detectCollision(shieldManager.setAsDrawable(gameState.getShields()), rocketManager.setAsDrawable(gameState.getRockets()));
-            CollisionDetails rocketCityExplosionCollisionDetails = collisionDetector.detectCollision(cityExplosionManager.setAsDrawable(gameState.getCityExplosions()), rocketManager.setAsDrawable(gameState.getRockets()));
-            CollisionDetails rocketAtomicExplosionCollisionDetails = collisionDetector.detectCollision(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), rocketManager.setAsDrawable(gameState.getRockets()));
-            CollisionDetails rocketRingExplosionCollisionDetails = collisionDetector.detectCollision(ringExplosionManager.setAsDrawable(gameState.getRingExplosions()), rocketManager.setAsDrawable(gameState.getRockets()));
-            //Robot collision details.
-            CollisionDetails robotCityCollisionDetails = collisionDetector.detectCollision(cityManager.setAsDrawable(gameState.getCitys()), robotManager.setAsDrawable(gameState.getRobots()));
-            CollisionDetails robotShieldCollisionDetails = collisionDetector.detectCollision(shieldManager.setAsDrawable(gameState.getShields()), robotManager.setAsDrawable(gameState.getRobots()));
-            CollisionDetails robotCityExplosionCollisionDetails = collisionDetector.detectCollision(cityExplosionManager.setAsDrawable(gameState.getCityExplosions()), robotManager.setAsDrawable(gameState.getRobots()));
-            CollisionDetails robotAtomicExplosionCollisionDetails = collisionDetector.detectCollision(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), robotManager.setAsDrawable(gameState.getRobots()));
-            CollisionDetails robotRingExplosionCollisionDetails = collisionDetector.detectCollision(ringExplosionManager.setAsDrawable(gameState.getRingExplosions()), robotManager.setAsDrawable(gameState.getRobots()));
-            //Bullet collision details.
-            CollisionDetails bulletCityCollisionDetails = collisionDetector.detectCollision(cityManager.setAsDrawable(gameState.getCitys()), bulletManager.setAsDrawable(gameState.getBullets()));
-            CollisionDetails bulletShieldCollisionDetails = collisionDetector.detectCollision(shieldManager.setAsDrawable(gameState.getShields()), bulletManager.setAsDrawable(gameState.getBullets()));
-            CollisionDetails bulletAtomicExplosionDetails = collisionDetector.detectCollision(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), bulletManager.setAsDrawable(gameState.getBullets()));
-            CollisionDetails bulletCityExplosionDetails = collisionDetector.detectCollision(cityExplosionManager.setAsDrawable(gameState.getCityExplosions()), bulletManager.setAsDrawable(gameState.getBullets()));
-            CollisionDetails bulletRingExplosionDetails = collisionDetector.detectCollision(ringExplosionManager.setAsDrawable(gameState.getRingExplosions()), bulletManager.setAsDrawable(gameState.getBullets()));
+            /***************************************************************************************************************************************************************************************
+            *** CollisionDetails must be checked and dealt with in order so that each check does not include objects that have already been coolided with previously.
+            **************************************************************************************************************************************************************************************/
 
+            //Fireball collision checks
+            CollisionDetails fireballRobotCollisionDetails = collisionDetector.detectCollision(fireballManager.setAsDrawable(gameState.getFireballs()), robotManager.setAsDrawable(gameState.getRobots()));
+            if(fireballRobotCollisionDetails != null) {
+                Fireball f = (Fireball)fireballRobotCollisionDetails.getDrawable1();
+                f.cancelTimer();
+                log("cancelTimer() for fireballRobotCollisionDetails count = " + (f.getCount()-1));
+                robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), fireballRobotCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket_explosion_1).getWidth() / 2), fireballRobotCollisionDetails.getY());
+                if(fireballRobotCollisionDetails.getDrawable2().getDrawables().size() > 0)
+                {
+                    gameState.getParachutes().remove(fireballRobotCollisionDetails.getDrawable2().getDrawable(Parachute.class));
+                    gameState.getRockets().remove(fireballRobotCollisionDetails.getDrawable2().getDrawable(Rocket.class));
+                }
+                gameState.getFireballs().remove(f);
+                gameState.getRobots().remove(fireballRobotCollisionDetails.getDrawable2());
+            }
+            CollisionDetails fireballRocketCollisionDetails = collisionDetector.detectCollision(fireballManager.setAsDrawable(gameState.getFireballs()), rocketManager.setAsDrawable(gameState.getRockets()));
             if(fireballRocketCollisionDetails != null) {
+                Fireball f = (Fireball)fireballRocketCollisionDetails.getDrawable1();
+                f.cancelTimer();
+                log("cancelTimer() for fireballRocketCollisionDetails, count = " + (f.getCount()-1));
                 rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), fireballRocketCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket_explosion_1).getWidth() / 2), fireballRocketCollisionDetails.getY());
                 //Remove the Robot that is on the Rocket.
                 if(fireballRocketCollisionDetails.getDrawable2().getDrawables().size() > 0)
                 {
                     gameState.getRobots().remove(fireballRocketCollisionDetails.getDrawable2().getDrawables().get(0));
                 }
-                gameState.getFireballs().remove(fireballRocketCollisionDetails.getDrawable1());
+
+
+                gameState.getFireballs().remove(f);
                 gameState.getRockets().remove(fireballRocketCollisionDetails.getDrawable2());
             }
+            CollisionDetails fireballBulletCollisionDetails = collisionDetector.detectCollision(fireballManager.setAsDrawable(gameState.getFireballs()), bulletManager.setAsDrawable(gameState.getBullets()));
+            if(fireballBulletCollisionDetails != null) {
+                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), fireballBulletCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), fireballBulletCollisionDetails.getY());
+                gameState.getBullets().remove(fireballBulletCollisionDetails.getDrawable2());
+            }
 
+            //Rocket collision checks.
+            CollisionDetails rocketCityCollisionDetails = collisionDetector.detectCollision(cityManager.setAsDrawable(gameState.getCitys()), rocketManager.setAsDrawable(gameState.getRockets()));
             if(rocketCityCollisionDetails != null)
             {
                 if (City.HITS++ >= 5 && gameState.isGameOver() == false)
@@ -280,26 +291,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
                 gameState.getRockets().remove(rocketCityCollisionDetails.getDrawable2());
             }
-
-            if(fireballRobotCollisionDetails != null) {
-                robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), fireballRobotCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket_explosion_1).getWidth() / 2), fireballRobotCollisionDetails.getY());
-                if(fireballRobotCollisionDetails.getDrawable2().getDrawables().size() > 0)
-                {
-                    gameState.getParachutes().remove(fireballRobotCollisionDetails.getDrawable2().getDrawable(Parachute.class));
-                    gameState.getRockets().remove(fireballRobotCollisionDetails.getDrawable2().getDrawable(Rocket.class));
-                }
-                gameState.getFireballs().remove(fireballRobotCollisionDetails.getDrawable1());
-                gameState.getRobots().remove(fireballRobotCollisionDetails.getDrawable2());
-            }
-
-            if(bulletCityCollisionDetails != null) {
-                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletCityCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletCityCollisionDetails.getY());
-                gameState.getBullets().remove(bulletCityCollisionDetails.getDrawable2());
-            }
-            if(fireballBulletCollisionDetails != null) {
-                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), fireballBulletCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), fireballBulletCollisionDetails.getY());
-                gameState.getBullets().remove(fireballBulletCollisionDetails.getDrawable2());
-            }
+            CollisionDetails rocketShieldCollisionDetails = collisionDetector.detectCollision(shieldManager.setAsDrawable(gameState.getShields()), rocketManager.setAsDrawable(gameState.getRockets()));
             if(rocketShieldCollisionDetails != null) {
                 shieldManager.addHit(gameState.getShields());
                 rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketShieldCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket).getWidth() / 2), rocketShieldCollisionDetails.getY());
@@ -309,14 +301,35 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
                 gameState.getRockets().remove(rocketShieldCollisionDetails.getDrawable2());
             }
-            if(bulletAtomicExplosionDetails != null) {
-                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletAtomicExplosionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletAtomicExplosionDetails.getY());
-                gameState.getBullets().remove(bulletAtomicExplosionDetails.getDrawable2());
+            CollisionDetails rocketCityExplosionCollisionDetails = collisionDetector.detectCollision(cityExplosionManager.setAsDrawable(gameState.getCityExplosions()), rocketManager.setAsDrawable(gameState.getRockets()));
+            if(rocketCityExplosionCollisionDetails != null) {
+                rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketCityExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), rocketCityExplosionCollisionDetails.getY());
+                if(rocketCityExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
+                {
+                    gameState.getRobots().remove(rocketCityExplosionCollisionDetails.getDrawable2().getDrawable(Robot.class));
+                }
+                gameState.getRockets().remove(rocketCityExplosionCollisionDetails.getDrawable2());
             }
-            if(bulletCityExplosionDetails != null) {
-                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletCityExplosionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletCityExplosionDetails.getY());
-                gameState.getBullets().remove(bulletCityExplosionDetails.getDrawable2());
+            CollisionDetails rocketAtomicExplosionCollisionDetails = collisionDetector.detectCollision(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), rocketManager.setAsDrawable(gameState.getRockets()));
+            if(rocketAtomicExplosionCollisionDetails != null) {
+                rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketAtomicExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), rocketAtomicExplosionCollisionDetails.getY());
+                if(rocketAtomicExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
+                {
+                    gameState.getRobots().remove(rocketAtomicExplosionCollisionDetails.getDrawable2().getDrawable(Robot.class));
+                }
+                gameState.getRockets().remove(rocketAtomicExplosionCollisionDetails.getDrawable2());
             }
+            CollisionDetails rocketRingExplosionCollisionDetails = collisionDetector.detectCollision(ringExplosionManager.setAsDrawable(gameState.getRingExplosions()), rocketManager.setAsDrawable(gameState.getRockets()));
+            if(rocketRingExplosionCollisionDetails != null) {
+                rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketRingExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket).getWidth() / 2), rocketRingExplosionCollisionDetails.getY());
+                if(rocketRingExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
+                {
+                    gameState.getRobots().remove(rocketRingExplosionCollisionDetails.getDrawable2().getDrawable(Robot.class));
+                }
+                gameState.getRockets().remove(rocketRingExplosionCollisionDetails.getDrawable2());
+            }
+            //Robot collision details.
+            CollisionDetails robotCityCollisionDetails = collisionDetector.detectCollision(cityManager.setAsDrawable(gameState.getCitys()), robotManager.setAsDrawable(gameState.getRobots()));
             if(robotCityCollisionDetails != null) {
                 if (City.HITS++ >= 5 && gameState.isGameOver() == false)
                     gameState.setGameOver(true);
@@ -327,6 +340,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
                 gameState.getRobots().remove(robotCityCollisionDetails.getDrawable2());
             }
+            CollisionDetails robotShieldCollisionDetails = collisionDetector.detectCollision(shieldManager.setAsDrawable(gameState.getShields()), robotManager.setAsDrawable(gameState.getRobots()));
             if(robotShieldCollisionDetails != null) {
                 shieldManager.addHit(gameState.getShields());
                 if(robotShieldCollisionDetails.getDrawable2().getDrawables().size() > 0)
@@ -337,30 +351,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), robotShieldCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.robot_explosion_1).getWidth() / 2), robotShieldCollisionDetails.getY());
                 gameState.getRobots().remove(robotShieldCollisionDetails.getDrawable2());
             }
-
-            if(bulletShieldCollisionDetails != null) {
-                shieldManager.addHit(gameState.getShields());
-                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletShieldCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletShieldCollisionDetails.getY());
-                gameState.getBullets().remove(bulletShieldCollisionDetails.getDrawable2());
-            }
-
-            if(rocketCityExplosionCollisionDetails != null) {
-                rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketCityExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), rocketCityExplosionCollisionDetails.getY());
-                if(rocketCityExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
-                {
-                    gameState.getRobots().remove(rocketCityExplosionCollisionDetails.getDrawable2().getDrawable(Robot.class));
-                }
-                gameState.getRockets().remove(rocketCityExplosionCollisionDetails.getDrawable2());
-            }
-            if(rocketAtomicExplosionCollisionDetails != null) {
-                rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketAtomicExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), rocketAtomicExplosionCollisionDetails.getY());
-                if(rocketAtomicExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
-                {
-                    gameState.getRobots().remove(rocketAtomicExplosionCollisionDetails.getDrawable2().getDrawable(Robot.class));
-                }
-                gameState.getRockets().remove(rocketAtomicExplosionCollisionDetails.getDrawable2());
-            }
-
+            CollisionDetails robotCityExplosionCollisionDetails = collisionDetector.detectCollision(cityExplosionManager.setAsDrawable(gameState.getCityExplosions()), robotManager.setAsDrawable(gameState.getRobots()));
             if(robotCityExplosionCollisionDetails != null) {
                 robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), robotCityExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), robotCityExplosionCollisionDetails.getY());
                 if(robotCityExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
@@ -370,6 +361,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
                 gameState.getRobots().remove(robotCityExplosionCollisionDetails.getDrawable2());
             }
+            CollisionDetails robotAtomicExplosionCollisionDetails = collisionDetector.detectCollision(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), robotManager.setAsDrawable(gameState.getRobots()));
             if(robotAtomicExplosionCollisionDetails != null) {
                 robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), robotAtomicExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), robotAtomicExplosionCollisionDetails.getY());
                 if(robotAtomicExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
@@ -379,10 +371,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
                 gameState.getRobots().remove(robotAtomicExplosionCollisionDetails.getDrawable2());
             }
-            if(bulletRingExplosionDetails != null) {
-                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletRingExplosionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletRingExplosionDetails.getY());
-                gameState.getBullets().remove(bulletRingExplosionDetails.getDrawable2());
-            }
+            CollisionDetails robotRingExplosionCollisionDetails = collisionDetector.detectCollision(ringExplosionManager.setAsDrawable(gameState.getRingExplosions()), robotManager.setAsDrawable(gameState.getRobots()));
             if(robotRingExplosionCollisionDetails != null) {
                 robotExplosionManager.createRobotExplosion(this, gameState.getRobotExplosions(), robotRingExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.robot_explosion_1).getWidth() / 2), robotRingExplosionCollisionDetails.getY());
                 if(robotRingExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
@@ -392,14 +381,35 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
                 }
                 gameState.getRobots().remove(robotRingExplosionCollisionDetails.getDrawable2());
             }
-            if(rocketRingExplosionCollisionDetails != null) {
-                rocketExplosionManager.createExplosion(this, gameState.getRocketExplosions(), rocketRingExplosionCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.rocket).getWidth() / 2), rocketRingExplosionCollisionDetails.getY());
-                if(rocketRingExplosionCollisionDetails.getDrawable2().getDrawables().size() > 0)
-                {
-                    gameState.getRobots().remove(rocketRingExplosionCollisionDetails.getDrawable2().getDrawable(Robot.class));
-                }
-                gameState.getRockets().remove(rocketRingExplosionCollisionDetails.getDrawable2());
+            //Bullet Collision details.
+            CollisionDetails bulletCityCollisionDetails = collisionDetector.detectCollision(cityManager.setAsDrawable(gameState.getCitys()), bulletManager.setAsDrawable(gameState.getBullets()));
+            if(bulletCityCollisionDetails != null) {
+                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletCityCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletCityCollisionDetails.getY());
+                gameState.getBullets().remove(bulletCityCollisionDetails.getDrawable2());
             }
+            CollisionDetails bulletShieldCollisionDetails = collisionDetector.detectCollision(shieldManager.setAsDrawable(gameState.getShields()), bulletManager.setAsDrawable(gameState.getBullets()));
+            if(bulletShieldCollisionDetails != null) {
+                shieldManager.addHit(gameState.getShields());
+                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletShieldCollisionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletShieldCollisionDetails.getY());
+                gameState.getBullets().remove(bulletShieldCollisionDetails.getDrawable2());
+            }
+            CollisionDetails bulletAtomicExplosionDetails = collisionDetector.detectCollision(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), bulletManager.setAsDrawable(gameState.getBullets()));
+            if(bulletAtomicExplosionDetails != null) {
+                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletAtomicExplosionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletAtomicExplosionDetails.getY());
+                gameState.getBullets().remove(bulletAtomicExplosionDetails.getDrawable2());
+            }
+            CollisionDetails bulletCityExplosionDetails = collisionDetector.detectCollision(cityExplosionManager.setAsDrawable(gameState.getCityExplosions()), bulletManager.setAsDrawable(gameState.getBullets()));
+            if(bulletCityExplosionDetails != null) {
+                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletCityExplosionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletCityExplosionDetails.getY());
+                gameState.getBullets().remove(bulletCityExplosionDetails.getDrawable2());
+            }
+            CollisionDetails bulletRingExplosionDetails = collisionDetector.detectCollision(ringExplosionManager.setAsDrawable(gameState.getRingExplosions()), bulletManager.setAsDrawable(gameState.getBullets()));
+            if(bulletRingExplosionDetails != null) {
+                bulletExplosionManager.createBulletExplosion(this, gameState.getBulletExplosions(), bulletRingExplosionDetails.getX() - (BitmapFactory.decodeResource(getResources(), R.drawable.bullet_explosion_1).getWidth() / 2), bulletRingExplosionDetails.getY());
+                gameState.getBullets().remove(bulletRingExplosionDetails.getDrawable2());
+            }
+
+
 
             float[] aimerCoordinates = greenDotManager.getAimerCoordinates(gameState.getGreenDots());
 
@@ -423,8 +433,6 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
             draw.drawToCanvas(atomicExplosionManager.setAsDrawable(gameState.getAtomicExplosions()), canvas);
             draw.drawToCanvas(robotExplosionManager.setAsDrawable(gameState.getRobotExplosions()), canvas);
             draw.drawToCanvas(bulletExplosionManager.setAsDrawable(gameState.getBulletExplosions()), canvas);
-            if(gameState.getRocketExplosions().size() > 0)
-                log("rocketExplsions.size() = " + gameState.getRocketExplosions().size());
             draw.drawToCanvas(rocketExplosionManager.setAsDrawable(gameState.getRocketExplosions()), canvas);
              //Testing, for the path of the jumping gameState.getRobots().
              /*List<GreenDot> plottedCurve = new ArrayList();
@@ -473,7 +481,6 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
            gameState.getRockets().size() == 0 &&
            gameState.getRobots().size() == 0)
         {
-            log("everythingHasExploded() = " + true);
             return true;
         }
         else
@@ -484,7 +491,7 @@ public class MainGameView extends SurfaceView implements SurfaceHolder.Callback 
 
     public void log(String string) {
         if(logEnabled)
-            Log.i("MainGameView.java :::: ", string + " ::::");
+            Log.i(":::: MainGameView.java ->", string + " ::::");
     }
 
     public GameState getGameState() {

@@ -1,8 +1,8 @@
 package Physics.Play.drawables;
 
 import Physics.Play.bitmaps.ParachuteBitmaps;
+import Physics.Play.serializables.SerializableTimerTask;
 import Physics.Play.views.MainGameView;
-import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -45,11 +45,13 @@ public class Parachute extends Drawable {
 
 
     public void startAnimation() {
-        timerTask = new SerializableTimer(this);
-        new Timer().schedule(timerTask, 50L);
+        timerTask = new SerializableTimerTask(this);
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 50L);
     }
 
     public void switchImage() {
+        log("switchImage() called");
         if(imageIndex < ParachuteBitmaps.getSize()-1)
         {
             Drawable robot = getDrawable(Robot.class);
@@ -70,7 +72,7 @@ public class Parachute extends Drawable {
     private void log(String print){
 
         if(logEnabled)
-            Log.i("Parachute - ", print);
+            Log.i(":::: Parachute.java - ", print + " ::::");
     }
 
 }

@@ -4,6 +4,7 @@ import Physics.Play.R;
 import Physics.Play.views.MainGameView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 /**
  * Created by morantornesella-brooks on 10/11/14.
@@ -34,6 +35,8 @@ public class BulletExplosionBitmaps {
     }
 
     public static Bitmap getImage(int index) {
+        //Log.i(":::: BulletExplosionBitmaps.java -> ",  "bulletExplosions index val = " + index + " ::::");
         return bulletExplosions[index];
     }
+
 }

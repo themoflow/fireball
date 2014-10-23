@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false" android:id="@+id/fireball_animation">
+    <item android:drawable="@drawable/fireball1" android:duration="200" />
+    <item android:drawable="@drawable/fireball1a" android:duration="200" />
+    <item android:drawable="@drawable/fireball1b" android:duration="200" />
+    <item android:drawable="@drawable/fireball2" android:duration="200" />
+    <item android:drawable="@drawable/fireball2a" android:duration="200" />
+    <item android:drawable="@drawable/fireball2b" android:duration="200" />
+    <item android:drawable="@drawable/fireball3" android:duration="200" />
+    <item android:drawable="@drawable/fireball3a" android:duration="200" />
+    <item android:drawable="@drawable/fireball3b" android:duration="200" />
+    <item android:drawable="@drawable/fireball4" android:duration="200" />
+    <item android:drawable="@drawable/fireball4a" android:duration="200" />
+    <item android:drawable="@drawable/fireball4b" android:duration="200" />
+</animation-list>

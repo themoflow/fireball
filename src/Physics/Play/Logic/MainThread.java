@@ -11,7 +11,7 @@ public class MainThread extends Thread {
     private SurfaceHolder surfaceHolder;
     private MainGameView gamePanel;
     private volatile boolean running;
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
 
     public MainThread(SurfaceHolder surfaceHolder, MainGameView gamePanel) {
         super();
@@ -25,11 +25,9 @@ public class MainThread extends Thread {
 
     @Override
     public void run() {
-
         while (running)
         {
-            Canvas canvas = null;
-            canvas = surfaceHolder.lockCanvas();
+            Canvas canvas = surfaceHolder.lockCanvas();
             synchronized (surfaceHolder) {
                 gamePanel.onDraw(canvas);
             }
@@ -41,7 +39,7 @@ public class MainThread extends Thread {
 
     private void log(String print) {
         if(logEnabled)
-            Log.i("MainThread", print);
+            Log.i(":::: MainThread.java -> ", print + " ::::");
     }
 
 }

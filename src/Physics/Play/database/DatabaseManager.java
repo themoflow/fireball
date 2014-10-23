@@ -15,7 +15,7 @@ import java.io.*;
  */
 public final class DatabaseManager extends SQLiteOpenHelper {
 
-    private boolean logEnabled = true;
+    private boolean logEnabled = false;
     private static final String TABLE_NAME = "savedGameState";
     private static final String COLUMN_NAME = "gameState";
     private static final String ID = "id";
@@ -139,6 +139,10 @@ public final class DatabaseManager extends SQLiteOpenHelper {
             log("serializeGameState() - IOException thrown");
         }
         return null;
+    }
+
+    public void closeDB() {
+        db.close();
     }
 
     private void log(String print) {

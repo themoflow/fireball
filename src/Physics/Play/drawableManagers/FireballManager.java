@@ -3,6 +3,7 @@ package Physics.Play.drawableManagers;
 import Physics.Play.views.MainGameView;
 import Physics.Play.drawables.Drawable;
 import Physics.Play.drawables.Fireball;
+import android.app.Activity;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ public class FireballManager {
         return f;
     }
 
-    public void createFireballs(int amount, List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight) {
+    public void createFireballs(Activity a, int amount, List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight) {
         for(int i = 0; i < amount; i++) {
-            fireballs.add(new Fireball(g, scrWidth, scrHeight));
+            fireballs.add(new Fireball(g, scrWidth, scrHeight, a));
         }
     }
 
@@ -47,8 +48,8 @@ public class FireballManager {
         }
     }
 
-    public void addFireball(float x, float y, List<Fireball> fireballs, MainGameView g){
-        fireballs.add(new Fireball(g,x,y));
+    public void addFireball(float x, float y, List<Fireball> fireballs, MainGameView g, Activity a){
+        fireballs.add(new Fireball(g,x,y,a));
     }
 
     public float getLastXCoord(List<Fireball> fireballs){
@@ -89,40 +90,41 @@ public class FireballManager {
         }
     }
 
-    public void isAtleastOneFireball(List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight){
+    public void isAtleastOneFireball(List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight, Activity a){
         if(fireballs.size() <= 0)
         {
-            fireballs.add(new Fireball(g, scrWidth, scrHeight));
+            fireballs.add(new Fireball(g, scrWidth, scrHeight, a));
         }
     }
 
     public void checkForFireBallRemoval(List<Fireball> fireballs, MainGameView g){
-
-        for(int i = 0; i < fireballs.size(); i++)
+        synchronized(fireballs)
         {
-            if(fireballs.get(i).getX() <= 0 - fireballs.get(i).getWidth() || fireballs.get(i).getX() > g.getScreenWidth() || fireballs.get(i).getY() < 0 - fireballs.get(i).getHeight() || fireballs.get(i).getY() > g.getScreenHeight())
-            {
-                fireballs.remove(i);
+            for (int i = 0; i < fireballs.size(); i++) {
+                if (fireballs.get(i).getX() <= 0 - fireballs.get(i).getWidth() || fireballs.get(i).getX() > g.getScreenWidth() || fireballs.get(i).getY() < 0 - fireballs.get(i).getHeight() || fireballs.get(i).getY() > g.getScreenHeight()) {
+                    fireballs.get(i).cancelTimer();
+                    fireballs.remove(i);
+                }
             }
         }
 
     }
 
-    public void checkForFireballCreation(boolean down, List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight){
+    public void checkForFireballCreation(boolean down, List<Fireball> fireballs, MainGameView g, float scrWidth, float scrHeight, Activity a){
 
         if(fireballs.size() > 0)
         {
             if(fireballs.get(fireballs.size()-1).getY() + 48 < fireballs.get(0).getOriginY())
             {
-                fireballs.add(new Fireball(g, scrWidth, scrHeight));
+                fireballs.add(new Fireball(g, scrWidth, scrHeight, a));
             }
             else if(down == false && fireballs.get(fireballs.size()-1).getY() <= fireballs.get(0).getOriginY() && fireballs.get(fireballs.size()-1).getX()+48 < fireballs.get(0).getOriginX())
             {
-                fireballs.add(new Fireball(g, scrWidth, scrHeight));
+                fireballs.add(new Fireball(g, scrWidth, scrHeight,a ));
             }
             else if (down == false && fireballs.get(fireballs.size()-1).getY() <= fireballs.get(0).getOriginY() && fireballs.get(fireballs.size()-1).getX() > fireballs.get(0).getOriginX()+48)
             {
-                fireballs.add(new Fireball(g, scrWidth, scrHeight));
+                fireballs.add(new Fireball(g, scrWidth, scrHeight, a));
             }
 
 
@@ -148,22 +150,38 @@ public class FireballManager {
     }
 
     public void onDrag(float x, float y, List<Fireball> fireballs, MainGameView g){
-            if(fireballs.size() > 0)
-            {
-                fireballs.get(fireballs.size()-1).setX(centerX(x, fireballs));
-                fireballs.get(fireballs.size()-1).setY(centerY(y, fireballs));
-                //Set the Y coordinate boundry area for the bottom of screen.
-                if(fireballs.get(fireballs.size()-1).getY() > g.getScreenHeight() - fireballs.get(0).getHeight())
-                    fireballs.get(fireballs.size()-1).setY(g.getScreenHeight() - fireballs.get(0).getHeight());
-                //Set the y coordinate boundry area for the top.
-                if(fireballs.get(fireballs.size()-1).getY() < fireballs.get(0).getOriginY())
-                    fireballs.get(fireballs.size()-1).setY(fireballs.get(0).getOriginY());
-                //Set the x coordinate boundry area for the left of the screen.
-                if(fireballs.get(fireballs.size()-1).getX() < 0)
-                    fireballs.get(fireballs.size()-1).setX(0);
-                //Set the x coordinate boundry area for the right of the screen.
-                if(fireballs.get(fireballs.size()-1).getX() > g.getScreenWidth() - fireballs.get(0).getWidth())
-                    fireballs.get(fireballs.size()-1).setX(g.getScreenWidth() - fireballs.get(0).getWidth());
+        synchronized(fireballs)
+        {
+            if (fireballs.size() > 0) {
+                if (fireballs.get(fireballs.size() - 1) != null) {
+                    fireballs.get(fireballs.size() - 1).setX(centerX(x, fireballs));
+                    fireballs.get(fireballs.size() - 1).setY(centerY(y, fireballs));
+                    //Set the Y coordinate boundry area for the bottom of screen.
+                    if (fireballs.get(fireballs.size() - 1).getY() > g.getScreenHeight() - fireballs.get(0).getHeight())
+                        fireballs.get(fireballs.size() - 1).setY(g.getScreenHeight() - fireballs.get(0).getHeight());
+                    //Set the y coordinate boundry area for the top.
+                    if (fireballs.get(fireballs.size() - 1).getY() < fireballs.get(0).getOriginY())
+                        fireballs.get(fireballs.size() - 1).setY(fireballs.get(0).getOriginY());
+                    //Set the x coordinate boundry area for the left of the screen.
+                    if (fireballs.get(fireballs.size() - 1).getX() < 0)
+                        fireballs.get(fireballs.size() - 1).setX(0);
+                    //Set the x coordinate boundry area for the right of the screen.
+                    if (fireballs.get(fireballs.size() - 1).getX() > g.getScreenWidth() - fireballs.get(0).getWidth())
+                        fireballs.get(fireballs.size() - 1).setX(g.getScreenWidth() - fireballs.get(0).getWidth());
+                }
+            }
+        }
+    }
+
+    public Fireball getLastFireball(List<Fireball> fireballs) {
+        synchronized(fireballs) {
+            return fireballs.get(fireballs.size()-1);
+        }
+    }
+
+    public int getSize(List<Fireball> fireballs) {
+        synchronized(fireballs) {
+            return fireballs.size();
         }
     }
 
@@ -176,14 +194,27 @@ public class FireballManager {
     }
 
     public void checkForRemoval(List<Fireball> fireballs) {
-        for(int i = 0; i < fireballs.size(); i++)
-            if(fireballs.get(i).isActive() == false)
-                fireballs.remove(i);
+        synchronized(fireballs)
+        {
+            for (int i = 0; i < fireballs.size(); i++)
+                if (fireballs.get(i).isActive() == false)
+                    fireballs.remove(i);
+        }
+    }
+
+    public Fireball getFirstFireball(List<Fireball> fireballs) {
+        synchronized(fireballs) {
+            return fireballs.get(0);
+        }
     }
 
     public void removeFireballs(List<Fireball> fireballs) {
-        for(int i = 0; i < fireballs.size(); i ++)
-            fireballs.remove(i);
+        synchronized(fireballs)
+        {
+            for (int i = 0; i < fireballs.size(); i++)
+                fireballs.remove(i);
+
+        }
     }
 
     private void log(String print) {

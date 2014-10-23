@@ -1,8 +1,8 @@
 package Physics.Play.drawables;
 
 import Physics.Play.bitmaps.RobotExplosionBitmaps;
+import Physics.Play.serializables.SerializableTimerTask;
 import Physics.Play.views.MainGameView;
-import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -40,12 +40,13 @@ public class RobotExplosion extends Drawable {
     }
 
     public void startAnimation(){
-        timerTask = new SerializableTimer(this);
-        new Timer().schedule(timerTask, 30L);
+        timerTask = new SerializableTimerTask(this);
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 30L);
     }
 
     public void switchImage(){
-        log("switchImage() imageIndex = " + imageIndex);
+        log("switchImage() called");
         if(imageIndex < RobotExplosionBitmaps.getSize()-1)
         {
             imageIndex++;
@@ -61,6 +62,6 @@ public class RobotExplosion extends Drawable {
 
     private void log(String print) {
         if(logEnabled)
-            Log.i(":::: RobotExplosionManager.java - ", print + " ::::");
+            Log.i(":::: RobotExplosionManager.java -> ", print + " ::::");
     }
 }

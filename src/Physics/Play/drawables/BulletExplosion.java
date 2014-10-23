@@ -1,9 +1,10 @@
 package Physics.Play.drawables;
 
 import Physics.Play.bitmaps.BulletExplosionBitmaps;
+import Physics.Play.serializables.SerializableTimerTask;
 import Physics.Play.views.MainGameView;
-import Physics.Play.logic.SerializableTimer;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Timer;
@@ -16,6 +17,7 @@ public class BulletExplosion extends Drawable implements Serializable {
 
     private TimerTask timerTask;
     private int imageIndex = 0;
+    private boolean logEnabled = false;
 
     public BulletExplosion(MainGameView g) {
         super();
@@ -48,11 +50,13 @@ public class BulletExplosion extends Drawable implements Serializable {
     }
 
     public void startAnimation(){
-        timerTask = new SerializableTimer(this);
-        new Timer().schedule(timerTask, 30L);
+        timerTask = new SerializableTimerTask(this);
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 30L);
     }
 
     public void switchImage(){
+        log("switchImage() called");
         if(imageIndex < 15)
         {
             imageIndex++;
@@ -64,5 +68,10 @@ public class BulletExplosion extends Drawable implements Serializable {
         {
             setIsActive(false);
         }
+    }
+
+    private void log(String print) {
+        if(logEnabled)
+            Log.i(":::: BulletExplosion.java - ", print + " ::::");
     }
 }

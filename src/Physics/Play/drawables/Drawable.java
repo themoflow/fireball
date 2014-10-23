@@ -25,6 +25,9 @@ public abstract class Drawable implements Serializable {
     public void switchImage() {
 
     }
+    public int getCount() {
+        return 0;
+    }
 
     public float getX(){
         return x;

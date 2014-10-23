@@ -1,6 +1,7 @@
 package Physics.Play.activities;
 
-import Physics.Play.R;
+import Physics.Play.drawables.Fireball;
+import Physics.Play.logic.SavedContext;
 import Physics.Play.views.MainGameView;
 import Physics.Play.database.DatabaseManager;
 import Physics.Play.model.GameState;
@@ -12,6 +13,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.*;
 import android.widget.PopupWindow;
+
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,42 +29,60 @@ public class MainGameActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(":::: MyActivity.java - ", "onCreate() called :::: ");
+        log("onCreate() called");
         super.onCreate(savedInstanceState);
+        SavedContext.setContext(getApplicationContext());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         dbm = new DatabaseManager(this);
         builder = new AlertDialog.Builder(this);
-        looper = Looper.getMainLooper();
+        //looper = Looper.getMainLooper();
+        //looper.prepare();
+        //looper.loop();
         String gameType = getIntent().getExtras().getString("gameType");
         mainGameView = new MainGameView(this);
-        if(gameType.equals("continue")) {
+
+        if(gameType.equals("continue"))
+        {
             GameState gameState = dbm.getSavedGameState();
-            if (gameState != null)
+            if (gameState != null) {
+                log("stopAnimation list size = " + gameState.getFireballs().get(0).amount);
                 mainGameView.setGameState(gameState);
+            }
         }
         setContentView(mainGameView);
     }
 
     @Override
     protected void onStart() {
-        Log.i(":::: MyActivity.java - ", "onStart() called :::: ");
+        log("onStart() called");
         super.onStart();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.i(":::: MyActivity.java - ", "onPause() called :::: ");
+        log("onPause() called");
+        List<Fireball> fireballs = mainGameView.getGameState().getFireballs();
+        for(int i = 0; i < fireballs.size(); i++)
+            fireballs.get(i).cancelTimer();
+
     }
 
     @Override
     public void onStop(){
         super.onStop();
         log("onStop() called");
+        List<Fireball> fireballs = mainGameView.getGameState().getFireballs();
+        for(int i = 0; i < fireballs.size(); i++)
+        {
+            fireballs.get(i).cancelTimer();
+        }
         if(!mainGameView.getGameState().isGameOver()) {
+            log("stopAnimation list size = " + mainGameView.getGameState().getFireballs().get(0).amount);
             dbm.saveGameState(mainGameView.getGameState());
         }
+        dbm.closeDB();
     }
 
     @Override

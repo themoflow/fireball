@@ -23,20 +23,14 @@ public class City extends Drawable {
         setY(y);
     }
 
-    public static void initializeStaticMembers(MainGameView g) {
-
-    }
-
     public static void addHit(){
        HITS++;
     }
 
     public void switchImage() {
-        //setImage(CityBitmaps.getImage(1));
         imageIndex++;
         setWidth(CityBitmaps.getImage(1).getWidth());
         setHeight(CityBitmaps.getImage(1).getHeight());
-
     }
 
     @Override

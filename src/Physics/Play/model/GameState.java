@@ -1,9 +1,9 @@
 package Physics.Play.model;
 
 import Physics.Play.drawables.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +35,7 @@ public class GameState implements Serializable {
     private List<Shield> shields;
     private List<RingExplosion> ringExplosions;
     private SlingShot slingShot;
+    List<String> syncList;
 
     /*//Drawable managers.
     private RobotManager robotManager = RobotManager.getInstance();
@@ -61,7 +62,7 @@ public class GameState implements Serializable {
         rockets = new ArrayList();;
         citys = new ArrayList();
         rocketExplosions = new ArrayList();
-        fireballs = new ArrayList();
+        fireballs = Collections.synchronizedList(new ArrayList<Fireball>());
         screenBackgrounds = new ArrayList<ScreenBackground>();
         greenDots = new ArrayList<GreenDot>();
         bullets = new ArrayList();
