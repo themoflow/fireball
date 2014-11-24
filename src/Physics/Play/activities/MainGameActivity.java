@@ -49,6 +49,7 @@ public class MainGameActivity extends Activity {
                 log("stopAnimation list size = " + gameState.getFireballs().get(0).amount);
                 mainGameView.setGameState(gameState);
             }
+            dbm.closeDB();
         }
         setContentView(mainGameView);
     }
